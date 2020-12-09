@@ -93,6 +93,10 @@ public class CategoryRepository {
     }
 
     private Category fromResultSet(ResultSet rs) throws Exception {
+        if (!rs.next()) {
+            return null;
+        }
+
         Category cat = new Category();
 
         cat.setIdCategory(rs.getInt("idCategory"));

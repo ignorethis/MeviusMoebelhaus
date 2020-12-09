@@ -100,6 +100,10 @@ public class CustomerRepository {
     }
 
     private Customer fromResultSet(ResultSet rs) throws Exception {
+        if (!rs.next()) {
+            return null;
+        }
+
         Customer cus = new Customer();
 
         cus.setIdCustomer(rs.getInt("idCustomer"));

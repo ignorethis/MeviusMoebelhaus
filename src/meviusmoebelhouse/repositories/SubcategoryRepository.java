@@ -97,6 +97,10 @@ public class SubcategoryRepository {
     }
 
     private Subcategory fromResultSet(ResultSet rs) throws Exception {
+        if (!rs.next()) {
+            return null;
+        }
+
         Subcategory sc = new Subcategory();
 
         sc.setIdSubcategory(rs.getInt("idSubcategory"));

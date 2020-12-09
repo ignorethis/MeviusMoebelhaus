@@ -91,6 +91,10 @@ public class UserRoleRepository {
     }
 
     private UserRole fromResultSet(ResultSet rs) throws Exception {
+        if (!rs.next()) {
+            return null;
+        }
+
         UserRole cus = new UserRole();
 
         cus.setIdUserRole(rs.getInt("idUserRole"));

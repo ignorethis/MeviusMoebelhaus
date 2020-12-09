@@ -108,6 +108,10 @@ public class UserRepository {
     }
 
     private User fromResultSet(ResultSet rs) throws Exception {
+        if (!rs.next()) {
+            return null;
+        }
+
         User usr = new User();
 
         usr.setIdUser(rs.getInt("idUser"));

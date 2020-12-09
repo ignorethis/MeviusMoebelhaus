@@ -100,6 +100,10 @@ public class InvoiceDetailsRepository {
     }
 
     private InvoiceDetails fromResultSet(ResultSet rs) throws Exception {
+        if (!rs.next()) {
+            return null;
+        }
+
         InvoiceDetails id = new InvoiceDetails();
 
         id.setIdInvoiceDetails(rs.getInt("idInvoiceDetails"));

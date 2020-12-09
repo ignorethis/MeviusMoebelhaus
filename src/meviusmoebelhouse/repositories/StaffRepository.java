@@ -96,6 +96,10 @@ public class StaffRepository {
     }
 
     private Staff fromResultSet(ResultSet rs) throws Exception {
+        if (!rs.next()) {
+            return null;
+        }
+
         Staff sta = new Staff();
 
         sta.setIdStaff(rs.getInt("idStaff"));

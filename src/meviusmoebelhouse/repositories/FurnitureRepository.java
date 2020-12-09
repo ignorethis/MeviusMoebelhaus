@@ -109,6 +109,10 @@ public class FurnitureRepository {
     }
 
     private Furniture fromResultSet(ResultSet rs) throws Exception {
+        if (!rs.next()) {
+            return null;
+        }
+
         Furniture fur = new Furniture();
 
         fur.setIdFurniture(rs.getInt("idFurniture"));

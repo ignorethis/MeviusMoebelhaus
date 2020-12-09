@@ -108,6 +108,10 @@ public class InvoiceRepository {
     }
 
     private Invoice fromResultSet(ResultSet rs) throws Exception {
+        if (!rs.next()) {
+            return null;
+        }
+
         Invoice inv = new Invoice();
 
         inv.setIdInvoice(rs.getInt("idInvoice"));
