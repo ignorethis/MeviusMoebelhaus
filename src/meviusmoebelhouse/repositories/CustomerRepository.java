@@ -41,7 +41,7 @@ public class CustomerRepository {
         ResultSet rs = null;
 
         try {
-            stmt = conn.prepareStatement("select from customer where idCustomer = ?");
+            stmt = conn.prepareStatement("select * from customer where idCustomer = ?");
             stmt.setInt(1, idCustomer);
             rs = stmt.executeQuery();
 
@@ -52,16 +52,16 @@ public class CustomerRepository {
         }
     }
 
-    public int create(Customer Customer) throws Exception {
+    public int create(Customer customer) throws Exception {
         PreparedStatement stmt = null;
 
         try {
             stmt = conn.prepareStatement("insert into customer (firstName, lastName, birthday, IBAN, emailAddress) values (?,?,?,?,?)");
-            stmt.setString(1, Customer.getFirstName());
-            stmt.setString(2, Customer.getLastName());
-            stmt.setDate(3, Customer.getBirthday());
-            stmt.setString(4, Customer.getIBAN());
-            stmt.setString(5, Customer.getEmailAddress());
+            stmt.setString(1, customer.getFirstName());
+            stmt.setString(2, customer.getLastName());
+            stmt.setDate(3, customer.getBirthday());
+            stmt.setString(4, customer.getIBAN());
+            stmt.setString(5, customer.getEmailAddress());
             
             return stmt.executeUpdate();
         } finally {
@@ -69,17 +69,17 @@ public class CustomerRepository {
         }
     }
 
-    public void update(Customer Customer) throws Exception {
+    public void update(Customer customer) throws Exception {
         PreparedStatement stmt = null;
 
         try {
             stmt = conn.prepareStatement("update customer set firstName = ?, lastName = ?, birthday = ?, IBAN = ?, emailAddress = ? where idCustomer = ?");
-            stmt.setString(1, Customer.getFirstName());
-            stmt.setString(2, Customer.getLastName());
-            stmt.setDate(3, Customer.getBirthday());
-            stmt.setString(4, Customer.getIBAN());
-            stmt.setString(5, Customer.getEmailAddress());
-            stmt.setInt(6, Customer.getIdCustomer());
+            stmt.setString(1, customer.getFirstName());
+            stmt.setString(2, customer.getLastName());
+            stmt.setDate(3, customer.getBirthday());
+            stmt.setString(4, customer.getIBAN());
+            stmt.setString(5, customer.getEmailAddress());
+            stmt.setInt(6, customer.getIdCustomer());
 
             stmt.executeUpdate();
         } finally {
@@ -87,11 +87,11 @@ public class CustomerRepository {
         }
     }
 
-    public void delete(Customer Customer) throws Exception {
+    public void delete(Customer customer) throws Exception {
         PreparedStatement stmt = null;
         try {
             stmt = conn.prepareStatement("delete from customer where idCustomer = ?");
-            stmt.setInt(1, Customer.getIdCustomer()); 
+            stmt.setInt(1, customer.getIdCustomer());
             
             stmt.executeUpdate();
         } finally {

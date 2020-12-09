@@ -79,7 +79,7 @@ public class InvoiceRepository {
         PreparedStatement stmt = null;
 
         try {
-            stmt = conn.prepareStatement("update invoice set idInvoice = ?, idCustomer = ?, idStaff = ?, firstName = ?, lastName = ?, shippingAddress = ?, billOfGoods = ?, totalPrice = ? where idInvoice = ?");
+            stmt = conn.prepareStatement("update invoice set idCustomer = ?, idStaff = ?, firstName = ?, lastName = ?, shippingAddress = ?, billOfGoods = ?, totalPrice = ? where idInvoice = ?");
             stmt.setInt(1, invoice.getIdCustomer());
             stmt.setInt(2, invoice.getIdStaff());
             stmt.setString(3, invoice.getFirstName());

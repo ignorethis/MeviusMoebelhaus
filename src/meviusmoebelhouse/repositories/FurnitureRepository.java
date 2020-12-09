@@ -42,7 +42,7 @@ public class FurnitureRepository {
         ResultSet rs = null;
 
         try {
-            stmt = conn.prepareStatement("select from furniture where idFurniture = ?");
+            stmt = conn.prepareStatement("select * from furniture where idFurniture = ?");
             stmt.setInt(1, idFurniture);
             rs = stmt.executeQuery();
 
@@ -57,7 +57,7 @@ public class FurnitureRepository {
         PreparedStatement stmt = null;
 
         try {
-            stmt = conn.prepareStatement("insert into furniture (idSubcategory, name, width, length, height, price, rebate, pictureAddress, description) values (?,?,?,?,?,?,?,?)");
+            stmt = conn.prepareStatement("insert into furniture (idSubcategory, name, width, length, height, price, rebate, pictureAddress, description) values (?,?,?,?,?,?,?,?,?)");
             stmt.setInt(1, furniture.getIdSubcategory());
             stmt.setString(2, furniture.getName());
             stmt.setFloat(3, furniture.getWidth());
@@ -65,7 +65,8 @@ public class FurnitureRepository {
             stmt.setFloat(5, furniture.getHeight());
             stmt.setBigDecimal(6, furniture.getPrice());
             stmt.setDouble(7, furniture.getRebate());
-            stmt.setString(8, furniture.getDescription());
+            stmt.setString(8, furniture.getPictureAddress());
+            stmt.setString(9, furniture.getDescription());
 
             return stmt.executeUpdate();
         } finally {

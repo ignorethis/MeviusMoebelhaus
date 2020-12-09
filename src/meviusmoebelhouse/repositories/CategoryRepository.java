@@ -56,9 +56,8 @@ public class CategoryRepository {
         PreparedStatement stmt = null;
 
         try {
-            stmt = conn.prepareStatement("insert into category (idCategory, name) values (?,?)");
-            stmt.setInt(1, Category.getIdCategory()); 
-            stmt.setString(2, Category.getName());
+            stmt = conn.prepareStatement("insert into category (name) values (?)");
+            stmt.setString(1, Category.getName());
             
             return stmt.executeUpdate();
         } finally {

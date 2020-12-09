@@ -42,7 +42,7 @@ public class InvoiceDetailsRepository {
         ResultSet rs = null;
 
         try {
-            stmt = conn.prepareStatement("select from invoiceDetails where idInvoiceDetails = ?");
+            stmt = conn.prepareStatement("select * from invoiceDetails where idInvoiceDetails = ?");
             stmt.setInt(1, idInvoiceDetails);
             rs = stmt.executeQuery();
 
@@ -56,11 +56,12 @@ public class InvoiceDetailsRepository {
         PreparedStatement stmt = null;
 
         try {
-            stmt = conn.prepareStatement("insert into invoiceDetails (idFurniture, amount, price, totalPrice) values (?,?,?,?)");
-            stmt.setInt(1, InvoiceDetails.getIdFurniture());
-            stmt.setInt(2, InvoiceDetails.getAmount());
-            stmt.setBigDecimal(3, InvoiceDetails.getPrice());
-            stmt.setBigDecimal(4, InvoiceDetails.getTotalPrice());
+            stmt = conn.prepareStatement("insert into invoiceDetails (idInvoice, idFurniture, amount, price, totalPrice) values (?,?,?,?,?)");
+            stmt.setInt(1, InvoiceDetails.getIdInvoice());
+            stmt.setInt(2, InvoiceDetails.getIdFurniture());
+            stmt.setInt(3, InvoiceDetails.getAmount());
+            stmt.setBigDecimal(4, InvoiceDetails.getPrice());
+            stmt.setBigDecimal(5, InvoiceDetails.getTotalPrice());
 
             return stmt.executeUpdate();
         } finally {
@@ -72,9 +73,9 @@ public class InvoiceDetailsRepository {
         PreparedStatement stmt = null;
 
         try {
-            stmt = conn.prepareStatement("update invoiceDetails set idFurniture = ?, amount = ?, price = ?, totalPrice = ? where idInvoiceDetails = ?");
-            stmt.setInt(1, InvoiceDetails.getIdFurniture());
-            stmt.setInt(2, InvoiceDetails.getIdInvoice());
+            stmt = conn.prepareStatement("update invoiceDetails set idInvoice = ?, idFurniture = ?, amount = ?, price = ?, totalPrice = ? where idInvoiceDetails = ?");
+            stmt.setInt(1, InvoiceDetails.getIdInvoice());
+            stmt.setInt(2, InvoiceDetails.getIdFurniture());
             stmt.setInt(3, InvoiceDetails.getAmount());
             stmt.setBigDecimal(4, InvoiceDetails.getPrice());
             stmt.setBigDecimal(5, InvoiceDetails.getTotalPrice());
