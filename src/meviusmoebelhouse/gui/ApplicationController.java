@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import meviusmoebelhouse.gui.controllers.*;
 import meviusmoebelhouse.gui.fxmlfiles.FXML;
 import meviusmoebelhouse.model.*;
 import meviusmoebelhouse.repositories.*;
@@ -133,16 +134,47 @@ public class ApplicationController {
      * Function that takes control of switching a scene/frame
      * @param anchorPane is the main anchor pane of the calling controller
      * @param fxmlName is the name of the requested new frame
-     * @throws IOException e
+     * @throws Exception e
      */
-    public void switchScene(AnchorPane anchorPane, String fxmlName) throws IOException {
-        Stage stage = (Stage) anchorPane.getScene().getWindow();
-        Parent root = FXMLLoader.load(FXML.class.getResource(fxmlName + ".fxml"));
+    public void switchScene(AnchorPane anchorPane, String fxmlName) throws Exception {
+        FXMLLoader loader = new FXMLLoader(FXML.class.getResource(fxmlName + ".fxml"));
+        setControllerFactory(fxmlName, loader);
+
+        Parent root = loader.load();
         Scene scene = new Scene(root);
 
+        Stage stage = (Stage) anchorPane.getScene().getWindow();
         stage.setScene(scene);
         stage.setTitle(fxmlName);
         stage.show();
+    }
+
+    public void setControllerFactory(String viewName, FXMLLoader loader) throws Exception {
+        switch (viewName) {
+            case "Category":
+                loader.setControllerFactory(c -> new CategoryController(this));
+                break;
+            case "Home":
+                loader.setControllerFactory(c -> new HomeController(this));
+                break;
+            case "Login":
+                loader.setControllerFactory(c -> new LoginController(this));
+                break;
+            case "Settings":
+                loader.setControllerFactory(c -> new SettingsController(this));
+                break;
+            case "ShoppingCart":
+                loader.setControllerFactory(c -> new ShoppingCartController(this));
+                break;
+            case "Singleitem":
+                loader.setControllerFactory(c -> new SingleItemController(this));
+                break;
+            case "Subcategory":
+                loader.setControllerFactory(c -> new SubcategoryController(this));
+                break;
+            default:
+                throw new Exception("Please add a controller factory for '" + viewName + "'");
+        }
     }
 
     public Category getCurrentCategory() {
@@ -242,7 +274,7 @@ public class ApplicationController {
      * @param anchorPane anchorPane of the frame the image layed on
      * @throws IOException e
      */
-    public void openSubcategory(Image imageOfSubcategory, AnchorPane anchorPane) throws IOException {
+    public void openSubcategory(Image imageOfSubcategory, AnchorPane anchorPane) throws Exception {
         int idSub = IdForSubcategoryImages.get(imageOfSubcategory);
 
         for(Subcategory s : allSubcategories){
@@ -260,7 +292,7 @@ public class ApplicationController {
 
         currentFurniture = null;
 
-        switchScene(anchorPane, "Subcategory");
+        switchScene(anchorPane, "Category");
     }
 
     /**

@@ -14,8 +14,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ShoppingCartController implements Initializable {
-
-    private final ApplicationController applicationController = Main.getApplicationController();
+    private ApplicationController applicationController = null;
 
     public AnchorPane mainAnchorPane;
     public Label    furnitureName1, furnitureName2, furnitureName3,
@@ -23,6 +22,10 @@ public class ShoppingCartController implements Initializable {
     public ChoiceBox<Integer> furnitureAmount1, furnitureAmount2, furnitureAmount3;
     public TextField    furniturePricePerUnit1, furniturePricePerUnit2, furniturePricePerUnit3,
                         totalPriceField;
+
+    public ShoppingCartController(ApplicationController applicationController) {
+        this.applicationController = applicationController;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -33,18 +36,18 @@ public class ShoppingCartController implements Initializable {
         }
     }
 
-    public void openLogin(ActionEvent actionEvent) throws IOException {
+    public void openLogin(ActionEvent actionEvent) throws Exception {
         applicationController.switchScene(mainAnchorPane, "Login");
     }
 
     public void logout(ActionEvent actionEvent) {
     }
 
-    public void openSettings(ActionEvent actionEvent) throws IOException {
+    public void openSettings(ActionEvent actionEvent) throws Exception {
         applicationController.switchScene(mainAnchorPane, "Settings");
     }
 
-    public void backToHomeOCE(ActionEvent actionEvent) throws IOException {
+    public void backToHomeOCE(ActionEvent actionEvent) throws Exception {
         applicationController.switchScene(mainAnchorPane, "Home");
     }
 

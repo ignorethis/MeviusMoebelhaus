@@ -8,8 +8,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SettingsController implements Initializable {
+    ApplicationController applicationController = null;
 
-    private final ApplicationController applicationController = Main.getApplicationController();
+    public SettingsController(ApplicationController applicationController) {
+        this.applicationController = applicationController;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

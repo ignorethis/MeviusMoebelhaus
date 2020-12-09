@@ -7,15 +7,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import meviusmoebelhouse.gui.ApplicationController;
 import meviusmoebelhouse.gui.fxmlfiles.FXML;
+import meviusmoebelhouse.gui.controllers.*;
 
 public class Main extends Application {
-
-    public static ApplicationController applicationController = new ApplicationController();
-
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
+        ApplicationController applicationController = new ApplicationController();
 
-        Parent root = (Parent) FXMLLoader.load(FXML.class.getResource("Home.fxml"));
+        FXMLLoader loader = new FXMLLoader(FXML.class.getResource("Home.fxml"));
+        loader.setControllerFactory(c -> new HomeController(applicationController));
+        Parent root = loader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Home");
@@ -25,9 +26,4 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
-    public static ApplicationController getApplicationController(){
-        return applicationController;
-    }
-
 }

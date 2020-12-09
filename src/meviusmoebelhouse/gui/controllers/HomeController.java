@@ -15,8 +15,7 @@ import java.net.URL;
 import java.util.*;
 
 public class HomeController implements Initializable {
-
-    private final ApplicationController applicationController = Main.getApplicationController();
+    private ApplicationController applicationController = null;
 
     public int counterSales = 0;        //Index of which first furniture in sales is showing (0/1/2/3/4/5...)
     public int counterCategories = 0;   //Index of which first category in categories is showing (0/1/2/3/4/5...)
@@ -39,6 +38,10 @@ public class HomeController implements Initializable {
 
     ArrayList<Image> allSalesImages = new ArrayList<>(); //List with all sales images
     ArrayList<Image> allCategoryImages = new ArrayList<>(); //List with all category images
+
+    public HomeController(ApplicationController applicationController) {
+        this.applicationController = applicationController;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -125,15 +128,15 @@ public class HomeController implements Initializable {
         applicationController.openCategory(allCategoryImages.get(Integer.parseInt(mouseEvent.getPickResult().getIntersectedNode().getId())), mainAnchorPane);
     }
 
-    public void openLogin() throws IOException {
+    public void openLogin() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Login");
     }
 
-    public void openSettings() throws IOException {
+    public void openSettings() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Settings");
     }
 
-    public void openShoppingCart() throws IOException {
+    public void openShoppingCart() throws Exception {
         applicationController.switchScene(mainAnchorPane, "ShoppingCart");
     }
 

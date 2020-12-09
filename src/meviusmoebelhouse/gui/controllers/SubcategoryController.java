@@ -19,7 +19,7 @@ public class SubcategoryController implements Initializable {
 
     public AnchorPane mainAnchorPane;
 
-    private final ApplicationController applicationController = Main.getApplicationController();
+    private ApplicationController applicationController = null;
 
     //Index of which first furniture in furnitures is showing (0/1/2/3/4/5...)
     public int counterFurnitures = 0;
@@ -37,6 +37,10 @@ public class SubcategoryController implements Initializable {
 
     //List with all furniture images in this subcategory
     ArrayList<Image> allFurnitureImages = new ArrayList<>();
+
+    public SubcategoryController(ApplicationController applicationController) {
+        this.applicationController = applicationController;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -65,26 +69,26 @@ public class SubcategoryController implements Initializable {
         showFurnitureImages();
     }
 
-    public void backToHomeOCE(ActionEvent actionEvent) throws IOException {
+    public void backToHomeOCE(ActionEvent actionEvent) throws Exception {
         applicationController.switchScene(mainAnchorPane, "Home");
     }
 
-    public void openLogin(ActionEvent actionEvent) throws IOException {
+    public void openLogin(ActionEvent actionEvent) throws Exception {
         applicationController.switchScene(mainAnchorPane, "Login");
     }
 
     public void logout(ActionEvent actionEvent) {
     }
 
-    public void openSettings(ActionEvent actionEvent) throws IOException {
+    public void openSettings(ActionEvent actionEvent) throws Exception {
         applicationController.switchScene(mainAnchorPane, "Settings");
     }
 
-    public void openShoppingCart(ActionEvent actionEvent) throws IOException {
+    public void openShoppingCart(ActionEvent actionEvent) throws Exception {
         applicationController.switchScene(mainAnchorPane, "ShoppingCart");
     }
 
-    public void backToCategoryOCE(ActionEvent actionEvent) throws IOException {
+    public void backToCategoryOCE(ActionEvent actionEvent) throws Exception {
         applicationController.switchScene(mainAnchorPane, "Category");
     }
 

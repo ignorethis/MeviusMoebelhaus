@@ -14,8 +14,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SingleItemController implements Initializable {
-
-    private final ApplicationController applicationController = Main.getApplicationController();
+    private ApplicationController applicationController = null;
 
     public Furniture currentFurniture;
     public AnchorPane mainAnchorPane;
@@ -25,6 +24,10 @@ public class SingleItemController implements Initializable {
     public TextField singleItemViewPrice, singleItemViewRebate, singleItemViewFinalPrice;
     public Button backToCategoryButton, backToSubcategoryButton;
     public ChoiceBox furnitureAmount;
+
+    public SingleItemController(ApplicationController applicationController) {
+        this.applicationController = applicationController;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -50,24 +53,24 @@ public class SingleItemController implements Initializable {
      * with x amount in the shopping cart of the customer
      * @throws IOException
      */
-    public void addToShoppingCart() throws IOException {
+    public void addToShoppingCart() throws Exception {
         applicationController.addFurnitureToShoppingCart((Integer) furnitureAmount.getValue());
         applicationController.switchScene(mainAnchorPane, "ShoppingCart");
     }
 
-    public void backToHomeOCE() throws IOException {
+    public void backToHomeOCE() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Home");
     }
 
-    public void backToCategoryOCE() throws IOException {
+    public void backToCategoryOCE() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Category");
     }
 
-    public void backToSubcategoryOCE() throws IOException {
+    public void backToSubcategoryOCE() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Subcategory");
     }
 
-    public void openLogin() throws IOException {
+    public void openLogin() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Login");
     }
 
@@ -75,11 +78,11 @@ public class SingleItemController implements Initializable {
 
     }
 
-    public void openSettings() throws IOException {
+    public void openSettings() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Settings");
     }
 
-    public void openShoppingCart() throws IOException {
+    public void openShoppingCart() throws Exception {
         applicationController.switchScene(mainAnchorPane, "ShoppingCart");
     }
 }

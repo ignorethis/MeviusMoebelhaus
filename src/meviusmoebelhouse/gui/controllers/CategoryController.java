@@ -17,8 +17,7 @@ import java.net.URL;
 import java.util.*;
 
 public class CategoryController implements Initializable {
-
-    private final ApplicationController applicationController = Main.getApplicationController();
+    private ApplicationController applicationController = null;
 
     public AnchorPane mainAnchorPane;
 
@@ -44,6 +43,10 @@ public class CategoryController implements Initializable {
     ArrayList<Image> allSalesImages = new ArrayList<>(); //List with all sales images in this category
     ArrayList<Image> allFurnitureImages = new ArrayList<>(); //List with all furniture images in this category
     ArrayList<Image> allSubcategoryImages = new ArrayList<>(); //List with all subcategory images in this category
+
+    public CategoryController(ApplicationController applicationController) {
+        this.applicationController = applicationController;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -80,22 +83,22 @@ public class CategoryController implements Initializable {
         showSubcategoryImages();
     }
 
-    public void backToHomeOCE() throws IOException {
+    public void backToHomeOCE() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Home");
     }
 
-    public void openLogin() throws IOException {
+    public void openLogin() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Login");
     }
 
     public void logout() {
     }
 
-    public void openSettings() throws IOException {
+    public void openSettings() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Settings");
     }
 
-    public void openShoppingCart() throws IOException {
+    public void openShoppingCart() throws Exception {
         applicationController.switchScene(mainAnchorPane, "ShoppingCart");
     }
 
@@ -156,7 +159,7 @@ public class CategoryController implements Initializable {
     }
 
 
-    public void openSubcategory(MouseEvent mouseEvent) throws IOException {
+    public void openSubcategory(MouseEvent mouseEvent) throws Exception {
         applicationController.openSubcategory(allSubcategoryImages.get(Integer.parseInt(mouseEvent.getPickResult().getIntersectedNode().getId())), mainAnchorPane);
     }
 
