@@ -1,4 +1,4 @@
-package meviusmoebelhouse.gui.controllers;
+package meviusmoebelhouse.gui.user.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -6,10 +6,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import meviusmoebelhouse.Main;
 import meviusmoebelhouse.gui.ApplicationController;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 

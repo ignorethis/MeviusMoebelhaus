@@ -1,4 +1,4 @@
-package meviusmoebelhouse.gui.controllers;
+package meviusmoebelhouse.gui.user.controllers;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -35,7 +35,11 @@ public class LoginController implements Initializable {
         }
         else {
             applicationController.setCurrentUser(user);
-            applicationController.switchScene(mainAnchorPane, "Home");
+            if(applicationController.getUserRoleRepository().getByIdUserRole(user.getIdUser()).getIdUserRole() == 1){
+                applicationController.switchScene(mainAnchorPane, "AdminHome");
+            } else {
+                applicationController.switchScene(mainAnchorPane, "Home");
+            }
         }
     }
 

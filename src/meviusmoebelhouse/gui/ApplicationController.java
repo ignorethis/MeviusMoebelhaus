@@ -6,8 +6,9 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import meviusmoebelhouse.gui.controllers.*;
-import meviusmoebelhouse.gui.fxmlfiles.FXML;
+import meviusmoebelhouse.gui.admin.controllers.AdminHomeController;
+import meviusmoebelhouse.gui.user.controllers.*;
+import meviusmoebelhouse.gui.user.fxmlfiles.FXML;
 import meviusmoebelhouse.model.*;
 import meviusmoebelhouse.repositories.*;
 
@@ -185,6 +186,9 @@ public class ApplicationController {
                 break;
             case "Subcategory":
                 loader.setControllerFactory(c -> new SubcategoryController(this));
+                break;
+            case "AdminHome":
+                loader.setControllerFactory(c -> new AdminHomeController(this));
                 break;
             default:
                 throw new Exception("Please add a controller factory for '" + viewName + "'");
