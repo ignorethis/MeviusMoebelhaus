@@ -23,7 +23,7 @@ public class HomeController implements Initializable {
     public AnchorPane mainAnchorPane;
 
     public Button   homeSalesSliderLeftButton, homeSalesSliderRightButton,
-            homeCategoriesSliderLeftButton, homeCategoriesSliderRightButton;
+            homeCategoriesSliderLeftButton, homeCategoriesSliderRightButton, menuBarLogin, menuBarLogout, menuBarSettings;
 
     public AnchorPane   homeSalesSliderPane1, homeSalesSliderPane2,
             homeSalesSliderPane3, homeSalesSliderPane4,
@@ -51,6 +51,12 @@ public class HomeController implements Initializable {
         allCategoryImageViews.addAll(Arrays.asList( homeCategoriesImage1, homeCategoriesImage2,
                                                     homeCategoriesImage3, homeCategoriesImage4));
 
+        boolean userLoggedIn = applicationController.isUserLoggedIn();
+        menuBarLogin.setDisable(userLoggedIn);
+        menuBarLogout.setDisable(!userLoggedIn);
+        menuBarSettings.setDisable(!userLoggedIn);
+
+
         //load all images of furnitures with rebates in the allSalesImages list
         HashMap<Integer, HashMap<Integer, List<Image>>> allFurnituresImages = applicationController.getAllFurnituresImages();
         for(HashMap<Integer, List<Image>> hashMap : allFurnituresImages.values()){
@@ -72,7 +78,6 @@ public class HomeController implements Initializable {
 
     /**
      * Adjusts the images in the image views showing the previous image in the list
-     * @param actionEvent actionEvent
      */
     public void homeSalesSliderLeftOCE() { //slides the sales images of the slider to the left
         if(counterSales > 0){
@@ -83,7 +88,6 @@ public class HomeController implements Initializable {
 
     /**
      * Adjusts the images in the image views showing the next image in the list
-     * @param actionEvent actionEvent
      */
     public void homeSalesSliderRightOCE() { //slides the sales images of the slider to the right
         if(counterSales < allSalesImages.size() - allSalesImageViews.size()){
@@ -94,7 +98,6 @@ public class HomeController implements Initializable {
 
     /**
      * Adjusts the images in the image views showing the previous image in the list
-     * @param actionEvent actionEvent
      */
     public void homeCategoriesSliderLeftOCE() { //slides the category images of the slider to the left
         if(counterCategories > 0){
@@ -105,7 +108,6 @@ public class HomeController implements Initializable {
 
     /**
      * Adjusts the images in the image views showing the next image in the list
-     * @param actionEvent actionEvent
      */
     public void homeCategoriesSliderRightOCE() { //slides the category images of the slider to the right
         if(counterCategories < allCategoryImages.size() - allCategoryImageViews.size()){

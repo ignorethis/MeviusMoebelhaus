@@ -46,7 +46,11 @@ public class InvoiceDetailsRepository {
             stmt.setInt(1, idInvoiceDetails);
             rs = stmt.executeQuery();
 
-            return fromResultSet(rs);
+            if (rs.next()) {
+                return fromResultSet(rs);
+            } else {
+                return null;
+            }
         } finally {
             RepositoryHelper.CloseIfExists(rs, stmt);
         }
@@ -100,10 +104,6 @@ public class InvoiceDetailsRepository {
     }
 
     private InvoiceDetails fromResultSet(ResultSet rs) throws Exception {
-        if (!rs.next()) {
-            return null;
-        }
-
         InvoiceDetails id = new InvoiceDetails();
 
         id.setIdInvoiceDetails(rs.getInt("idInvoiceDetails"));

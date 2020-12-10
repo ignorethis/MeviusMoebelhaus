@@ -17,12 +17,13 @@
     </Label>
     <ToolBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="622.0">
         <items>
-            <Button fx:id="menuBarLogin" mnemonicParsing="false" onAction="#openLogin" text="Login" />
+
         </items>
     </ToolBar>
     <ToolBar layoutX="622.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="378.0">
         <items>
-            <Button fx:id="menuBarLogout" mnemonicParsing="false" onAction="#logout" text="Logout" />
+            <Button fx:id="menuBarLogin" mnemonicParsing="false" onAction="#openLogin" text="Login" alignment="CENTER_RIGHT" />
+            <Button fx:id="menuBarLogout" mnemonicParsing="false" onAction="#logout" text="Logout" alignment="CENTER_RIGHT" />
             <Button fx:id="menuBarSettings" mnemonicParsing="false" onAction="#openSettings" text="Settings" />
             <Button fx:id="menuBarShoppingCart" mnemonicParsing="false" onAction="#openShoppingCart" text="Shopping cart" />
         </items>

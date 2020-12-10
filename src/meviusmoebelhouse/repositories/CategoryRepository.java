@@ -46,7 +46,11 @@ public class CategoryRepository {
             stmt.setInt(1, idCategory);
             rs = stmt.executeQuery();
 
-            return fromResultSet(rs);
+            if (rs.next()) {
+                return fromResultSet(rs);
+            } else {
+                return null;
+            }
         } finally {
             RepositoryHelper.CloseIfExists(rs, stmt);
         }
@@ -93,10 +97,6 @@ public class CategoryRepository {
     }
 
     private Category fromResultSet(ResultSet rs) throws Exception {
-        if (!rs.next()) {
-            return null;
-        }
-
         Category cat = new Category();
 
         cat.setIdCategory(rs.getInt("idCategory"));

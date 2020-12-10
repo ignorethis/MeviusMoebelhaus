@@ -47,10 +47,13 @@ public class InvoiceRepository {
         try {
             stmt = conn.prepareStatement("select * from invoice where idInvoice = ?");
             stmt.setInt(1, idInvoice);
-
             rs = stmt.executeQuery();
 
-            return fromResultSet(rs);
+            if (rs.next()) {
+                return fromResultSet(rs);
+            } else {
+                return null;
+            }
         } finally {
             RepositoryHelper.CloseIfExists(rs, stmt);
         }
@@ -108,10 +111,6 @@ public class InvoiceRepository {
     }
 
     private Invoice fromResultSet(ResultSet rs) throws Exception {
-        if (!rs.next()) {
-            return null;
-        }
-
         Invoice inv = new Invoice();
 
         inv.setIdInvoice(rs.getInt("idInvoice"));

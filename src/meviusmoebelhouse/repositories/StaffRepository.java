@@ -44,10 +44,13 @@ public class StaffRepository {
         try {
             stmt = conn.prepareStatement("select * from staff where idStaff = ?");
             stmt.setInt(1, idStaff);
-
             rs = stmt.executeQuery();
 
-            return fromResultSet(rs);
+            if (rs.next()) {
+                return fromResultSet(rs);
+            } else {
+                return null;
+            }
         } finally {
             RepositoryHelper.CloseIfExists(rs, stmt);
         }
@@ -96,10 +99,6 @@ public class StaffRepository {
     }
 
     private Staff fromResultSet(ResultSet rs) throws Exception {
-        if (!rs.next()) {
-            return null;
-        }
-
         Staff sta = new Staff();
 
         sta.setIdStaff(rs.getInt("idStaff"));

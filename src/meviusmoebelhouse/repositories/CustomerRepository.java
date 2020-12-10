@@ -45,8 +45,30 @@ public class CustomerRepository {
             stmt.setInt(1, idCustomer);
             rs = stmt.executeQuery();
 
-            return fromResultSet(rs);
+            if (rs.next()) {
+                return fromResultSet(rs);
+            } else {
+                return null;
+            }
+        } finally {
+            RepositoryHelper.CloseIfExists(rs, stmt);
+        }
+    }
 
+    public Customer getByIdUser(int idUser) throws Exception {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = conn.prepareStatement("select * from customer where idUser = ?");
+            stmt.setInt(1, idUser);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return fromResultSet(rs);
+            } else {
+                return null;
+            }
         } finally {
             RepositoryHelper.CloseIfExists(rs, stmt);
         }
@@ -100,10 +122,6 @@ public class CustomerRepository {
     }
 
     private Customer fromResultSet(ResultSet rs) throws Exception {
-        if (!rs.next()) {
-            return null;
-        }
-
         Customer cus = new Customer();
 
         cus.setIdCustomer(rs.getInt("idCustomer"));

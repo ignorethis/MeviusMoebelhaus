@@ -46,11 +46,14 @@ public class FurnitureRepository {
             stmt.setInt(1, idFurniture);
             rs = stmt.executeQuery();
 
-            return fromResultSet(rs);
+            if (rs.next()) {
+                return fromResultSet(rs);
+            } else {
+                return null;
+            }
         } finally {
             RepositoryHelper.CloseIfExists(rs, stmt);
         }
-
     }
 
     public int create(Furniture furniture) throws Exception {
@@ -109,10 +112,6 @@ public class FurnitureRepository {
     }
 
     private Furniture fromResultSet(ResultSet rs) throws Exception {
-        if (!rs.next()) {
-            return null;
-        }
-
         Furniture fur = new Furniture();
 
         fur.setIdFurniture(rs.getInt("idFurniture"));

@@ -4,12 +4,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import meviusmoebelhouse.Main;
 import meviusmoebelhouse.gui.ApplicationController;
 import meviusmoebelhouse.model.User;
-import meviusmoebelhouse.repositories.UserRepository;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -29,11 +25,18 @@ public class LoginController implements Initializable {
 
     }
 
-    public void loginOCE() {
-   /*     userRepository.getByUsernameAndPassword(usernameField.getText(),passwordField.getText());
-        if (){
+    public void loginOCE() throws Exception {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
 
-        }*/
+        User user = applicationController.getUserRepository().getByUsernameAndPassword(username, password);
+        if (user == null){
+            errorMessageLabel.setText("Wrong username or password");
+        }
+        else {
+            applicationController.setCurrentUser(user);
+            applicationController.switchScene(mainAnchorPane, "Home");
+        }
     }
 
     public void registerOCE() {

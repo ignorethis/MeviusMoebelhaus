@@ -44,8 +44,11 @@ public class UserRoleRepository {
             stmt.setInt(1, idUserRole);
             rs = stmt.executeQuery();
 
-            return fromResultSet(rs);
-
+            if (rs.next()) {
+                return fromResultSet(rs);
+            } else {
+                return null;
+            }
         } finally {
             RepositoryHelper.CloseIfExists(rs, stmt);
         }
@@ -91,10 +94,6 @@ public class UserRoleRepository {
     }
 
     private UserRole fromResultSet(ResultSet rs) throws Exception {
-        if (!rs.next()) {
-            return null;
-        }
-
         UserRole cus = new UserRole();
 
         cus.setIdUserRole(rs.getInt("idUserRole"));

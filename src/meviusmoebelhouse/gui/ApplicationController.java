@@ -17,11 +17,10 @@ import java.sql.DriverManager;
 import java.util.*;
 
 public class ApplicationController {
-    Connection conn = null;
-
     Category    currentCategory;
     Subcategory currentSubcategory;
     Furniture   currentFurniture;
+    User currentUser;
 
     List<Category>          allCategories;
     List<Customer>          allCustomers;
@@ -41,33 +40,48 @@ public class ApplicationController {
     HashMap<Image, Integer> IdForCategoryImages      = new HashMap<>(); //Hashmap that saves the ID of an category image as a value with the image as a key
     HashMap<Image, Integer> IdForSubcategoryImages   = new HashMap<>(); //Hashmap that saves the ID of an subcategory image as a value with the image as a key
 
+    //repositories
+    CategoryRepository categoryRepository = null;
+    CustomerRepository customerRepository = null;
+    FurnitureRepository furnitureRepository = null;
+    InvoiceRepository invoiceRepository = null;
+    InvoiceDetailsRepository invoiceDetailsRepository = null;
+    StaffRepository staffRepository = null;
+    SubcategoryRepository subcategoryRepository = null;
+    UserRepository userRepository = null;
+    UserRoleRepository userRoleRepository = null;
+
     public ApplicationController() {
 
         try {
             Class.forName("org.sqlite.JDBC"); // in configurationsdatei
-            conn = DriverManager.getConnection("jdbc:sqlite:db\\MeviusMoebelhaus.db"); // (xml/json/ini) auslagern.
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:db\\MeviusMoebelhaus.db"); // (xml/json/ini) auslagern.
 
             //read data from the database and store it in the above structure
-            CategoryRepository catRep = new CategoryRepository(conn);
-            allCategories = catRep.getAll();
+            categoryRepository = new CategoryRepository(conn);
+            allCategories = categoryRepository.getAll();
 
-            CustomerRepository cusRep = new CustomerRepository(conn);
-            allCustomers = cusRep.getAll();
+            customerRepository = new CustomerRepository(conn);
+            allCustomers = customerRepository.getAll();
 
-            FurnitureRepository furRep = new FurnitureRepository(conn);
-            allFurnitures = furRep.getAll();
+            furnitureRepository = new FurnitureRepository(conn);
+            allFurnitures = furnitureRepository.getAll();
 
-            InvoiceRepository invRep = new InvoiceRepository(conn);
-            allInvoices = invRep.getAll();
+            invoiceRepository = new InvoiceRepository(conn);
+            allInvoices = invoiceRepository.getAll();
 
-            InvoiceDetailsRepository invDetRep = new InvoiceDetailsRepository(conn);
-            allInvoiceDetails = invDetRep.getAll();
+            invoiceDetailsRepository = new InvoiceDetailsRepository(conn);
+            allInvoiceDetails = invoiceDetailsRepository.getAll();
 
-            StaffRepository staRep = new StaffRepository(conn);
-            allStaffs = staRep.getAll();
+            staffRepository = new StaffRepository(conn);
+            allStaffs = staffRepository.getAll();
 
-            SubcategoryRepository subCatRep = new SubcategoryRepository(conn);
-            allSubcategories = subCatRep.getAll();
+            subcategoryRepository = new SubcategoryRepository(conn);
+            allSubcategories = subcategoryRepository.getAll();
+
+            userRepository = new UserRepository(conn);
+
+            userRoleRepository = new UserRoleRepository(conn);
 
             //iterates all furnitures and fills the allFurnituresImages Hashmap and the IdForFurnitureImages Hashmap
             for(Furniture f : allFurnitures){
@@ -372,5 +386,53 @@ public class ApplicationController {
 
     public void addFurnitureToShoppingCart(int amount) {
         //add currentFurniture amount times in the shopping cart of the customer
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public CategoryRepository getCategoryRepository() {
+        return categoryRepository;
+    }
+
+    public CustomerRepository getCustomerRepository() {
+        return customerRepository;
+    }
+
+    public FurnitureRepository getFurnitureRepository() {
+        return furnitureRepository;
+    }
+
+    public InvoiceRepository getInvoiceRepository() {
+        return invoiceRepository;
+    }
+
+    public InvoiceDetailsRepository getInvoiceDetailsRepository() {
+        return invoiceDetailsRepository;
+    }
+
+    public StaffRepository getStaffRepository() {
+        return staffRepository;
+    }
+
+    public SubcategoryRepository getSubcategoryRepository() {
+        return subcategoryRepository;
+    }
+
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
+
+    public UserRoleRepository getUserRoleRepository() {
+        return userRoleRepository;
+    }
+
+    public boolean isUserLoggedIn(){
+        return currentUser != null;
     }
 }

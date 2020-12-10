@@ -46,9 +46,14 @@ public class SubcategoryRepository {
         try {
             stmt = conn.prepareStatement("select * from subcategory where idSubcategory = ?");
             stmt.setInt(1, idSubcategory);
+
             rs = stmt.executeQuery();
 
-            return fromResultSet(rs);
+            if (rs.next()) {
+                return fromResultSet(rs);
+            } else {
+                return null;
+            }
         } finally {
             RepositoryHelper.CloseIfExists(rs, stmt);
         }
@@ -97,10 +102,6 @@ public class SubcategoryRepository {
     }
 
     private Subcategory fromResultSet(ResultSet rs) throws Exception {
-        if (!rs.next()) {
-            return null;
-        }
-
         Subcategory sc = new Subcategory();
 
         sc.setIdSubcategory(rs.getInt("idSubcategory"));

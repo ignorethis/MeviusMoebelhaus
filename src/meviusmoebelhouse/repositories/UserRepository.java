@@ -40,9 +40,14 @@ public class UserRepository {
         try {
             stmt = conn.prepareStatement("select * from user where idUser = ?");
             stmt.setInt(1, idUser);
+
             rs = stmt.executeQuery();
 
-            return fromResultSet(rs);
+            if (rs.next()) {
+                return fromResultSet(rs);
+            } else {
+                return null;
+            }
         } finally {
             RepositoryHelper.CloseIfExists(rs, stmt);
         }
@@ -58,7 +63,11 @@ public class UserRepository {
             stmt.setString(2, password);
             rs = stmt.executeQuery();
 
-            return fromResultSet(rs);
+            if (rs.next()) {
+                return fromResultSet(rs);
+            } else {
+                return null;
+            }
         }finally {
             RepositoryHelper.CloseIfExists(rs, stmt);
         }
@@ -108,10 +117,6 @@ public class UserRepository {
     }
 
     private User fromResultSet(ResultSet rs) throws Exception {
-        if (!rs.next()) {
-            return null;
-        }
-
         User usr = new User();
 
         usr.setIdUser(rs.getInt("idUser"));
