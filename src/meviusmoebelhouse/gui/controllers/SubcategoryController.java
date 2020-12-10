@@ -2,6 +2,7 @@ package meviusmoebelhouse.gui.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,6 +28,8 @@ public class SubcategoryController implements Initializable {
     public Subcategory currentSubcategory;
 
     public Label subcategoryLabel;
+    public Button backToCategoryButton;
+
     public ImageView    categoriesFurnituresImage1, categoriesFurnituresImage2, categoriesFurnituresImage3,
             categoriesFurnituresImage4, categoriesFurnituresImage5, categoriesFurnituresImage6,
             categoriesFurnituresImage7, categoriesFurnituresImage8, categoriesFurnituresImage9,
@@ -47,6 +50,7 @@ public class SubcategoryController implements Initializable {
         currentSubcategory = applicationController.getCurrentSubcategory();
 
         subcategoryLabel.setText(currentSubcategory.getName());
+        backToCategoryButton.setText(applicationController.getCurrentCategory().getName());
 
         allFurnitureImageViews.addAll(Arrays.asList(categoriesFurnituresImage1, categoriesFurnituresImage2,
                 categoriesFurnituresImage3, categoriesFurnituresImage4, categoriesFurnituresImage5,

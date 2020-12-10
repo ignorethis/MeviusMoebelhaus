@@ -86,13 +86,13 @@ public class ApplicationController {
             //iterates all furnitures and fills the allFurnituresImages Hashmap and the IdForFurnitureImages Hashmap
             for(Furniture f : allFurnitures){
                 Image t;
-                if(allFurnituresImages.containsKey(f.getIdSubcategory())) {
+                if(allFurnituresImages.containsKey(getSubcategoryById(f.getIdSubcategory()).getIdCategory())) {
                     //case when the hashmap has already entries in the category (at least 1)
-                    if (allFurnituresImages.get(f.getIdSubcategory()).containsKey(f.getIdSubcategory())) {
+                    if (allFurnituresImages.get(getSubcategoryById(f.getIdSubcategory()).getIdCategory()).containsKey(f.getIdSubcategory())) {
                         //case when the hashmap has already entries in the subcategory (at least 1)
                         //adds the next entry to the existing list
                         t = getFurnitureImageByFurniture(f);
-                        allFurnituresImages.get(f.getIdSubcategory()).get(f.getIdSubcategory()).add(t);
+                        allFurnituresImages.get(getSubcategoryById(f.getIdSubcategory()).getIdCategory()).get(f.getIdSubcategory()).add(t);
                     } else {
                         //case when the hashmap has no entry in the subcategory yet
                         //adds a new HashMap with the first entry
@@ -101,7 +101,7 @@ public class ApplicationController {
                         t = getFurnitureImageByFurniture(f);
                         i.add(t);
                         h.put(f.getIdSubcategory(), i);
-                        allFurnituresImages.put(f.getIdSubcategory(), h);
+                        allFurnituresImages.put(getSubcategoryById(f.getIdSubcategory()).getIdCategory(), h);
                     }
                 } else {
                     //case when the hashmap has no entry in the category yet
@@ -111,7 +111,7 @@ public class ApplicationController {
                     t = getFurnitureImageByFurniture(f);
                     i.add(t);
                     h.put(f.getIdSubcategory(), i);
-                    allFurnituresImages.put(f.getIdSubcategory(), h);
+                    allFurnituresImages.put(getSubcategoryById(f.getIdSubcategory()).getIdCategory(), h);
                 }
                 IdForFurnitureImages.put(t, f.getIdFurniture());
             }
@@ -242,7 +242,7 @@ public class ApplicationController {
             }
         }
 
-        int idCat = currentFurniture.getIdSubcategory();
+        int idCat = getSubcategoryById(currentFurniture.getIdSubcategory()).getIdCategory();
         for(Category c : allCategories){
             if(c.getIdCategory() == idCat){
                 setCurrentCategory(c);
@@ -306,7 +306,7 @@ public class ApplicationController {
 
         currentFurniture = null;
 
-        switchScene(anchorPane, "Category");
+        switchScene(anchorPane, "Subcategory");
     }
 
     /**
