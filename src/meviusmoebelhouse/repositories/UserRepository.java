@@ -17,7 +17,7 @@ public class UserRepository {
         Statement stmt = null;
         ResultSet rs = null;
 
-        List<User> result = new ArrayList<User>();
+        List<User> result = new ArrayList<>();
 
         try {
             stmt = conn.createStatement();
@@ -73,8 +73,9 @@ public class UserRepository {
         }
     }
 
-    public int create(User user) throws Exception {
+    public void create(User user) throws Exception {
         PreparedStatement stmt = null;
+        ResultSet generatedKeysResultSet = null;
 
         try {
             stmt = conn.prepareStatement("insert into user (username, password, failedLoginAttempts) values (?,?,?)");
@@ -82,9 +83,16 @@ public class UserRepository {
             stmt.setString(2, user.getPassword());
             stmt.setInt(3, user.getFailedLoginAttempts());
 
-            return stmt.executeUpdate();
+            stmt.executeUpdate();
+
+            generatedKeysResultSet = stmt.getGeneratedKeys();
+            if (generatedKeysResultSet.next()){
+                user.setIdUser(generatedKeysResultSet.getInt(1));
+            } else {
+                throw new Exception("No key was returned.");
+            }
         } finally {
-            RepositoryHelper.CloseIfExists(stmt);
+            RepositoryHelper.CloseIfExists(generatedKeysResultSet, stmt);
         }
     }
 

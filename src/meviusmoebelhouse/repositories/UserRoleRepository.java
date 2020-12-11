@@ -19,7 +19,7 @@ public class UserRoleRepository {
         Statement stmt = null;
         ResultSet rs = null;
 
-        List<UserRole> result = new ArrayList<UserRole>();
+        List<UserRole> result = new ArrayList<>();
 
         try {
             stmt = conn.createStatement();
@@ -54,16 +54,24 @@ public class UserRoleRepository {
         }
     }
 
-    public int create(UserRole userRole) throws Exception {
+    public void create(UserRole userRole) throws Exception {
         PreparedStatement stmt = null;
+        ResultSet generatedKeysResultSet = null;
 
         try {
             stmt = conn.prepareStatement("insert into userRole (name) values (?)");
             stmt.setString(1, userRole.getName());
 
-            return stmt.executeUpdate();
+            stmt.executeUpdate();
+
+            generatedKeysResultSet = stmt.getGeneratedKeys();
+            if (generatedKeysResultSet.next()){
+                userRole.setIdUserRole(generatedKeysResultSet.getInt(1));
+            } else {
+                throw new Exception("No key was returned.");
+            }
         } finally {
-            RepositoryHelper.CloseIfExists(stmt);
+            RepositoryHelper.CloseIfExists(generatedKeysResultSet, stmt);
         }
     }
 

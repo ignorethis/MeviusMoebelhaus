@@ -17,11 +17,11 @@ public class InvoiceRepository {
         this.conn = conn;
     }
 
-    public List<Invoice> getAll() {
+    public List<Invoice> getAll() throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
 
-        List<Invoice> result = new ArrayList<Invoice>();
+        List<Invoice> result = new ArrayList<>();
 
         try {
             stmt = conn.createStatement();
@@ -32,13 +32,9 @@ public class InvoiceRepository {
             }
 
             return result;
-        } catch (Exception e) {
-            System.out.println(e);
         } finally {
             RepositoryHelper.CloseIfExists(rs, stmt);
         }
-
-        return null;
     }
     public Invoice getByIdInvoice(int idInvoice) throws Exception {
         PreparedStatement stmt = null;
@@ -59,8 +55,9 @@ public class InvoiceRepository {
         }
     }
 
-    public int create(Invoice invoice) throws Exception {
+    public void create(Invoice invoice) throws Exception {
         PreparedStatement stmt = null;
+        ResultSet generatedKeysResultSet = null;
 
         try {
             stmt = conn.prepareStatement("insert into invoice (idCustomer, idStaff, firstName, lastName, shippingAddress, billOfGoods, totalPrice) values (?,?,?,?,?,?,?)");
@@ -72,9 +69,16 @@ public class InvoiceRepository {
             stmt.setString(6, invoice.getBillOfGoods());
             stmt.setBigDecimal(7, invoice.getTotalPrice());
 
-            return stmt.executeUpdate();
+            stmt.executeUpdate();
+
+            generatedKeysResultSet = stmt.getGeneratedKeys();
+            if (generatedKeysResultSet.next()){
+                invoice.setIdInvoice(generatedKeysResultSet.getInt(1));
+            } else {
+                throw new Exception("No key was returned.");
+            }
         } finally {
-            RepositoryHelper.CloseIfExists(stmt);
+            RepositoryHelper.CloseIfExists(generatedKeysResultSet, stmt);
         }
     }
 

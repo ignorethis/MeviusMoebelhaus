@@ -56,26 +56,34 @@ public class CategoryRepository {
         }
     }
 
-    public int create(Category Category) throws Exception {
+    public void create(Category category) throws Exception {
         PreparedStatement stmt = null;
+        ResultSet generatedKeysResultSet = null;
 
         try {
             stmt = conn.prepareStatement("insert into category (name) values (?)");
-            stmt.setString(1, Category.getName());
-            
-            return stmt.executeUpdate();
+            stmt.setString(1, category.getName());
+
+            stmt.executeUpdate();
+
+            generatedKeysResultSet = stmt.getGeneratedKeys();
+            if (generatedKeysResultSet.next()) {
+                category.setIdCategory(generatedKeysResultSet.getInt(1));
+            } else {
+                throw new Exception("No key was returned.");
+            }
         } finally {
-            RepositoryHelper.CloseIfExists(stmt);
+            RepositoryHelper.CloseIfExists(generatedKeysResultSet, stmt);
         }
     }
 
-    public void update(Category Category) throws Exception {
+    public void update(Category category) throws Exception {
         PreparedStatement stmt = null;
 
         try {
             stmt = conn.prepareStatement("update category set name = ? where idCategory = ?");
-            stmt.setString(1, Category.getName());
-            stmt.setInt(2, Category.getIdCategory());
+            stmt.setString(1, category.getName());
+            stmt.setInt(2, category.getIdCategory());
            
             stmt.executeUpdate();
         } finally {
@@ -84,11 +92,11 @@ public class CategoryRepository {
 
     }
 
-    public void delete(Category Category) throws Exception {
+    public void delete(Category category) throws Exception {
         PreparedStatement stmt = null;
         try {
             stmt = conn.prepareStatement("delete from category where idCategory = ?");
-            stmt.setInt(1, Category.getIdCategory()); 
+            stmt.setInt(1, category.getIdCategory());
             
             stmt.executeUpdate();
         } finally {

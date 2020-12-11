@@ -21,7 +21,7 @@ public class FurnitureRepository {
         Statement stmt = null;
         ResultSet rs = null;
 
-        List<Furniture> result = new ArrayList<Furniture>();
+        List<Furniture> result = new ArrayList<>();
 
         try {
             stmt = conn.createStatement();
@@ -56,8 +56,9 @@ public class FurnitureRepository {
         }
     }
 
-    public int create(Furniture furniture) throws Exception {
+    public void create(Furniture furniture) throws Exception {
         PreparedStatement stmt = null;
+        ResultSet generatedKeysResultSet = null;
 
         try {
             stmt = conn.prepareStatement("insert into furniture (idSubcategory, name, width, length, height, price, rebate, pictureAddress, description) values (?,?,?,?,?,?,?,?,?)");
@@ -71,9 +72,16 @@ public class FurnitureRepository {
             stmt.setString(8, furniture.getPictureAddress());
             stmt.setString(9, furniture.getDescription());
 
-            return stmt.executeUpdate();
+            stmt.executeUpdate();
+
+            generatedKeysResultSet = stmt.getGeneratedKeys();
+            if (generatedKeysResultSet.next()){
+                furniture.setIdFurniture(generatedKeysResultSet.getInt(1));
+            } else {
+                throw new Exception("No key was returned.");
+            }
         } finally {
-            RepositoryHelper.CloseIfExists(stmt);
+            RepositoryHelper.CloseIfExists(generatedKeysResultSet, stmt);
         }
     }
 

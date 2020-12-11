@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
-    private ApplicationController applicationController = null;
+    private ApplicationController applicationController;
 
     public AnchorPane mainAnchorPane;
     public TextField usernameField, passwordField;
@@ -41,7 +41,8 @@ public class LoginController implements Initializable {
         }
     }
 
-    public void registerOCE() {
+    public void registerOCE() throws Exception {
+        applicationController.switchScene(mainAnchorPane,"Register");
     }
 
     public void backToHomeOCE() throws Exception {

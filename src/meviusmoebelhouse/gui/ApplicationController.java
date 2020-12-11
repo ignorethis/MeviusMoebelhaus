@@ -186,6 +186,9 @@ public class ApplicationController {
             case "Subcategory":
                 loader.setControllerFactory(c -> new SubcategoryController(this));
                 break;
+            case "Register":
+                loader.setControllerFactory(c -> new RegisterController(this));
+                break;
             default:
                 throw new Exception("Please add a controller factory for '" + viewName + "'");
         }

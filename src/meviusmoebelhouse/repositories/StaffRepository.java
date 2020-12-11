@@ -21,7 +21,7 @@ public class StaffRepository {
         Statement stmt = null;
         ResultSet rs = null;
 
-        List<Staff> result = new ArrayList<Staff>();
+        List<Staff> result = new ArrayList<>();
 
         try {
             stmt = conn.createStatement();
@@ -55,8 +55,9 @@ public class StaffRepository {
             RepositoryHelper.CloseIfExists(rs, stmt);
         }
     }
-    public int create(Staff staff) throws Exception {
+    public void create(Staff staff) throws Exception {
         PreparedStatement stmt = null;
+        ResultSet generatedKeysResultSet = null;
 
         try {
             stmt = conn.prepareStatement("insert into staff (idUser, firstName, lastName) values (?,?,?)");
@@ -64,11 +65,19 @@ public class StaffRepository {
             stmt.setString(2, staff.getFirstName());
             stmt.setString(3, staff.getLastName());
 
-            return stmt.executeUpdate();
+            stmt.executeUpdate();
+
+            generatedKeysResultSet = stmt.getGeneratedKeys();
+            if (generatedKeysResultSet.next()){
+                staff.setIdStaff(generatedKeysResultSet.getInt(1));
+            } else {
+                throw new Exception("No key was returned.");
+            }
         } finally {
-            RepositoryHelper.CloseIfExists(stmt);
+            RepositoryHelper.CloseIfExists(generatedKeysResultSet, stmt);
         }
     }
+
     public void update(Staff staff) throws Exception {
         PreparedStatement stmt = null;
 

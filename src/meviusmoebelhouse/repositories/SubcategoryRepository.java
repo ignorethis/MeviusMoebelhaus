@@ -21,7 +21,7 @@ public class SubcategoryRepository {
         Statement stmt = null;
         ResultSet rs = null;
 
-        List<Subcategory> result = new ArrayList<Subcategory>();
+        List<Subcategory> result = new ArrayList<>();
 
         try {
             stmt = conn.createStatement();
@@ -34,8 +34,6 @@ public class SubcategoryRepository {
             return result;
         } finally {
             RepositoryHelper.CloseIfExists(rs, stmt);
-            rs = null;
-            stmt = null;
         }
     }
 
@@ -59,28 +57,36 @@ public class SubcategoryRepository {
         }
     }
 
-    public int create(Subcategory Subcategory) throws Exception {
+    public void create(Subcategory subcategory) throws Exception {
         PreparedStatement stmt = null;
+        ResultSet generatedKeysResultSet = null;
 
         try {
             stmt = conn.prepareStatement("insert into subcategory (idCategory, name) values (?,?)");
-            stmt.setInt(1, Subcategory.getIdCategory());
-            stmt.setString(2, Subcategory.getName());
+            stmt.setInt(1, subcategory.getIdCategory());
+            stmt.setString(2, subcategory.getName());
 
-            return stmt.executeUpdate();
+            stmt.executeUpdate();
+
+            generatedKeysResultSet = stmt.getGeneratedKeys();
+            if (generatedKeysResultSet.next()){
+                subcategory.setIdSubcategory(generatedKeysResultSet.getInt(1));
+            } else {
+                throw new Exception("No key was returned.");
+            }
         } finally {
-            RepositoryHelper.CloseIfExists(stmt);
+            RepositoryHelper.CloseIfExists(generatedKeysResultSet, stmt);
         }
     }
 
-    public void update(Subcategory Subcategory) throws Exception {
+    public void update(Subcategory subcategory) throws Exception {
         PreparedStatement stmt = null;
 
         try {
             stmt = conn.prepareStatement("update subcategory idCategory = ?, name = ? where idSubcategory = ?");
-            stmt.setInt(1, Subcategory.getIdCategory());
-            stmt.setString(2, Subcategory.getName());
-            stmt.setInt(3, Subcategory.getIdSubcategory());
+            stmt.setInt(1, subcategory.getIdCategory());
+            stmt.setString(2, subcategory.getName());
+            stmt.setInt(3, subcategory.getIdSubcategory());
 
             stmt.executeUpdate();
         } finally {
@@ -88,12 +94,12 @@ public class SubcategoryRepository {
         }
     }
 
-    public void delete(Subcategory Subcategory) throws Exception {
+    public void delete(Subcategory subcategory) throws Exception {
         PreparedStatement stmt = null;
 
         try {
             stmt = conn.prepareStatement("delete from subcategory where idSubcategory = ?");
-            stmt.setInt(1, Subcategory.getIdSubcategory()); 
+            stmt.setInt(1, subcategory.getIdSubcategory());
             
             stmt.executeUpdate();
         } finally {

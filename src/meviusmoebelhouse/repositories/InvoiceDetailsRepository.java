@@ -21,7 +21,7 @@ public class InvoiceDetailsRepository {
         Statement stmt = null;
         ResultSet rs = null;
 
-        List<InvoiceDetails> result = new ArrayList<InvoiceDetails>();
+        List<InvoiceDetails> result = new ArrayList<>();
 
         try {
             stmt = conn.createStatement();
@@ -56,20 +56,28 @@ public class InvoiceDetailsRepository {
         }
     }
 
-    public int create(InvoiceDetails InvoiceDetails) throws Exception {
+    public void create(InvoiceDetails invoiceDetails) throws Exception {
         PreparedStatement stmt = null;
+        ResultSet generatedKeysResultSet = null;
 
         try {
             stmt = conn.prepareStatement("insert into invoiceDetails (idInvoice, idFurniture, amount, price, totalPrice) values (?,?,?,?,?)");
-            stmt.setInt(1, InvoiceDetails.getIdInvoice());
-            stmt.setInt(2, InvoiceDetails.getIdFurniture());
-            stmt.setInt(3, InvoiceDetails.getAmount());
-            stmt.setBigDecimal(4, InvoiceDetails.getPrice());
-            stmt.setBigDecimal(5, InvoiceDetails.getTotalPrice());
+            stmt.setInt(1, invoiceDetails.getIdInvoice());
+            stmt.setInt(2, invoiceDetails.getIdFurniture());
+            stmt.setInt(3, invoiceDetails.getAmount());
+            stmt.setBigDecimal(4, invoiceDetails.getPrice());
+            stmt.setBigDecimal(5, invoiceDetails.getTotalPrice());
 
-            return stmt.executeUpdate();
+            stmt.executeUpdate();
+
+            generatedKeysResultSet = stmt.getGeneratedKeys();
+            if (generatedKeysResultSet.next()){
+                invoiceDetails.setIdInvoiceDetails(generatedKeysResultSet.getInt(1));
+            } else {
+                throw new Exception("No key was returned.");
+            }
         } finally {
-            RepositoryHelper.CloseIfExists(stmt);
+            RepositoryHelper.CloseIfExists(generatedKeysResultSet, stmt);
         }
     }
 

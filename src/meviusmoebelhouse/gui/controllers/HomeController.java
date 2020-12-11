@@ -15,7 +15,7 @@ import java.net.URL;
 import java.util.*;
 
 public class HomeController implements Initializable {
-    private ApplicationController applicationController = null;
+    private ApplicationController applicationController;
 
     public int counterSales = 0;        //Index of which first furniture in sales is showing (0/1/2/3/4/5...)
     public int counterCategories = 0;   //Index of which first category in categories is showing (0/1/2/3/4/5...)
@@ -51,11 +51,7 @@ public class HomeController implements Initializable {
         allCategoryImageViews.addAll(Arrays.asList( homeCategoriesImage1, homeCategoriesImage2,
                                                     homeCategoriesImage3, homeCategoriesImage4));
 
-        boolean userLoggedIn = applicationController.isUserLoggedIn();
-        menuBarLogin.setDisable(userLoggedIn);
-        menuBarLogout.setDisable(!userLoggedIn);
-        menuBarSettings.setDisable(!userLoggedIn);
-
+        updateUiBasedOnLoginState();
 
         //load all images of furnitures with rebates in the allSalesImages list
         HashMap<Integer, HashMap<Integer, List<Image>>> allFurnituresImages = applicationController.getAllFurnituresImages();
@@ -143,6 +139,8 @@ public class HomeController implements Initializable {
     }
 
     public void logout() {
+        applicationController.setCurrentUser(null);
+        updateUiBasedOnLoginState();
     }
 
     /**
@@ -181,5 +179,12 @@ public class HomeController implements Initializable {
     public void suppressInformationPane(MouseEvent mouseEvent) {
         //TO BE IMPLEMENTED
         //show new temporary pane when hovering over an furniture
+    }
+
+    private void updateUiBasedOnLoginState() {
+        boolean userLoggedIn = applicationController.isUserLoggedIn();
+        menuBarLogin.setDisable(userLoggedIn);
+        menuBarLogout.setDisable(!userLoggedIn);
+        menuBarSettings.setDisable(!userLoggedIn);
     }
 }

@@ -61,6 +61,7 @@ public class CustomerRepository {
         try {
             stmt = conn.prepareStatement("select * from customer where idUser = ?");
             stmt.setInt(1, idUser);
+
             rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -73,20 +74,29 @@ public class CustomerRepository {
         }
     }
 
-    public int create(Customer customer) throws Exception {
+    public void create(Customer customer) throws Exception {
         PreparedStatement stmt = null;
+        ResultSet generatedKeysResultSet = null;
 
         try {
-            stmt = conn.prepareStatement("insert into customer (firstName, lastName, birthday, IBAN, emailAddress) values (?,?,?,?,?)");
-            stmt.setString(1, customer.getFirstName());
-            stmt.setString(2, customer.getLastName());
-            stmt.setString(3, customer.getBirthday().format(DateTimeFormatter.ISO_DATE));
-            stmt.setString(4, customer.getIBAN());
-            stmt.setString(5, customer.getEmailAddress());
-            
-            return stmt.executeUpdate();
+            stmt = conn.prepareStatement("insert into customer (idUser, firstName, lastName, birthday, IBAN, emailAddress) values (?,?,?,?,?,?)");
+            stmt.setInt(1, customer.getIdUser());
+            stmt.setString(2, customer.getFirstName());
+            stmt.setString(3, customer.getLastName());
+            stmt.setString(4, customer.getBirthday().format(DateTimeFormatter.ISO_DATE));
+            stmt.setString(5, customer.getIBAN());
+            stmt.setString(6, customer.getEmailAddress());
+
+            stmt.executeUpdate();
+
+            generatedKeysResultSet = stmt.getGeneratedKeys();
+            if (generatedKeysResultSet.next()){
+                customer.setIdCustomer(generatedKeysResultSet.getInt(1));
+            } else {
+                throw new Exception("No key was returned.");
+            }
         } finally {
-            RepositoryHelper.CloseIfExists(stmt);
+            RepositoryHelper.CloseIfExists(generatedKeysResultSet, stmt);
         }
     }
 
@@ -122,7 +132,7 @@ public class CustomerRepository {
 
     private Customer fromResultSet(ResultSet rs) throws Exception {
         Customer cus = new Customer();
-
+        
         cus.setIdCustomer(rs.getInt("idCustomer"));
         cus.setIdUser(rs.getInt("idUser"));
         cus.setFirstName(rs.getString("firstName"));
