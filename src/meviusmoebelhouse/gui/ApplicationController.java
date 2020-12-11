@@ -6,7 +6,9 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import meviusmoebelhouse.gui.admin.controllers.AdminAccountManagerController;
 import meviusmoebelhouse.gui.admin.controllers.AdminHomeController;
+import meviusmoebelhouse.gui.admin.fxmlfiles.FXMLADMIN;
 import meviusmoebelhouse.gui.user.controllers.*;
 import meviusmoebelhouse.gui.user.fxmlfiles.FXML;
 import meviusmoebelhouse.model.*;
@@ -28,6 +30,8 @@ public class ApplicationController {
     List<Furniture>         allFurnitures;
     List<Invoice>           allInvoices;
     List<InvoiceDetails>    allInvoiceDetails;
+
+
     List<Staff>             allStaffs;
     List<Subcategory>       allSubcategories;
 
@@ -152,7 +156,12 @@ public class ApplicationController {
      * @throws Exception e
      */
     public void switchScene(AnchorPane anchorPane, String fxmlName) throws Exception {
-        FXMLLoader loader = new FXMLLoader(FXML.class.getResource(fxmlName + ".fxml"));
+        FXMLLoader loader;
+        if(fxmlName.startsWith("Admin")){
+            loader = new FXMLLoader(FXMLADMIN.class.getResource(fxmlName + ".fxml"));
+        } else{
+            loader = new FXMLLoader(FXML.class.getResource(fxmlName + ".fxml"));
+        }
         setControllerFactory(fxmlName, loader);
 
         Parent root = loader.load();
@@ -189,6 +198,9 @@ public class ApplicationController {
                 break;
             case "AdminHome":
                 loader.setControllerFactory(c -> new AdminHomeController(this));
+                break;
+            case "AdminAccountManager":
+                loader.setControllerFactory(c -> new AdminAccountManagerController(this));
                 break;
             default:
                 throw new Exception("Please add a controller factory for '" + viewName + "'");
@@ -438,5 +450,13 @@ public class ApplicationController {
 
     public boolean isUserLoggedIn(){
         return currentUser != null;
+    }
+
+    public List<Customer> getAllCustomers() {
+        return allCustomers;
+    }
+
+    public List<Staff> getAllStaffs() {
+        return allStaffs;
     }
 }

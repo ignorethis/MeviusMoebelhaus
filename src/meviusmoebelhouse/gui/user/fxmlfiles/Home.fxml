@@ -22,8 +22,8 @@
     </ToolBar>
     <ToolBar layoutX="622.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="378.0">
         <items>
-            <Button fx:id="menuBarLogin" mnemonicParsing="false" onAction="#openLogin" text="Login" alignment="CENTER_RIGHT" />
-            <Button fx:id="menuBarLogout" mnemonicParsing="false" onAction="#logout" text="Logout" alignment="CENTER_RIGHT" />
+            <Button fx:id="menuBarLogin" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#openLogin" text="Login" />
+            <Button fx:id="menuBarLogout" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#logout" text="Logout" />
             <Button fx:id="menuBarSettings" mnemonicParsing="false" onAction="#openSettings" text="Settings" />
             <Button fx:id="menuBarShoppingCart" mnemonicParsing="false" onAction="#openShoppingCart" text="Shopping cart" />
         </items>
@@ -106,4 +106,5 @@
          <Font name="System Bold Italic" size="22.0" />
       </font>
    </Label>
+   <Button layoutX="862.0" layoutY="66.0" mnemonicParsing="false" onAction="#testGui" text="Test gui button" />
 </AnchorPane>

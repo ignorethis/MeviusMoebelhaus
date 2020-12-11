@@ -1,5 +1,6 @@
 package meviusmoebelhouse.gui.user.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -178,5 +179,9 @@ public class HomeController implements Initializable {
     public void suppressInformationPane(MouseEvent mouseEvent) {
         //TO BE IMPLEMENTED
         //show new temporary pane when hovering over an furniture
+    }
+
+    public void testGui(ActionEvent actionEvent) throws Exception {
+        applicationController.switchScene(mainAnchorPane, "AdminAccountManager");
     }
 }
