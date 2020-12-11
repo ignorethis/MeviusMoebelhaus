@@ -1,13 +1,13 @@
 package meviusmoebelhouse.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class Customer {
     private int idCustomer = 0;
     private Integer idUser = null;
     private String firstName = null;
     private String lastName = null;
-    private String birthday = null;
+    private LocalDate birthday = null;
     private String IBAN = null;
     private String emailAddress = null;
 
@@ -39,13 +39,11 @@ public class Customer {
         this.lastName = lastName;
     }
 
-    public Date getBirthday() { return Date.valueOf(birthday); }
+    public LocalDate getBirthday() { return birthday; }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday.toString();
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
     }
-
-    public void setBirthday(String birthday) { this.birthday = birthday; }
 
     public String getIBAN() {
         return IBAN;

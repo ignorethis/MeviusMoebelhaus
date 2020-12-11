@@ -14,14 +14,15 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SettingsController implements Initializable {
-    ApplicationController applicationController = null;
+    private ApplicationController applicationController;
+    private User user;
+    private Customer customer;
+
     public AnchorPane mainAnchorPane;
     public TextField usernameTextField, firstnameTextField, lastnameTextField, IBANTextField, emailAddressTextField, passwordTextField;
     public DatePicker birthdayDatePicker;
     public Label errorMessageLabel,passwordLabel;
     public Button saveButton,cancelButton,changePasswordButton;
-    private User user;
-    private Customer customer;
 
     public SettingsController(ApplicationController applicationController) {
         this.applicationController = applicationController;
@@ -37,14 +38,14 @@ public class SettingsController implements Initializable {
             lastnameTextField.setText(customer.getLastName());
             IBANTextField.setText(customer.getIBAN());
             emailAddressTextField.setText(customer.getEmailAddress());
-            birthdayDatePicker.setValue(customer.getBirthday().toLocalDate());
+            birthdayDatePicker.setValue(customer.getBirthday());
         }
         catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
         }
     }
     public void changePasswordOCE(){
-        if (passwordLabel.isDisable() == true){
+        if (passwordLabel.isDisable()){
             passwordLabel.disableProperty().setValue(false);
             passwordTextField.disableProperty().setValue(false);
         }
@@ -55,27 +56,17 @@ public class SettingsController implements Initializable {
     }
 
     public void saveOCE() throws Exception{
-        if (passwordLabel.isDisable() == true){
-            customer.setFirstName(firstnameTextField.getText());
-            customer.setLastName(lastnameTextField.getText());
-            customer.setBirthday(birthdayDatePicker.getChronology().toString());
-            customer.setIBAN(IBANTextField.getText());
-            customer.setEmailAddress(emailAddressTextField.getText());
+        customer.setFirstName(firstnameTextField.getText());
+        customer.setLastName(lastnameTextField.getText());
+        customer.setBirthday(birthdayDatePicker.getValue());
+        customer.setIBAN(IBANTextField.getText());
+        customer.setEmailAddress(emailAddressTextField.getText());
 
-            applicationController.setCurrentUser(user);
-            applicationController.getCustomerRepository().update(customer);
-        }
-        else{
-            customer.setFirstName(firstnameTextField.getText());
-            customer.setLastName(lastnameTextField.getText());
-            customer.setBirthday(birthdayDatePicker.getChronology().toString());
-            customer.setIBAN(IBANTextField.getText());
-            customer.setEmailAddress(emailAddressTextField.getText());
+        if (!passwordLabel.isDisable()){
             user.setPassword(passwordTextField.getText());
-
-            applicationController.setCurrentUser(user);
-            applicationController.getCustomerRepository().update(customer);
         }
+
+        applicationController.getCustomerRepository().update(customer);
         applicationController.switchScene(mainAnchorPane, "Home");
     }
 }
