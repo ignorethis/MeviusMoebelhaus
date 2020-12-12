@@ -1,4 +1,4 @@
-package meviusmoebelhouse.gui.controllers;
+package meviusmoebelhouse.gui.user.controllers;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;

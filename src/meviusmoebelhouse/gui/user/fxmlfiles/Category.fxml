@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainAnchorPane" maxHeight="800.0" maxWidth="1000.0" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meviusmoebelhouse.gui.controllers.CategoryController">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="800.0" maxWidth="1000.0" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meviusmoebelhouse.gui.user.controllers.CategoryController">
 
     <Button fx:id="backToHomeButton" layoutX="38.0" layoutY="66.0" mnemonicParsing="false" onAction="#backToHomeOCE" text="Home" />
     <Label fx:id="categoryLabel" layoutX="389.0" layoutY="51.0" prefHeight="54.0" prefWidth="516.0" text="Category" textAlignment="CENTER">

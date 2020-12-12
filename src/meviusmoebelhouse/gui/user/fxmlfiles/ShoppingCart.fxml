@@ -9,7 +9,7 @@
             prefHeight="800.0" prefWidth="1000.0"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="meviusmoebelhouse.gui.controllers.ShoppingCartController"
+            fx:controller="meviusmoebelhouse.gui.user.controllers.ShoppingCartController"
             fx:id="mainAnchorPane">
 
     <Label fx:id="shoppingCartLabel" layoutX="389.0" layoutY="51.0" prefHeight="54.0" prefWidth="516.0" text="Shopping cart" textAlignment="CENTER">

@@ -6,8 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import meviusmoebelhouse.gui.ApplicationController;
-import meviusmoebelhouse.gui.fxmlfiles.FXML;
-import meviusmoebelhouse.gui.controllers.*;
+import meviusmoebelhouse.gui.user.fxmlfiles.FXML;
+import meviusmoebelhouse.gui.user.controllers.*;
 
 public class Main extends Application {
     @Override

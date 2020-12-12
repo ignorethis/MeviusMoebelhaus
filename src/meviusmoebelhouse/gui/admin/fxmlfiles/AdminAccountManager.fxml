@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="mainAnchorPane" maxHeight="426.0" maxWidth="404.0" minHeight="400.0" minWidth="400.0" prefHeight="426.0" prefWidth="404.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meviusmoebelhouse.gui.admin.controllers.AdminAccountManagerController">
+   <children>
+      <RadioButton fx:id="customerRadioButton" layoutX="38.0" layoutY="37.0" mnemonicParsing="false" onAction="#accountTypeChosen" text="Customer">
+         <toggleGroup>
+            <ToggleGroup fx:id="accountChoice" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="staffRadioButton" layoutX="166.0" layoutY="37.0" mnemonicParsing="false" onAction="#accountTypeChosen" text="Staff" toggleGroup="$accountChoice" />
+      <RadioButton fx:id="adminRadioButton" layoutX="268.0" layoutY="37.0" mnemonicParsing="false" onAction="#accountTypeChosen" text="Admin" toggleGroup="$accountChoice" />
+      <Label layoutX="38.0" layoutY="71.0" text="Search by id" />
+      <TextField fx:id="searchByIdTextField" layoutX="126.0" layoutY="67.0" />
+      <AnchorPane fx:id="listAnchorPane1" layoutX="35.0" layoutY="110.0" prefHeight="30.0" prefWidth="250.0">
+         <children>
+            <Label fx:id="listAnchorPaneNameLabel1" layoutX="7.0" layoutY="6.0" prefHeight="17.0" prefWidth="111.0" text="Lastname, Firstname" />
+            <Label fx:id="listAnchorPaneRoleLabel1" layoutX="157.0" layoutY="6.0" prefHeight="17.0" prefWidth="87.0" text="Role" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="listAnchorPane2" layoutX="35.0" layoutY="150.0" prefHeight="30.0" prefWidth="250.0">
+         <children>
+            <Label fx:id="listAnchorPaneNameLabel2" layoutX="7.0" layoutY="6.0" prefHeight="17.0" prefWidth="111.0" text="Lastname, Firstname" />
+            <Label fx:id="listAnchorPaneRoleLabel2" layoutX="157.0" layoutY="6.0" prefHeight="17.0" prefWidth="87.0" text="Role" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="listAnchorPane3" layoutX="35.0" layoutY="190.0" prefHeight="30.0" prefWidth="250.0">
+         <children>
+            <Label fx:id="listAnchorPaneNameLabel3" layoutX="7.0" layoutY="6.0" prefHeight="17.0" prefWidth="111.0" text="Lastname, Firstname" />
+            <Label fx:id="listAnchorPaneRoleLabel3" layoutX="157.0" layoutY="6.0" prefHeight="17.0" prefWidth="87.0" text="Role" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="listAnchorPane4" layoutX="35.0" layoutY="230.0" prefHeight="30.0" prefWidth="250.0">
+         <children>
+            <Label fx:id="listAnchorPaneNameLabel4" layoutX="7.0" layoutY="6.0" prefHeight="17.0" prefWidth="111.0" text="Lastname, Firstname" />
+            <Label fx:id="listAnchorPaneRoleLabel4" layoutX="157.0" layoutY="6.0" prefHeight="17.0" prefWidth="87.0" text="Role" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="listAnchorPane5" layoutX="35.0" layoutY="270.0" prefHeight="30.0" prefWidth="250.0">
+         <children>
+            <Label fx:id="listAnchorPaneNameLabel5" layoutX="7.0" layoutY="6.0" prefHeight="17.0" prefWidth="111.0" text="Lastname, Firstname" />
+            <Label fx:id="listAnchorPaneRoleLabel5" layoutX="157.0" layoutY="6.0" prefHeight="17.0" prefWidth="87.0" text="Role" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="listAnchorPane6" layoutX="35.0" layoutY="310.0" prefHeight="30.0" prefWidth="250.0">
+         <children>
+            <Label fx:id="listAnchorPaneNameLabel6" layoutX="7.0" layoutY="6.0" prefHeight="17.0" prefWidth="111.0" text="Lastname, Firstname" />
+            <Label fx:id="listAnchorPaneRoleLabel6" layoutX="157.0" layoutY="6.0" prefHeight="17.0" prefWidth="87.0" text="Role" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="listAnchorPane7" layoutX="35.0" layoutY="350.0" prefHeight="30.0" prefWidth="250.0">
+         <children>
+            <Label fx:id="listAnchorPaneNameLabel7" layoutX="7.0" layoutY="6.0" prefHeight="17.0" prefWidth="111.0" text="Lastname, Firstname" />
+            <Label fx:id="listAnchorPaneRoleLabel7" layoutX="157.0" layoutY="6.0" prefHeight="17.0" prefWidth="87.0" text="Role" />
+         </children>
+      </AnchorPane>
+      <Button fx:id="anchorPaneListPrevious" layoutX="25.0" layoutY="387.0" mnemonicParsing="false" onAction="#adjustAnchorPaneListViewRadioButtonOCE" text="previous page" />
+      <Button fx:id="anchorPaneListNext" layoutX="216.0" layoutY="387.0" mnemonicParsing="false" onAction="#adjustAnchorPaneListViewRadioButtonOCE" text="next page" />
+   </children>
+</AnchorPane>

@@ -1,15 +1,13 @@
-package meviusmoebelhouse.gui.controllers;
+package meviusmoebelhouse.gui.user.controllers;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import meviusmoebelhouse.Main;
 import meviusmoebelhouse.gui.ApplicationController;
 import meviusmoebelhouse.model.Furniture;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 

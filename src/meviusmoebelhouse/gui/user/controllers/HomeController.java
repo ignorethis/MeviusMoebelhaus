@@ -1,4 +1,4 @@
-package meviusmoebelhouse.gui.controllers;
+package meviusmoebelhouse.gui.user.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -7,10 +7,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import meviusmoebelhouse.Main;
 import meviusmoebelhouse.gui.ApplicationController;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -186,5 +184,9 @@ public class HomeController implements Initializable {
         menuBarLogin.setDisable(userLoggedIn);
         menuBarLogout.setDisable(!userLoggedIn);
         menuBarSettings.setDisable(!userLoggedIn);
+    }
+
+    public void testGui(ActionEvent actionEvent) throws Exception {
+        applicationController.switchScene(mainAnchorPane, "AdminAccountManager");
     }
 }
