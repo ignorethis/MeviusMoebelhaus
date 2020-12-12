@@ -78,10 +78,11 @@ public class UserRepository {
         ResultSet generatedKeysResultSet = null;
 
         try {
-            stmt = conn.prepareStatement("insert into user (username, password, failedLoginAttempts) values (?,?,?)");
-            stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getPassword());
-            stmt.setInt(3, user.getFailedLoginAttempts());
+            stmt = conn.prepareStatement("insert into user (idUserRole, username, password, failedLoginAttempts) values (?,?,?,?)");
+            stmt.setInt(1, user.getIdUserRole());
+            stmt.setString(2, user.getUsername());
+            stmt.setString(3, user.getPassword());
+            stmt.setInt(4, user.getFailedLoginAttempts());
 
             stmt.executeUpdate();
 
@@ -100,11 +101,12 @@ public class UserRepository {
         PreparedStatement stmt = null;
 
         try {
-            stmt = conn.prepareStatement("update user set username = ?, password = ?, failedLoginAttempts = ? where idUser = ?");
-            stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getPassword());
-            stmt.setInt(3, user.getFailedLoginAttempts());
-            stmt.setInt(4, user.getIdUser());
+            stmt = conn.prepareStatement("update user set idUserRole = ?, username = ?, password = ?, failedLoginAttempts = ? where idUser = ?");
+            stmt.setInt(1, user.getIdUserRole());
+            stmt.setString(2, user.getUsername());
+            stmt.setString(3, user.getPassword());
+            stmt.setInt(4, user.getFailedLoginAttempts());
+            stmt.setInt(5, user.getIdUser());
 
             stmt.executeUpdate();
         } finally {
@@ -128,6 +130,7 @@ public class UserRepository {
         User usr = new User();
 
         usr.setIdUser(rs.getInt("idUser"));
+        usr.setIdUserRole(rs.getInt("idUserRole"));
         usr.setUsername(rs.getString("username"));
         usr.setPassword(rs.getString("password"));
         usr.setFailedLoginAttempts(rs.getInt("failedLoginAttempts"));

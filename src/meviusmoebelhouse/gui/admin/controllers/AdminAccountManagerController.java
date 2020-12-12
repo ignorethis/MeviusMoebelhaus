@@ -72,6 +72,9 @@ public class AdminAccountManagerController implements Initializable {
 
         anchorPaneListPrevious.setDisable(true);
         anchorPaneListNext.setDisable(true);
+
+        customerRadioButton.setSelected(true);
+        fillListAnchorPanes("Customer");
     }
 
     public AdminAccountManagerController(ApplicationController applicationController){

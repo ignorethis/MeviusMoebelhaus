@@ -37,7 +37,7 @@ public class LoginController implements Initializable {
         }
         else {
             applicationController.setCurrentUser(user);
-            if(applicationController.getUserRoleRepository().getByIdUserRole(user.getIdUser()).getIdUserRole() == 1){
+            if(user.isAdmin()){
                 applicationController.switchScene(mainAnchorPane, "AdminHome");
             } else {
                 applicationController.switchScene(mainAnchorPane, "Home");

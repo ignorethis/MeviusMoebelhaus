@@ -1,4 +1,4 @@
-package meviusmoebelhouse.gui.controllers;
+package meviusmoebelhouse.gui.user.controllers;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -9,6 +9,8 @@ import javafx.scene.layout.AnchorPane;
 import meviusmoebelhouse.gui.ApplicationController;
 import meviusmoebelhouse.model.Customer;
 import meviusmoebelhouse.model.User;
+import meviusmoebelhouse.model.UserRoleEnum;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -34,6 +36,7 @@ public class RegisterController implements Initializable{
 
     public void saveOCE() throws Exception{
         User registeredUser = new User();
+        registeredUser.setUserRole(UserRoleEnum.Customer);
         registeredUser.setUsername(usernameTextField.getText());
         registeredUser.setPassword(passwordTextField.getText());
         registeredUser.setFailedLoginAttempts(0);

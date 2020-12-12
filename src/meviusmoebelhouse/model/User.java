@@ -2,6 +2,7 @@ package meviusmoebelhouse.model;
 
 public class User {
     private int idUser = 0;
+    private int idUserRole = 0;
     private String username = null;
     private String password = null;
     private int failedLoginAttempts = 0;
@@ -13,6 +14,10 @@ public class User {
     public void setIdUser(int idUser) {
         this.idUser = idUser;
     }
+
+    public int getIdUserRole() { return idUserRole; }
+
+    public void setIdUserRole(int idUserRole) { this.idUserRole = idUserRole; }
 
     public String getUsername() {
         return username;
@@ -36,6 +41,18 @@ public class User {
 
     public void setFailedLoginAttempts(int failedLoginAttempts) {
         this.failedLoginAttempts = failedLoginAttempts;
+    }
+
+    public boolean isAdmin() throws Exception {
+        return getUserRole() == UserRoleEnum.Admin;
+    }
+
+    public UserRoleEnum getUserRole() throws Exception {
+        return UserRoleEnum.parse(idUserRole);
+    }
+
+    public void setUserRole(UserRoleEnum userRole) throws Exception {
+        idUserRole = userRole.getIdUserRole();
     }
 
     @Override
