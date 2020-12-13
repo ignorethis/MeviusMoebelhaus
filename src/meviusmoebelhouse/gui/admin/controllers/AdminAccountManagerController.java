@@ -18,9 +18,11 @@ import java.util.ResourceBundle;
 
 public class AdminAccountManagerController implements Initializable {
 
+
     ApplicationController applicationController;
 
     int customerListCounter = 0, staffListCounter = 0, adminListCounter = 0;
+
 
     public AnchorPane   mainAnchorPane,
                         listAnchorPane1, listAnchorPane2, listAnchorPane3,
@@ -34,7 +36,7 @@ public class AdminAccountManagerController implements Initializable {
                     listAnchorPaneRoleLabel6, listAnchorPaneRoleLabel7;
 
     public Button   anchorPaneListPrevious, anchorPaneListNext, editUser1, editUser2, editUser3, editUser4,
-                    editUser5, editUser6, editUser7;
+                    editUser5, editUser6, editUser7, addUserButton;
 
     public ToggleGroup accountChoice;
 
@@ -312,7 +314,10 @@ public class AdminAccountManagerController implements Initializable {
         }
     }
 
-    public void back(ActionEvent actionEvent) throws Exception {
-        applicationController.switchScene(mainAnchorPane, "AdminHome");
+    public void openAdminAccountEdit(ActionEvent actionEvent) throws Exception {
+        applicationController.switchScene(mainAnchorPane, "AdminAccountEdit");
+    }
+
+    public void back(ActionEvent actionEvent) {
     }
 }

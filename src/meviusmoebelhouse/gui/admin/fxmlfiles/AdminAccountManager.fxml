@@ -62,13 +62,13 @@
       </AnchorPane>
       <Button fx:id="anchorPaneListPrevious" layoutX="38.0" layoutY="387.0" mnemonicParsing="false" onAction="#adjustAnchorPaneListPrevious" text="previous page" />
       <Button fx:id="anchorPaneListNext" layoutX="143.0" layoutY="387.0" mnemonicParsing="false" onAction="#adjustAnchorPaneListNext" text="next page" />
-      <Button fx:id="editUser1" layoutX="320.0" layoutY="113.0" mnemonicParsing="false" text="Edit" />
-      <Button fx:id="editUser2" layoutX="320.0" layoutY="153.0" mnemonicParsing="false" text="Edit" />
-      <Button fx:id="editUser3" layoutX="320.0" layoutY="193.0" mnemonicParsing="false" text="Edit" />
-      <Button fx:id="editUser4" layoutX="320.0" layoutY="233.0" mnemonicParsing="false" text="Edit" />
-      <Button fx:id="editUser5" layoutX="320.0" layoutY="273.0" mnemonicParsing="false" text="Edit" />
-      <Button fx:id="editUser6" layoutX="320.0" layoutY="313.0" mnemonicParsing="false" text="Edit" />
-      <Button fx:id="editUser7" layoutX="320.0" layoutY="353.0" mnemonicParsing="false" text="Edit" />
+      <Button fx:id="editUser1" layoutX="320.0" layoutY="113.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
+      <Button fx:id="editUser2" layoutX="320.0" layoutY="153.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
+      <Button fx:id="editUser3" layoutX="320.0" layoutY="193.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
+      <Button fx:id="editUser4" layoutX="320.0" layoutY="233.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
+      <Button fx:id="editUser5" layoutX="320.0" layoutY="273.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
+      <Button fx:id="editUser6" layoutX="320.0" layoutY="313.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
+      <Button fx:id="editUser7" layoutX="320.0" layoutY="353.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
       <Button fx:id="addUserButton" layoutX="249.0" layoutY="387.0" mnemonicParsing="false" text="Add" />
       <Button layoutX="5.0" layoutY="5.0" mnemonicParsing="false" onAction="#back" text="Back" />
    </children>

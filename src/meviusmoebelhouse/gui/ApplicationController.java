@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import meviusmoebelhouse.gui.admin.controllers.AdminAccountEditController;
 import meviusmoebelhouse.gui.admin.controllers.AdminAccountManagerController;
 import meviusmoebelhouse.gui.admin.controllers.AdminHomeController;
 import meviusmoebelhouse.gui.admin.fxmlfiles.FXMLADMIN;
@@ -204,6 +205,9 @@ public class ApplicationController {
                 break;
             case "AdminAccountManager":
                 loader.setControllerFactory(c -> new AdminAccountManagerController(this));
+                break;
+            case "AdminAccountEdit":
+                loader.setControllerFactory(c -> new AdminAccountEditController(this));
                 break;
             default:
                 throw new Exception("Please add a controller factory for '" + viewName + "'");
