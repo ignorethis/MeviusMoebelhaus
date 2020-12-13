@@ -13,6 +13,7 @@ import meviusmoebelhouse.gui.user.controllers.*;
 import meviusmoebelhouse.gui.user.fxmlfiles.FXML;
 import meviusmoebelhouse.model.*;
 import meviusmoebelhouse.repositories.*;
+import meviusmoebelhouse.viewmodel.ShoppingCart;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -24,6 +25,7 @@ public class ApplicationController {
     Subcategory currentSubcategory;
     Furniture   currentFurniture;
     User currentUser;
+    ShoppingCart shoppingCart;
 
     List<Category>          allCategories;
     List<Customer>          allCustomers;
@@ -85,6 +87,8 @@ public class ApplicationController {
             userRepository = new UserRepository(conn);
 
             userRoleRepository = new UserRoleRepository(conn);
+
+            shoppingCart = new ShoppingCart();
 
             //iterates all furnitures and fills the allFurnituresImages Hashmap and the IdForFurnitureImages Hashmap
             for(Furniture f : allFurnitures){
@@ -219,6 +223,8 @@ public class ApplicationController {
     public Furniture getCurrentFurniture() {
         return currentFurniture;
     }
+
+    public ShoppingCart getShoppingCart() { return shoppingCart; }
 
     public void setCurrentCategory(Category currentCategory) {
         this.currentCategory = currentCategory;
@@ -399,10 +405,6 @@ public class ApplicationController {
      */
     public Category getCategoryByImage(Image i){
         return getCategoryById(IdForCategoryImages.get(i));
-    }
-
-    public void addFurnitureToShoppingCart(int amount) {
-        //add currentFurniture amount times in the shopping cart of the customer
     }
 
     public User getCurrentUser() {

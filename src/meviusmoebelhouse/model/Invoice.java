@@ -9,7 +9,7 @@ public class Invoice {
     private String firstName = null;
     private String lastName = null;
     private String shippingAddress = null;
-    private String billOfGoods = null;
+    private int billOfGoods = 0;
     private BigDecimal totalPrice = null;
 
     public int getIdInvoice() { return idInvoice; }
@@ -44,9 +44,9 @@ public class Invoice {
 
     public void setShippingAddress(String shippingAddress) { this.shippingAddress = shippingAddress; }
 
-    public String getBillOfGoods() { return billOfGoods; }
+    public int getBillOfGoods() { return billOfGoods; }
 
-    public void setBillOfGoods(String billOfGoods) { this.billOfGoods = billOfGoods; }
+    public void setBillOfGoods(int billOfGoods) { this.billOfGoods = billOfGoods; }
 
     public BigDecimal getTotalPrice() { return totalPrice; }
 

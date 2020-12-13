@@ -79,13 +79,14 @@ public class CustomerRepository {
         ResultSet generatedKeysResultSet = null;
 
         try {
-            stmt = conn.prepareStatement("insert into customer (idUser, firstName, lastName, birthday, IBAN, emailAddress) values (?,?,?,?,?,?)");
+            stmt = conn.prepareStatement("insert into customer (idUser, firstName, lastName, birthday, IBAN, emailAddress, defaultShippingAddress) values (?,?,?,?,?,?,?)");
             stmt.setInt(1, customer.getIdUser());
             stmt.setString(2, customer.getFirstName());
             stmt.setString(3, customer.getLastName());
             stmt.setString(4, customer.getBirthday().format(DateTimeFormatter.ISO_DATE));
             stmt.setString(5, customer.getIBAN());
             stmt.setString(6, customer.getEmailAddress());
+            stmt.setString(7,customer.getDefaultShippingAddress());
 
             stmt.executeUpdate();
 
@@ -104,13 +105,14 @@ public class CustomerRepository {
         PreparedStatement stmt = null;
 
         try {
-            stmt = conn.prepareStatement("update customer set firstName = ?, lastName = ?, birthday = ?, IBAN = ?, emailAddress = ? where idCustomer = ?");
+            stmt = conn.prepareStatement("update customer set firstName = ?, lastName = ?, birthday = ?, IBAN = ?, emailAddress = ?, defaultShippingAddress = ? where idCustomer = ?");
             stmt.setString(1, customer.getFirstName());
             stmt.setString(2, customer.getLastName());
             stmt.setString(3, customer.getBirthday().format(DateTimeFormatter.ISO_DATE));
             stmt.setString(4, customer.getIBAN());
             stmt.setString(5, customer.getEmailAddress());
-            stmt.setInt(6, customer.getIdCustomer());
+            stmt.setString(6,customer.getDefaultShippingAddress());
+            stmt.setInt(7, customer.getIdCustomer());
 
             stmt.executeUpdate();
         } finally {
@@ -140,6 +142,7 @@ public class CustomerRepository {
         cus.setBirthday(LocalDate.parse(rs.getString("birthday"), DateTimeFormatter.ISO_DATE));
         cus.setIBAN(rs.getString("IBAN"));
         cus.setEmailAddress(rs.getString("emailAddress"));
+        cus.setDefaultShippingAddress(rs.getString("defaultShippingAddress"));
 
         return cus;
     }

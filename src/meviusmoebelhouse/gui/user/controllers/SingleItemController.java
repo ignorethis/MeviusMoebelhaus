@@ -12,16 +12,17 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SingleItemController implements Initializable {
-    private ApplicationController applicationController = null;
+    private ApplicationController applicationController;
 
     public Furniture currentFurniture;
+
     public AnchorPane mainAnchorPane;
     public Label singleItemViewLabel;
     public ImageView singleItemViewImage;
     public TextArea singleItemViewDescription;
     public TextField singleItemViewPrice, singleItemViewRebate, singleItemViewFinalPrice;
     public Button backToCategoryButton, backToSubcategoryButton;
-    public ChoiceBox furnitureAmount;
+    public ChoiceBox furnitureCountChoiceBox;
 
     public SingleItemController(ApplicationController applicationController) {
         this.applicationController = applicationController;
@@ -41,18 +42,19 @@ public class SingleItemController implements Initializable {
         singleItemViewRebate.setText(currentFurniture.getRebate() + "%");
         singleItemViewFinalPrice.setText(currentFurniture.getActualPrice().toString() + "€");
         for(int i = 1; i <= 20; i++){
-            furnitureAmount.getItems().add(i);
+            furnitureCountChoiceBox.getItems().add(i);
         }
-        furnitureAmount.setValue(1);
+        furnitureCountChoiceBox.setValue(1);
     }
 
     /**
      * Reads the amount of the choice box and passes it to the application controller which adds the furniture
      * with x amount in the shopping cart of the customer
-     * @throws IOException
+     * @throws Exception
      */
     public void addToShoppingCart() throws Exception {
-        applicationController.addFurnitureToShoppingCart((Integer) furnitureAmount.getValue());
+        Integer furnitureCount = (Integer) furnitureCountChoiceBox.getValue();
+        applicationController.getShoppingCart().addFurniture(currentFurniture, furnitureCount);
         applicationController.switchScene(mainAnchorPane, "ShoppingCart");
     }
 

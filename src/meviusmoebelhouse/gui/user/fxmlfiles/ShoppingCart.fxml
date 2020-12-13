@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 <AnchorPane maxHeight="800.0" maxWidth="1000.0"
             minHeight="800.0" minWidth="1000.0"
             prefHeight="800.0" prefWidth="1000.0"
@@ -12,7 +13,7 @@
             fx:controller="meviusmoebelhouse.gui.user.controllers.ShoppingCartController"
             fx:id="mainAnchorPane">
 
-    <Label fx:id="shoppingCartLabel" layoutX="389.0" layoutY="51.0" prefHeight="54.0" prefWidth="516.0" text="Shopping cart" textAlignment="CENTER">
+    <Label layoutX="389.0" layoutY="51.0" prefHeight="54.0" prefWidth="516.0" text="Shopping cart" textAlignment="CENTER">
         <font>
             <Font name="System Bold Italic" size="25.0" />
         </font>
@@ -25,52 +26,11 @@
         <Button fx:id="menuBarSettings" mnemonicParsing="false" onAction="#openSettings" text="Settings" />
         <Button fx:id="backToHomeButton" mnemonicParsing="false" onAction="#backToHomeOCE" text="Back to home" />
     </ToolBar>
-    <AnchorPane layoutX="72.0" layoutY="116.0" prefHeight="150.0" prefWidth="833.0" style="-fx-border-radius: 2; -fx-border-color: black;">
-        <children>
-            <ImageView fx:id="furnitureImage1" fitHeight="146.0" fitWidth="148.0" layoutX="2.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
 
-            </ImageView>
-            <Label fx:id="furnitureName1" layoutX="161.0" layoutY="14.0" prefHeight="17.0" prefWidth="444.0" text="Furniture.name" />
-            <Label fx:id="furnitureDescription1" layoutX="161.0" layoutY="44.0" prefHeight="92.0" prefWidth="444.0" text="Furniture.description" />
-            <ChoiceBox fx:id="furnitureAmount1" layoutX="761.0" layoutY="14.0" prefHeight="25.0" prefWidth="46.0" />
-            <Label layoutX="698.0" layoutY="18.0" text="Amount" />
-            <Label layoutX="698.0" layoutY="62.0" text="Price:" />
-            <TextField fx:id="furniturePricePerUnit1" editable="false" layoutX="761.0" layoutY="58.0" prefHeight="25.0" prefWidth="46.0" />
-            <Button fx:id="furnitureRemove1" layoutX="733.0" layoutY="101.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="74.0" text="remove" />
-        </children>
-    </AnchorPane>
-    <AnchorPane layoutX="72.0" layoutY="288.0" prefHeight="150.0" prefWidth="833.0" style="-fx-border-color: black; -fx-border-width: 1px; -fx-border-radius: 2px;">
-        <children>
-            <ImageView fx:id="furnitureImage2" fitHeight="146.0" fitWidth="148.0" layoutX="2.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+    <VBox fx:id="shoppingCartItemsContainer" layoutX="100" layoutY="100">
+    </VBox>
 
-            </ImageView>
-            <Label fx:id="furnitureName2" layoutX="161.0" layoutY="14.0" prefHeight="17.0" prefWidth="444.0" text="Furniture.name" />
-            <Label fx:id="furnitureDescription2" layoutX="161.0" layoutY="44.0" prefHeight="92.0" prefWidth="444.0" text="Furniture.description" />
-            <ChoiceBox fx:id="furnitureAmount2" layoutX="761.0" layoutY="14.0" prefHeight="25.0" prefWidth="46.0" />
-            <Label layoutX="698.0" layoutY="18.0" text="Amount" />
-            <Label layoutX="698.0" layoutY="62.0" text="Price:" />
-            <TextField fx:id="furniturePricePerUnit2" editable="false" layoutX="761.0" layoutY="58.0" prefHeight="25.0" prefWidth="46.0" />
-            <Button fx:id="furnitureRemove2" layoutX="733.0" layoutY="101.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="74.0" text="remove" />
-        </children>
-    </AnchorPane>
-    <AnchorPane layoutX="72.0" layoutY="463.0" prefHeight="150.0" prefWidth="833.0" style="-fx-border-color: black; -fx-border-width: 1px; -fx-border-radius: 2px;">
-        <children>
-            <ImageView fx:id="furnitureImage3" fitHeight="148.0" fitWidth="146.0" layoutX="2.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
-
-            </ImageView>
-            <Label fx:id="furnitureName3" layoutX="161.0" layoutY="14.0" prefHeight="17.0" prefWidth="444.0" text="Furniture.name" />
-            <Label fx:id="furnitureDescription3" layoutX="161.0" layoutY="44.0" prefHeight="92.0" prefWidth="444.0" text="Furniture.description" />
-            <ChoiceBox fx:id="furnitureAmount3" layoutX="761.0" layoutY="14.0" prefHeight="25.0" prefWidth="46.0" />
-            <Label layoutX="698.0" layoutY="18.0" text="Amount" />
-            <Label layoutX="698.0" layoutY="62.0" text="Price:" />
-            <TextField fx:id="furniturePricePerUnit3" editable="false" layoutX="761.0" layoutY="58.0" prefHeight="25.0" prefWidth="46.0" />
-            <Button fx:id="furnitureRemove3" layoutX="733.0" layoutY="101.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="74.0" text="remove" />
-        </children>
-    </AnchorPane>
-    <Button fx:id="previousPageButton" layoutX="72.0" layoutY="627.0" mnemonicParsing="false" onAction="#showPreviousPageOCE" text="previous page" />
-    <Button fx:id="showNextPage" layoutX="835.0" layoutY="640.0" mnemonicParsing="false" onAction="#showNextPageOCE" text="next page" />
-    <Button layoutX="376.0" layoutY="709.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="225.0" text="Order" />
+    <Button fx:id="orderButton" onAction="#orderOCE" layoutX="376.0" layoutY="709.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="225.0" text="Order" />
     <Label layoutX="728.0" layoutY="721.0" text="Total price:" />
-    <TextField fx:id="totalPriceField" editable="false" layoutX="805.0" layoutY="717.0" prefHeight="25.0" prefWidth="74.0" />
-
+    <Text fx:id="totalPriceText" layoutX="805.0" layoutY="717.0" />
 </AnchorPane>

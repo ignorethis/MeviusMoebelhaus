@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Text?>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:id="furnitureItemHBox"
+      fx:controller="meviusmoebelhouse.gui.user.controllers.FurnitureItemController">
+    <ImageView fx:id="imageView"/>
+    <Text fx:id="nameText"/>
+    <Button fx:id="increaseCountButton" onAction="#increaseCountOCE">+</Button>
+    <TextField fx:id="amountTextField" onAction="#changeCountOCE"/>
+    <Button fx:id="decreaseCountButton" onAction="#decreaseCountOCE">-</Button>
+    <Text fx:id="furniturePriceText"/>
+    <Text fx:id="furnitureItemPriceText"/>
+</HBox>

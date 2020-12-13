@@ -10,6 +10,7 @@ public class Customer {
     private LocalDate birthday = null;
     private String IBAN = null;
     private String emailAddress = null;
+    private String defaultShippingAddress = null;
 
     public int getIdCustomer() {
         return idCustomer;
@@ -61,6 +62,14 @@ public class Customer {
         this.emailAddress = emailAddress;
     }
 
+    public String getDefaultShippingAddress() {
+        return defaultShippingAddress;
+    }
+
+    public void setDefaultShippingAddress(String shippingAddress) {
+        this.defaultShippingAddress = shippingAddress;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -71,6 +80,7 @@ public class Customer {
         sb.append("birthday: ").append(birthday).append(", ");
         sb.append("IBAN: ").append(IBAN).append(", ");
         sb.append("emailAddress: ").append(emailAddress).append(", ");
+        sb.append("defaultShippingAddress: ").append(defaultShippingAddress).append(", ");
         return sb.toString();
     }
 }

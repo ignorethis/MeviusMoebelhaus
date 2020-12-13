@@ -95,7 +95,7 @@ public class Furniture {
     }
 
     public BigDecimal getActualPrice() {
-        return price.multiply(BigDecimal.valueOf(1 - getRebate()));
+        return price.multiply(BigDecimal.valueOf((100 - getRebate())/100));
     }
 
     @Override
