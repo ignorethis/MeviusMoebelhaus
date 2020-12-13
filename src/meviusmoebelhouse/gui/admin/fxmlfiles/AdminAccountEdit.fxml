@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane fx:id="mainAnchorPane" prefHeight="426.0" prefWidth="404.0" xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="meviusmoebelhouse.gui.admin.controllers.AdminAccountEditController">
+   <children>
+      <Button fx:id="changeNameButton" layoutX="243.0" layoutY="27.0" mnemonicParsing="false" onAction="#AdminAccountChangeName" prefHeight="64.0" prefWidth="137.0" text="Change Name" />
+      <Button fx:id="changeEmailButton" layoutX="243.0" layoutY="103.0" mnemonicParsing="false" onAction="#AdminAccountChangeMail" prefHeight="64.0" prefWidth="137.0" text="Change e-mail" />
+      <Button fx:id="changePasswordButton" layoutX="243.0" layoutY="188.0" mnemonicParsing="false" onAction="#AdminAccountChangePassword" prefHeight="64.0" prefWidth="137.0" text="Change Password" />
+      <Button fx:id="removeUserButton" layoutX="243.0" layoutY="267.0" mnemonicParsing="false" onAction="#AdminAccountRemoveUser" prefHeight="64.0" prefWidth="137.0" text="Remove User" />
+      <Button fx:id="backToOverviewButton" layoutX="243.0" layoutY="348.0" mnemonicParsing="false" onAction="#AdminAccountBackToOverview" prefHeight="64.0" prefWidth="137.0" text="Back" />
+      <AnchorPane layoutX="20.0" layoutY="52.0" prefHeight="111.0" prefWidth="211.0">
+         <children>
+            <Label fx:id="userFirstName" layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="46.0" text="FirstName" />
+            <Label fx:id="userLastName" layoutX="106.0" layoutY="14.0" prefHeight="17.0" prefWidth="46.0" text="LastName" />
+            <Label fx:id="userMail" layoutX="11.0" layoutY="56.0" prefHeight="17.0" prefWidth="46.0" text="E-mail" />
+            <Label fx:id="userRole" layoutX="11.0" layoutY="84.0" prefHeight="17.0" prefWidth="46.0" text="Role" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

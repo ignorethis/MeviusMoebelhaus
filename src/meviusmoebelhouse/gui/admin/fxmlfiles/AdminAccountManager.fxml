@@ -9,7 +9,7 @@
 
 <AnchorPane fx:id="mainAnchorPane" maxHeight="426.0" maxWidth="404.0" minHeight="400.0" minWidth="400.0" prefHeight="426.0" prefWidth="404.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meviusmoebelhouse.gui.admin.controllers.AdminAccountManagerController">
    <children>
-      <RadioButton fx:id="customerRadioButton" layoutX="38.0" layoutY="37.0" mnemonicParsing="false" onAction="#accountTypeChosen" text="Customer" >
+      <RadioButton fx:id="customerRadioButton" layoutX="38.0" layoutY="37.0" mnemonicParsing="false" onAction="#accountTypeChosen" text="Customer">
          <toggleGroup>
             <ToggleGroup fx:id="accountChoice" />
          </toggleGroup>
@@ -60,7 +60,16 @@
             <Label fx:id="listAnchorPaneRoleLabel7" layoutX="157.0" layoutY="6.0" prefHeight="17.0" prefWidth="87.0" text="Role" />
          </children>
       </AnchorPane>
-      <Button fx:id="anchorPaneListPrevious" layoutX="25.0" layoutY="387.0" mnemonicParsing="false" onAction="#adjustAnchorPaneListViewRadioButtonOCE" text="previous page" />
-      <Button fx:id="anchorPaneListNext" layoutX="216.0" layoutY="387.0" mnemonicParsing="false" onAction="#adjustAnchorPaneListViewRadioButtonOCE" text="next page" />
+      <Button fx:id="anchorPaneListPrevious" layoutX="38.0" layoutY="387.0" mnemonicParsing="false" onAction="#adjustAnchorPaneListPrevious" text="previous page" />
+      <Button fx:id="anchorPaneListNext" layoutX="143.0" layoutY="387.0" mnemonicParsing="false" onAction="#adjustAnchorPaneListNext" text="next page" />
+      <Button fx:id="editUser1" layoutX="320.0" layoutY="113.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
+      <Button fx:id="editUser2" layoutX="320.0" layoutY="153.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
+      <Button fx:id="editUser3" layoutX="320.0" layoutY="193.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
+      <Button fx:id="editUser4" layoutX="320.0" layoutY="233.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
+      <Button fx:id="editUser5" layoutX="320.0" layoutY="273.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
+      <Button fx:id="editUser6" layoutX="320.0" layoutY="313.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
+      <Button fx:id="editUser7" layoutX="320.0" layoutY="353.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
+      <Button fx:id="addUserButton" layoutX="249.0" layoutY="387.0" mnemonicParsing="false" text="Add" />
+      <Button layoutX="5.0" layoutY="5.0" mnemonicParsing="false" onAction="#back" text="Back" />
    </children>
 </AnchorPane>

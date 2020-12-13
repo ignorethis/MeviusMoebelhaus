@@ -187,6 +187,6 @@ public class HomeController implements Initializable {
     }
 
     public void testGui(ActionEvent actionEvent) throws Exception {
-        applicationController.switchScene(mainAnchorPane, "AdminAccountManager");
+        applicationController.switchScene(mainAnchorPane, "AdminHome");
     }
 }
