@@ -14,6 +14,7 @@ public class LoginController implements Initializable {
     private ApplicationController applicationController;
 
     public AnchorPane mainAnchorPane;
+
     public TextField usernameField, passwordField;
     public Label errorMessageLabel;
     public Button loginButton, registerButton, backToHomeButton;

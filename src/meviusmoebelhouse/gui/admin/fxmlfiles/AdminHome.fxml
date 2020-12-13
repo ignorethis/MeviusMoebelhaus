@@ -3,16 +3,14 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="mainAnchorPane"
-            maxHeight="400.0" maxWidth="400.0" minHeight="400.0" minWidth="400.0" prefHeight="400.0" prefWidth="400.0"
-            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="meviusmoebelhouse.gui.admin.controllers.AdminHomeController">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="400.0" maxWidth="400.0" minHeight="400.0" minWidth="400.0" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meviusmoebelhouse.gui.admin.controllers.AdminHomeController">
 
     <children>
         <Button layoutX="126.0" layoutY="33.3" mnemonicParsing="false" onAction="#logout" prefHeight="40.0" prefWidth="150.0" text="Logout" />
         <Button layoutX="126.0" layoutY="106.6666" mnemonicParsing="false" onAction="#openFunctionFurniture" prefHeight="40.0" prefWidth="150.0" text="Furniture" />
-        <Button layoutX="125.0" layoutY="180.0" mnemonicParsing="false" onAction="#openFunctionCustomer" prefHeight="40.0" prefWidth="150.0" text="Customer" />
+        <Button layoutX="125.0" layoutY="180.0" mnemonicParsing="false" onAction="#openFunctionAccountManagement" prefHeight="40.0" prefWidth="150.0" text="Account Management" />
         <Button layoutX="126.0" layoutY="253.3" mnemonicParsing="false" onAction="#openFunctionInvoices" prefHeight="40.0" prefWidth="150.0" text="Invoices" />
         <Button layoutX="125.0" layoutY="326.6" mnemonicParsing="false" onAction="#openFunctionInventory" prefHeight="40.0" prefWidth="150.0" text="Inventory" />
+      <Button layoutX="5.0" layoutY="5.0" mnemonicParsing="false" onAction="#back" text="Back" />
     </children>
 </AnchorPane>

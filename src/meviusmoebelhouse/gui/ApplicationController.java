@@ -33,6 +33,8 @@ public class ApplicationController {
     List<Staff>             allStaffs;
     List<Subcategory>       allSubcategories;
 
+    ArrayList<Furniture>    newShoppingcart = new ArrayList<>();
+
     //for easy access to the images and data in general in home/category/subcategory frames
     HashMap<Integer, HashMap<Integer, List<Image>>> allFurnituresImages = new HashMap<>(); //HashMap<Category.id, HashMap<Subcategory.id, List<Furnitures>>>
     HashMap<Integer, List<Image>>                   allSubcategoryImages = new HashMap<>(); //HashMap<CategoryID, List<Subcategory>
@@ -459,5 +461,13 @@ public class ApplicationController {
 
     public List<Staff> getAllStaffs() {
         return allStaffs;
+    }
+
+    public ArrayList<Furniture> getNewShoppingcart() {
+        return newShoppingcart;
+    }
+
+    public void addFurnitureToShoppingCart(Furniture f){
+        newShoppingcart.add(f);
     }
 }

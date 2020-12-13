@@ -70,5 +70,6 @@
       <Button fx:id="editUser6" layoutX="320.0" layoutY="313.0" mnemonicParsing="false" text="Edit" />
       <Button fx:id="editUser7" layoutX="320.0" layoutY="353.0" mnemonicParsing="false" text="Edit" />
       <Button fx:id="addUserButton" layoutX="249.0" layoutY="387.0" mnemonicParsing="false" text="Add" />
+      <Button layoutX="5.0" layoutY="5.0" mnemonicParsing="false" onAction="#back" text="Back" />
    </children>
 </AnchorPane>

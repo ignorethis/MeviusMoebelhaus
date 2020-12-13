@@ -34,7 +34,8 @@ public class AdminHomeController implements Initializable {
         applicationController.switchScene(mainAnchorPane, "");
     }
 
-    public void openFunctionCustomer(ActionEvent actionEvent) {
+    public void openFunctionAccountManagement(ActionEvent actionEvent) throws Exception {
+        applicationController.switchScene(mainAnchorPane, "AdminAccountManager");
     }
 
     public void openFunctionInvoices(ActionEvent actionEvent) {
@@ -43,4 +44,7 @@ public class AdminHomeController implements Initializable {
     public void openFunctionInventory(ActionEvent actionEvent) {
     }
 
+    public void back(ActionEvent actionEvent) throws Exception {
+        applicationController.switchScene(mainAnchorPane, "Home");
+    }
 }

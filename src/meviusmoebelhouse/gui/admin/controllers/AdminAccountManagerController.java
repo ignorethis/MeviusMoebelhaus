@@ -22,7 +22,6 @@ public class AdminAccountManagerController implements Initializable {
 
     int customerListCounter = 0, staffListCounter = 0, adminListCounter = 0;
 
-
     public AnchorPane   mainAnchorPane,
                         listAnchorPane1, listAnchorPane2, listAnchorPane3,
                         listAnchorPane4,listAnchorPane5, listAnchorPane6, listAnchorPane7;
@@ -313,4 +312,7 @@ public class AdminAccountManagerController implements Initializable {
         }
     }
 
+    public void back(ActionEvent actionEvent) throws Exception {
+        applicationController.switchScene(mainAnchorPane, "AdminHome");
+    }
 }
