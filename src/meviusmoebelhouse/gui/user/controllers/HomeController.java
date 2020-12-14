@@ -65,7 +65,6 @@ public class HomeController implements Initializable {
 
         //load all images of categories in allCategoryImages list
         allCategoryImages.addAll(applicationController.getAllCategoryImages());
-
         showSalesImages();
         showCategoryImages();
     }
@@ -153,6 +152,18 @@ public class HomeController implements Initializable {
         for(int i = allSalesImageViews.size() - 1; i > allSalesImages.size() - 1; i--){
             allSalesImageViews.get(i).setDisable(true);
         }
+
+        //Disable Buttons of Sales if it is negative or too big
+        if(counterSales >= allSalesImages.size() - 4){
+            homeSalesSliderRightButton.setDisable(true);
+        } else {
+            homeSalesSliderRightButton.setDisable(false);
+        }
+        if(counterSales > 0){
+            homeSalesSliderLeftButton.setDisable(false);
+        } else {
+            homeSalesSliderLeftButton.setDisable(true);
+        }
     }
 
     /**
@@ -166,6 +177,17 @@ public class HomeController implements Initializable {
         }
         for(int i = allCategoryImageViews.size() - 1; i > allCategoryImages.size() - 1; i--){
             allCategoryImageViews.get(i).setDisable(true);
+        }
+        //Disable Buttons of Categories if it is negative or too big
+        if(counterCategories >= allCategoryImages.size() - 4){
+            homeCategoriesSliderRightButton.setDisable(true);
+        } else {
+            homeCategoriesSliderRightButton.setDisable(false);
+        }
+        if(counterCategories > 0){
+            homeCategoriesSliderLeftButton.setDisable(false);
+        } else {
+            homeCategoriesSliderLeftButton.setDisable(true);
         }
     }
 

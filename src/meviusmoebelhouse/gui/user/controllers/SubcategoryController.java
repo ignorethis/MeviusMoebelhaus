@@ -17,6 +17,7 @@ import java.util.*;
 public class SubcategoryController implements Initializable {
 
     public AnchorPane mainAnchorPane;
+    public Button subcategoryFurnituresSliderLeftButton, subcategoryFurnituresSliderRightButton;
 
     private ApplicationController applicationController = null;
 
@@ -138,5 +139,8 @@ public class SubcategoryController implements Initializable {
         for(int i = allFurnitureImageViews.size() - 1; i > allFurnitureImages.size() - 1; i--){
             allFurnitureImageViews.get(i).setDisable(true);
         }
+        //Dis/Enable Buttons of furnitures if it is negative or too big
+        subcategoryFurnituresSliderRightButton.setDisable(counterFurnitures >= allFurnitureImages.size() - 12);
+        subcategoryFurnituresSliderLeftButton.setDisable(counterFurnitures <= 0);
     }
 }

@@ -1,6 +1,7 @@
 package meviusmoebelhouse.gui.user.controllers;
 
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,6 +14,10 @@ import java.net.URL;
 import java.util.*;
 
 public class CategoryController implements Initializable {
+
+    public Button   categorySalesSliderLeftButton, categorySalesSliderRightButton,
+                    categoryFurnituresSliderLeftButton, categoryFurnituresSliderRightButton,
+                    categoriesSubcategoriesSliderLeftButton, categoriesSubcategoriesSliderRightButton;
 
     private ApplicationController applicationController = null;
 
@@ -173,6 +178,18 @@ public class CategoryController implements Initializable {
             //allSalesImageViews.get(i).setDisable(true);
             allSalesImageViews.get(i).setVisible(false);
         }
+
+        //Disable Buttons of Sales if it is negative or too big
+        if(counterSales >= allSalesImages.size() - 4){
+            categorySalesSliderRightButton.setDisable(true);
+        } else {
+            categorySalesSliderRightButton.setDisable(false);
+        }
+        if(counterSales > 0){
+            categorySalesSliderLeftButton.setDisable(false);
+        } else {
+            categorySalesSliderLeftButton.setDisable(true);
+        }
     }
 
     /**
@@ -188,6 +205,18 @@ public class CategoryController implements Initializable {
             //allFurnitureImageViews.get(i).setDisable(true);
             allFurnitureImageViews.get(i).setVisible(false);
         }
+
+        //Dis/Enable Buttons of Sales if it is negative or too big
+        if(counterFurnitures >= allFurnitureImages.size() - 4){
+            categoryFurnituresSliderRightButton.setDisable(true);
+        } else {
+            categoryFurnituresSliderRightButton.setDisable(false);
+        }
+        if(counterFurnitures > 0){
+            categoryFurnituresSliderLeftButton.setDisable(false);
+        } else {
+            categoryFurnituresSliderLeftButton.setDisable(true);
+        }
     }
 
     /**
@@ -202,6 +231,18 @@ public class CategoryController implements Initializable {
         for(int i = allSubcategoryImageViews.size() - 1; i > allSubcategoryImages.size() - 1; i--){
             //allSubcategoryImageViews.get(i).setDisable(true);
             allSubcategoryImageViews.get(i).setVisible(false);
+        }
+
+        //Dis/Enable Buttons of Subcategory if it is negative or too big
+        if(counterSubcategories >= allSubcategoryImages.size() - 4){
+            categoriesSubcategoriesSliderRightButton.setDisable(true);
+        } else{
+            categoriesSubcategoriesSliderRightButton.setDisable(false);
+        }
+        if(counterSubcategories > 0){
+            categoriesSubcategoriesSliderLeftButton.setDisable(false);
+        } else{
+            categoriesSubcategoriesSliderLeftButton.setDisable(true);
         }
     }
 }
