@@ -3,6 +3,7 @@ package meviusmoebelhouse.gui;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -506,5 +507,10 @@ public class ApplicationController {
 
     public int getUserRoleByUserId(int id) {
         return (allUsers.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null)).getIdUserRole();
+    }
+
+    public void logout(AnchorPane anchorPane) throws Exception {
+        currentUser = null;
+        switchScene(anchorPane, "Home");
     }
 }

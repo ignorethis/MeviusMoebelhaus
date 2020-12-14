@@ -3,6 +3,7 @@ package meviusmoebelhouse.gui.user.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -30,6 +31,7 @@ public class ShoppingCartController implements Initializable {
     public TextField    furniturePricePerUnit1, furniturePricePerUnit2, furniturePricePerUnit3;
     public Text totalPriceText;
     public VBox shoppingCartItemsContainer;
+    public Button menuBarLogin, menuBarLogout, menuBarSettings;
 
     public ShoppingCartController(ApplicationController applicationController) {
         this.applicationController = applicationController;
@@ -37,6 +39,8 @@ public class ShoppingCartController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        updateUiBasedOnLoginState();
+
         updateViewFromViewModel();
     }
 
@@ -44,7 +48,8 @@ public class ShoppingCartController implements Initializable {
         applicationController.switchScene(mainAnchorPane, "Login");
     }
 
-    public void logout(ActionEvent actionEvent) {
+    public void logout() throws Exception {
+        applicationController.logout(mainAnchorPane);
     }
 
     public void openSettings(ActionEvent actionEvent) throws Exception {
@@ -85,5 +90,12 @@ public class ShoppingCartController implements Initializable {
         }
 
         totalPriceText.setText(String.valueOf(shoppingCart.getTotalPrice()));
+    }
+
+    private void updateUiBasedOnLoginState() {
+        boolean userLoggedIn = applicationController.isUserLoggedIn();
+        menuBarLogin.setDisable(userLoggedIn);
+        menuBarLogout.setDisable(!userLoggedIn);
+        menuBarSettings.setDisable(!userLoggedIn);
     }
 }

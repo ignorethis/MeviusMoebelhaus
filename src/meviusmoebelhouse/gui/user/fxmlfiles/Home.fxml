@@ -15,12 +15,7 @@
             <Font name="System Bold Italic" size="25.0" />
         </font>
     </Label>
-    <ToolBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="622.0">
-        <items>
-
-        </items>
-    </ToolBar>
-    <ToolBar layoutX="622.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="378.0">
+    <ToolBar layoutX="0.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="1000">
         <items>
             <Button fx:id="menuBarLogin" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#openLogin" text="Login" />
             <Button fx:id="menuBarLogout" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#logout" text="Logout" />

@@ -135,8 +135,8 @@ public class HomeController implements Initializable {
         applicationController.switchScene(mainAnchorPane, "ShoppingCart");
     }
 
-    public void logout() {
-        applicationController.setCurrentUser(null);
+    public void logout() throws Exception {
+        applicationController.logout(mainAnchorPane);
         updateUiBasedOnLoginState();
     }
 

@@ -17,7 +17,8 @@ import java.util.*;
 public class SubcategoryController implements Initializable {
 
     public AnchorPane mainAnchorPane;
-    public Button subcategoryFurnituresSliderLeftButton, subcategoryFurnituresSliderRightButton;
+    public Button   subcategoryFurnituresSliderLeftButton, subcategoryFurnituresSliderRightButton,
+                    menuBarLogin, menuBarLogout, menuBarSettings;
 
     private ApplicationController applicationController = null;
 
@@ -47,6 +48,8 @@ public class SubcategoryController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         currentSubcategory = applicationController.getCurrentSubcategory();
+
+        updateUiBasedOnLoginState();
 
         subcategoryLabel.setText(currentSubcategory.getName());
         backToCategoryButton.setText(applicationController.getCurrentCategory().getName());
@@ -80,7 +83,8 @@ public class SubcategoryController implements Initializable {
         applicationController.switchScene(mainAnchorPane, "Login");
     }
 
-    public void logout(ActionEvent actionEvent) {
+    public void logout() throws Exception {
+        applicationController.logout(mainAnchorPane);
     }
 
     public void openSettings(ActionEvent actionEvent) throws Exception {
@@ -142,5 +146,12 @@ public class SubcategoryController implements Initializable {
         //Dis/Enable Buttons of furnitures if it is negative or too big
         subcategoryFurnituresSliderRightButton.setDisable(counterFurnitures >= allFurnitureImages.size() - 12);
         subcategoryFurnituresSliderLeftButton.setDisable(counterFurnitures <= 0);
+    }
+
+    private void updateUiBasedOnLoginState() {
+        boolean userLoggedIn = applicationController.isUserLoggedIn();
+        menuBarLogin.setDisable(userLoggedIn);
+        menuBarLogout.setDisable(!userLoggedIn);
+        menuBarSettings.setDisable(!userLoggedIn);
     }
 }

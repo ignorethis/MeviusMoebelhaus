@@ -17,13 +17,13 @@
             <Font name="System Bold Italic" size="25.0" />
         </font>
     </Label>
-    <ToolBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="622.0">
-        <Button fx:id="menuBarLogin" mnemonicParsing="false" onAction="#openLogin" text="Login" />
-    </ToolBar>
-    <ToolBar layoutX="622.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="378.0">
-        <Button fx:id="menuBarLogout" mnemonicParsing="false" onAction="#logout" text="Logout" />
-        <Button fx:id="menuBarSettings" mnemonicParsing="false" onAction="#openSettings" text="Settings" />
-        <Button fx:id="menuBarShoppingCart" mnemonicParsing="false" onAction="#openShoppingCart" text="Shopping cart" />
+    <ToolBar layoutX="0.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="1000">
+        <items>
+            <Button fx:id="menuBarLogin" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#openLogin" text="Login" />
+            <Button fx:id="menuBarLogout" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#logout" text="Logout" />
+            <Button fx:id="menuBarSettings" mnemonicParsing="false" onAction="#openSettings" text="Settings" />
+            <Button fx:id="menuBarShoppingCart" mnemonicParsing="false" onAction="#openShoppingCart" text="Shopping cart" />
+        </items>
     </ToolBar>
     <Button fx:id="subcategoryFurnituresSliderLeftButton" layoutX="38.0" layoutY="429.0" mnemonicParsing="false" onAction="#subcategoryFurnituresSliderLeftOCE" text="Left" />
     <Button fx:id="subcategoryFurnituresSliderRightButton" layoutX="924.0" layoutY="429.0" mnemonicParsing="false" onAction="#subcategoryFurnituresSliderRightOCE" text="Right" />

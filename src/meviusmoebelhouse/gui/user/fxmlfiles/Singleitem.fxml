@@ -12,13 +12,13 @@
 
 <AnchorPane fx:id="mainAnchorPane" maxHeight="800.0" maxWidth="1000.0" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meviusmoebelhouse.gui.user.controllers.SingleItemController">
 
-    <ToolBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="622.0">
-        <Button fx:id="menuBarLogin" mnemonicParsing="false" onAction="#openLogin" text="Login" />
-    </ToolBar>
-    <ToolBar layoutX="622.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="378.0">
-        <Button fx:id="menuBarLogout" mnemonicParsing="false" onAction="#logout" text="Logout" />
-        <Button fx:id="menuBarSettings" mnemonicParsing="false" onAction="#openSettings" text="Settings" />
-        <Button fx:id="menuBarShoppingCart" mnemonicParsing="false" onAction="#openShoppingCart" text="Shopping cart" />
+    <ToolBar layoutX="0.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="1000">
+        <items>
+            <Button fx:id="menuBarLogin" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#openLogin" text="Login" />
+            <Button fx:id="menuBarLogout" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#logout" text="Logout" />
+            <Button fx:id="menuBarSettings" mnemonicParsing="false" onAction="#openSettings" text="Settings" />
+            <Button fx:id="menuBarShoppingCart" mnemonicParsing="false" onAction="#openShoppingCart" text="Shopping cart" />
+        </items>
     </ToolBar>
     <Label fx:id="singleItemViewLabel" layoutX="389.0" layoutY="51.0" prefHeight="54.0" prefWidth="516.0" text="item.name" textAlignment="CENTER">
         <font>

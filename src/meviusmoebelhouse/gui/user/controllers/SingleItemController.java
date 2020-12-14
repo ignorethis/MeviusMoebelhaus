@@ -21,7 +21,7 @@ public class SingleItemController implements Initializable {
     public ImageView singleItemViewImage;
     public TextArea singleItemViewDescription;
     public TextField singleItemViewPrice, singleItemViewRebate, singleItemViewFinalPrice;
-    public Button backToCategoryButton, backToSubcategoryButton;
+    public Button backToCategoryButton, backToSubcategoryButton, menuBarLogin, menuBarLogout, menuBarSettings;
     public ChoiceBox furnitureCountChoiceBox;
 
     public SingleItemController(ApplicationController applicationController) {
@@ -32,6 +32,8 @@ public class SingleItemController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //get the current furniture (the furniture got clicked) and set up the single view of it
         currentFurniture = applicationController.getCurrentFurniture();
+
+        updateUiBasedOnLoginState();
 
         backToCategoryButton.setText(applicationController.getCurrentCategory().getName());
         backToSubcategoryButton.setText(applicationController.getCurrentSubcategory().getName());
@@ -74,8 +76,8 @@ public class SingleItemController implements Initializable {
         applicationController.switchScene(mainAnchorPane, "Login");
     }
 
-    public void logout() {
-
+    public void logout() throws Exception {
+        applicationController.logout(mainAnchorPane);
     }
 
     public void openSettings() throws Exception {
@@ -84,5 +86,12 @@ public class SingleItemController implements Initializable {
 
     public void openShoppingCart() throws Exception {
         applicationController.switchScene(mainAnchorPane, "ShoppingCart");
+    }
+
+    private void updateUiBasedOnLoginState() {
+        boolean userLoggedIn = applicationController.isUserLoggedIn();
+        menuBarLogin.setDisable(userLoggedIn);
+        menuBarLogout.setDisable(!userLoggedIn);
+        menuBarSettings.setDisable(!userLoggedIn);
     }
 }

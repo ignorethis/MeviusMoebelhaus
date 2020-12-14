@@ -26,12 +26,11 @@ public class AdminHomeController implements Initializable {
     }
 
     public void logout(ActionEvent actionEvent) throws Exception {
-        //logout currentAdmin
-        applicationController.switchScene(mainAnchorPane, "Home");
+        applicationController.logout(mainAnchorPane);
     }
 
     public void openFunctionFurniture(ActionEvent actionEvent) throws Exception {
-        applicationController.switchScene(mainAnchorPane, "");
+        applicationController.switchScene(mainAnchorPane, "AdminFurnitureManager");
     }
 
     public void openFunctionAccountManagement(ActionEvent actionEvent) throws Exception {

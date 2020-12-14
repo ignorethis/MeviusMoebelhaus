@@ -17,7 +17,8 @@ public class CategoryController implements Initializable {
 
     public Button   categorySalesSliderLeftButton, categorySalesSliderRightButton,
                     categoryFurnituresSliderLeftButton, categoryFurnituresSliderRightButton,
-                    categoriesSubcategoriesSliderLeftButton, categoriesSubcategoriesSliderRightButton;
+                    categoriesSubcategoriesSliderLeftButton, categoriesSubcategoriesSliderRightButton,
+                    menuBarLogin, menuBarLogout, menuBarSettings;
 
     private ApplicationController applicationController = null;
 
@@ -53,6 +54,8 @@ public class CategoryController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         currentCategory = applicationController.getCurrentCategory();
+
+        updateUiBasedOnLoginState();
 
         categoryLabel.setText(currentCategory.getName());
 
@@ -93,7 +96,8 @@ public class CategoryController implements Initializable {
         applicationController.switchScene(mainAnchorPane, "Login");
     }
 
-    public void logout() {
+    public void logout() throws Exception {
+        applicationController.logout(mainAnchorPane);
     }
 
     public void openSettings() throws Exception {
@@ -244,5 +248,12 @@ public class CategoryController implements Initializable {
         } else{
             categoriesSubcategoriesSliderLeftButton.setDisable(true);
         }
+    }
+
+    private void updateUiBasedOnLoginState() {
+        boolean userLoggedIn = applicationController.isUserLoggedIn();
+        menuBarLogin.setDisable(userLoggedIn);
+        menuBarLogout.setDisable(!userLoggedIn);
+        menuBarSettings.setDisable(!userLoggedIn);
     }
 }

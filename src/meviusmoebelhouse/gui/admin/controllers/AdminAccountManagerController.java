@@ -314,6 +314,7 @@ public class AdminAccountManagerController implements Initializable {
         applicationController.openAccountManagerEdit(mainAnchorPane, temp);
     }
 
-    public void back(ActionEvent actionEvent) {
+    public void back(ActionEvent actionEvent) throws Exception {
+        applicationController.switchScene(mainAnchorPane, "AdminHome");
     }
 }

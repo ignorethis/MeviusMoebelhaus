@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meviusmoebelhouse.gui.admin.controllers.AdminFurnitureManagerController">
+   <children>
+      <Button layoutX="5.0" layoutY="5.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <TextField fx:id="searchforFurnitureByIdTextField" layoutX="156.0" layoutY="45.0" />
+      <Label layoutX="12.0" layoutY="49.0" text="Search for a furniture by id:" />
+      <Button layoutX="321.0" layoutY="45.0" mnemonicParsing="false" onAction="#searchFurnitureByIdOCE" text="Search" />
+      <Label fx:id="errorMessageLabelSearchFurniture" layoutX="15.0" layoutY="77.0" />
+      <Button fx:id="addFurnitureButton" layoutX="5.0" layoutY="370.0" mnemonicParsing="false" onAction="#addFurnitureButtonOCE" text="Add furniture" />
+      <Label layoutX="12.0" layoutY="111.0" text="Add a furniture or change one when you search for a furniture above:" />
+      <Label layoutX="12.0" layoutY="135.0" text="Name:" />
+      <Label layoutX="12.0" layoutY="258.0" text="Width: (in cm)" />
+      <Label layoutX="165.0" layoutY="258.0" text="Height: (in cm)" />
+      <Label layoutX="321.0" layoutY="258.0" text="Length: (in cm)" />
+      <Label layoutX="12.0" layoutY="291.0" text="Price: (in €)" />
+      <Label layoutX="165.0" layoutY="291.0" text="Rebate: (in %)" />
+      <TextField fx:id="widthTextField" layoutX="92.0" layoutY="254.0" prefHeight="25.0" prefWidth="63.0" />
+      <TextField fx:id="heightTextField" layoutX="248.0" layoutY="254.0" prefHeight="25.0" prefWidth="63.0" />
+      <TextField fx:id="lengthTextField" layoutX="405.0" layoutY="254.0" prefHeight="25.0" prefWidth="63.0" />
+      <TextField fx:id="priceTextField" layoutX="92.0" layoutY="287.0" prefHeight="25.0" prefWidth="63.0" />
+      <TextField fx:id="rebateTextField" layoutX="247.0" layoutY="287.0" prefHeight="25.0" prefWidth="63.0" />
+      <TextField fx:id="nameTextField" layoutX="53.0" layoutY="131.0" prefHeight="25.0" prefWidth="262.0" />
+      <Label layoutX="12.0" layoutY="156.0" text="Description:" />
+      <TextField fx:id="descriptionTextField" layoutX="10.0" layoutY="175.0" prefHeight="71.0" prefWidth="458.0" />
+      <Button fx:id="changeFurnitureButton" layoutX="184.0" layoutY="370.0" mnemonicParsing="false" onAction="#changeFurnitureButtonOCE" text="Change Furniture" />
+      <Button fx:id="deactivateFurnitureButton" layoutX="373.0" layoutY="370.0" mnemonicParsing="false" onAction="#deactivateFurnitureButtonOCE" text="Deactivate Furniture" />
+      <Label fx:id="errorMessageLabelAddingFurniture" layoutX="12.0" layoutY="320.0" />
+   </children>
+</AnchorPane>
