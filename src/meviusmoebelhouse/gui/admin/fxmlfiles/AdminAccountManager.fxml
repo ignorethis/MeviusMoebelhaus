@@ -60,8 +60,8 @@
             <Label fx:id="listAnchorPaneRoleLabel7" layoutX="157.0" layoutY="6.0" prefHeight="17.0" prefWidth="87.0" text="Role" />
          </children>
       </AnchorPane>
-      <Button fx:id="anchorPaneListPrevious" layoutX="38.0" layoutY="387.0" mnemonicParsing="false" onAction="#adjustAnchorPaneListPrevious" text="previous page" />
-      <Button fx:id="anchorPaneListNext" layoutX="143.0" layoutY="387.0" mnemonicParsing="false" onAction="#adjustAnchorPaneListNext" text="next page" />
+      <Button fx:id="anchorPaneListPreviousButton" layoutX="38.0" layoutY="387.0" mnemonicParsing="false" onAction="#adjustAnchorPaneListPrevious" text="previous page" />
+      <Button fx:id="anchorPaneListNextButton" layoutX="143.0" layoutY="387.0" mnemonicParsing="false" onAction="#adjustAnchorPaneListNext" text="next page" />
       <Button fx:id="editUser1" layoutX="320.0" layoutY="113.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
       <Button fx:id="editUser2" layoutX="320.0" layoutY="153.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
       <Button fx:id="editUser3" layoutX="320.0" layoutY="193.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />

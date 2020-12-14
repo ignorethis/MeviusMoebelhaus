@@ -37,7 +37,7 @@ public class AdminAccountManagerController implements Initializable {
                     listAnchorPaneRoleLabel3, listAnchorPaneRoleLabel4, listAnchorPaneRoleLabel5,
                     listAnchorPaneRoleLabel6, listAnchorPaneRoleLabel7;
 
-    public Button   anchorPaneListPrevious, anchorPaneListNext, editUser1, editUser2, editUser3, editUser4,
+    public Button anchorPaneListPreviousButton, anchorPaneListNextButton, editUser1, editUser2, editUser3, editUser4,
                     editUser5, editUser6, editUser7, addUserButton;
 
     public ToggleGroup accountChoice;
@@ -46,7 +46,7 @@ public class AdminAccountManagerController implements Initializable {
 
     ArrayList<Customer> allCustomers = new ArrayList<>();
     ArrayList<Staff> allStaffs = new ArrayList<>();
-    ArrayList<Staff> allAdmins = new ArrayList<>(); //Admin class? change
+    ArrayList<Staff> allAdmins = new ArrayList<>();
 
     ArrayList<Label> listAnchorPaneNameLabels = new ArrayList<>();
     ArrayList<Label> listAnchorPaneRoleLabels = new ArrayList<>();
@@ -86,17 +86,12 @@ public class AdminAccountManagerController implements Initializable {
             a.setVisible(false);
         }
 
-        anchorPaneListPrevious.setDisable(true);
-        anchorPaneListNext.setDisable(true);
-
- //       customerRadioButton.setSelected(true);
-//        fillListAnchorPanes("Customer");
+        anchorPaneListPreviousButton.setDisable(true);
+        anchorPaneListNextButton.setDisable(true);
 
         for(Button a : listEditButtons){
             a.setDisable(true);
         }
-
-
     }
 
     public AdminAccountManagerController(ApplicationController applicationController){
@@ -105,8 +100,11 @@ public class AdminAccountManagerController implements Initializable {
 
 
     public void accountTypeChosen(ActionEvent actionEvent) {
-        anchorPaneListPrevious.setDisable(true);
-        anchorPaneListNext.setDisable(false);
+
+        String clickedRadioButtonId = ((RadioButton) actionEvent.getSource()).getId();
+
+        anchorPaneListPreviousButton.setDisable(true);
+        anchorPaneListNextButton.setDisable(false);
 
         for(Button a : listEditButtons){
             a.setDisable(false);
@@ -120,17 +118,23 @@ public class AdminAccountManagerController implements Initializable {
             a.setVisible(false);
         }
 
-        switch (((RadioButton) actionEvent.getSource()).getId()){
+        switch (clickedRadioButtonId){
             case "customerRadioButton":
                 //get all customers out of database and display
                 fillListAnchorPanes("Customer");
+                customerBorderNext();
+                customerBorderPrev();
                 break;
             case "adminRadioButton":
                 fillListAnchorPanes("Admin");
+                adminBorderNext();
+                adminBorderPrev();
                 //get all admins out of database and display
                 break;
             case "staffRadioButton":
                 fillListAnchorPanes("Staff");
+                staffBorderNext();
+                staffBorderPrev();
                 //get all staffs out of database and display
                 break;
         }
@@ -147,55 +151,17 @@ public class AdminAccountManagerController implements Initializable {
                     listAnchorPaneRoleLabels.get(i).setText("Customer");
                     listAnchorPanes.get(i).setStyle("-fx-border-color: black");
                     listAnchorPanes.get(i).setVisible(true);
-                }
-                break;
-            case "Staff":
-                for(int i = 0; (i + staffListCounter) <= allStaffs.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
-                    listAnchorPaneNameLabels.get(i).setText(
-                            allStaffs.get(i + staffListCounter).getLastName()
-                                    + ", " + allStaffs.get(i + staffListCounter).getFirstName());
-                    listAnchorPaneRoleLabels.get(i).setText("Staff");
-                    listAnchorPanes.get(i).setStyle("-fx-border-color: black");
-                    listAnchorPanes.get(i).setVisible(true);
-                }
-                break;
-            case "Admin":
-                for(int i = 0; (i + adminListCounter) <= allAdmins.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
-                    listAnchorPaneNameLabels.get(i).setText(
-                            allAdmins.get(i + staffListCounter).getLastName()
-                                    + ", " + allAdmins.get(i + adminListCounter).getFirstName());
-                    listAnchorPaneRoleLabels.get(i).setText("Admin");
-                    listAnchorPanes.get(i).setStyle("-fx-border-color: black");
-                    listAnchorPanes.get(i).setVisible(true);
-                }
-                break;
-        }
-    }
-
-    public void nextListAnchorPanes(String role){
-
-        switch (role){
-            case "Customer":
-
-                customerListCounter = customerListCounter + 7;
-                for(int i = 0; (i + customerListCounter) <= allCustomers.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
-                    listAnchorPaneNameLabels.get(i).setText(
-                            allCustomers.get(i + customerListCounter).getLastName()
-                                    + ", " + allCustomers.get(i + customerListCounter).getFirstName());
-                    listAnchorPaneRoleLabels.get(i).setText("Customer");
-                    listAnchorPanes.get(i).setStyle("-fx-border-color: black");
-                    listAnchorPanes.get(i).setVisible(true);
+                    listEditButtons.get(i).setVisible(true);
                 }
                 for(int i = 6; ((i + customerListCounter) > allCustomers.size() - 1) && i >= 0; i--){
                     listAnchorPaneNameLabels.get(i).setText("");
                     listAnchorPaneRoleLabels.get(i).setText("");
                     listAnchorPanes.get(i).setStyle("-fx-border-color: black");
                     listAnchorPanes.get(i).setVisible(false);
+                    listEditButtons.get(i).setVisible(false);
                 }
                 break;
             case "Staff":
-
-                staffListCounter = staffListCounter + 7;
                 for(int i = 0; (i + staffListCounter) <= allStaffs.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
                     listAnchorPaneNameLabels.get(i).setText(
                             allStaffs.get(i + staffListCounter).getLastName()
@@ -203,16 +169,18 @@ public class AdminAccountManagerController implements Initializable {
                     listAnchorPaneRoleLabels.get(i).setText("Staff");
                     listAnchorPanes.get(i).setStyle("-fx-border-color: black");
                     listAnchorPanes.get(i).setVisible(true);
+                    listEditButtons.get(i).setVisible(true);
                 }
                 for(int i = 6; ((i + staffListCounter) > allStaffs.size() - 1) && i >= 0; i--){
                     listAnchorPaneNameLabels.get(i).setText("");
                     listAnchorPaneRoleLabels.get(i).setText("");
                     listAnchorPanes.get(i).setStyle("-fx-border-color: black");
                     listAnchorPanes.get(i).setVisible(false);
+                    listEditButtons.get(i).setVisible(false);
                 }
+
                 break;
             case "Admin":
-                adminListCounter = adminListCounter + 7;
                 for(int i = 0; (i + adminListCounter) <= allAdmins.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
                     listAnchorPaneNameLabels.get(i).setText(
                             allAdmins.get(i + staffListCounter).getLastName()
@@ -220,77 +188,69 @@ public class AdminAccountManagerController implements Initializable {
                     listAnchorPaneRoleLabels.get(i).setText("Admin");
                     listAnchorPanes.get(i).setStyle("-fx-border-color: black");
                     listAnchorPanes.get(i).setVisible(true);
+                    listEditButtons.get(i).setVisible(true);
                 }
                 for(int i = 6; ((i + adminListCounter) > allAdmins.size() - 1) && i >= 0; i--){
                     listAnchorPaneNameLabels.get(i).setText("");
                     listAnchorPaneRoleLabels.get(i).setText("");
                     listAnchorPanes.get(i).setStyle("-fx-border-color: black");
                     listAnchorPanes.get(i).setVisible(false);
+                    listEditButtons.get(i).setVisible(false);
                 }
+                break;
         }
+    }
+
+    public void nextListAnchorPanes(String role){
+        switch (role){
+            case "Customer":
+                customerListCounter = customerListCounter + 7;
+                break;
+            case "Staff":
+                staffListCounter = staffListCounter + 7;
+                break;
+            case "Admin":
+                adminListCounter = adminListCounter + 7;
+        }
+        fillListAnchorPanes(role);
     }
 
     public void previousListAnchorPanes(String role){
-
         switch (role){
             case "Customer":
                 customerListCounter = customerListCounter - 7;
-                for(int i = 0; (i + customerListCounter) <= allCustomers.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
-                    listAnchorPaneNameLabels.get(i).setText(
-                            allCustomers.get(i + customerListCounter).getLastName()
-                                    + ", " + allCustomers.get(i + customerListCounter).getFirstName());
-                    listAnchorPaneRoleLabels.get(i).setText("Customer");
-                    listAnchorPanes.get(i).setStyle("-fx-border-color: black");
-                    listAnchorPanes.get(i).setVisible(true);
-                }
                 break;
             case "Staff":
                 staffListCounter = staffListCounter - 7;
-                for(int i = 0; (i + staffListCounter) <= allStaffs.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
-                    listAnchorPaneNameLabels.get(i).setText(
-                            allStaffs.get(i + staffListCounter).getLastName()
-                                    + ", " + allStaffs.get(i + staffListCounter).getFirstName());
-                    listAnchorPaneRoleLabels.get(i).setText("Staff");
-                    listAnchorPanes.get(i).setStyle("-fx-border-color: black");
-                    listAnchorPanes.get(i).setVisible(true);
-                }
                 break;
             case "Admin":
                 adminListCounter = adminListCounter - 7;
-                for(int i = 0; (i + adminListCounter) <= allAdmins.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
-                    listAnchorPaneNameLabels.get(i).setText(
-                            allAdmins.get(i + staffListCounter).getLastName()
-                                    + ", " + allAdmins.get(i + adminListCounter).getFirstName());
-                    listAnchorPaneRoleLabels.get(i).setText("Admin");
-                    listAnchorPanes.get(i).setStyle("-fx-border-color: black");
-                    listAnchorPanes.get(i).setVisible(true);
-                }
-                break;
         }
+        fillListAnchorPanes(role);
     }
 
     public void customerBorderPrev(){
-        anchorPaneListPrevious.setDisable(customerListCounter <= 0);
+        anchorPaneListPreviousButton.setDisable(customerListCounter <= 0);
    }
 
    public void staffBorderPrev() {
-       anchorPaneListPrevious.setDisable(staffListCounter <= 0);
+       anchorPaneListPreviousButton.setDisable(staffListCounter <= 0);
    }
 
    public void adminBorderPrev(){
-       anchorPaneListPrevious.setDisable(adminListCounter <= 0);
+       anchorPaneListPreviousButton.setDisable(adminListCounter <= 0);
    }
 
     public void customerBorderNext(){
-        anchorPaneListNext.setDisable(customerListCounter >= allCustomers.size() - 8);
+        anchorPaneListNextButton.setDisable(customerListCounter >= allCustomers.size() - 8);
     }
 
     public void staffBorderNext() {
-        anchorPaneListNext.setDisable(staffListCounter >= allStaffs.size() - 8);
+        anchorPaneListNextButton.setDisable(staffListCounter >= allStaffs.size() - 8);
     }
 
     public void adminBorderNext(){
-        anchorPaneListNext.setDisable(adminListCounter >= allAdmins.size() - 8);
+        anchorPaneListNextButton.setDisable(adminListCounter >= allAdmins.size() - 8);
     }
 
 
@@ -299,7 +259,7 @@ public class AdminAccountManagerController implements Initializable {
         if (adminRadioButton.equals(selectedToggle)) {
             previousListAnchorPanes("Admin");
             adminBorderNext();
-           adminBorderPrev();
+            adminBorderPrev();
 
         } else if (staffRadioButton.equals(selectedToggle)) {
 
