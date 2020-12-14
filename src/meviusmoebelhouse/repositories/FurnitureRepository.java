@@ -61,7 +61,7 @@ public class FurnitureRepository {
         ResultSet generatedKeysResultSet = null;
 
         try {
-            stmt = conn.prepareStatement("insert into furniture (idSubcategory, name, width, length, height, price, rebate, pictureAddress, description) values (?,?,?,?,?,?,?,?,?)");
+            stmt = conn.prepareStatement("insert into furniture (idSubcategory, name, width, length, height, price, rebate, isActive, description) values (?,?,?,?,?,?,?,?,?)");
             stmt.setInt(1, furniture.getIdSubcategory());
             stmt.setString(2, furniture.getName());
             stmt.setFloat(3, furniture.getWidth());
@@ -69,7 +69,7 @@ public class FurnitureRepository {
             stmt.setFloat(5, furniture.getHeight());
             stmt.setBigDecimal(6, furniture.getPrice());
             stmt.setDouble(7, furniture.getRebate());
-            stmt.setString(8, furniture.getPictureAddress());
+            stmt.setBoolean(8, furniture.getIsActive());
             stmt.setString(9, furniture.getDescription());
 
             stmt.executeUpdate();
@@ -89,7 +89,7 @@ public class FurnitureRepository {
         PreparedStatement stmt = null;
 
         try {
-            stmt = conn.prepareStatement("update furniture set idFurniture = ?, idSubcategory = ?, name = ?, width = ?, length = ?, height = ?, price = ?, rebate = ?, pictureAddress = ?, description = ? where idFurniture = ?");
+            stmt = conn.prepareStatement("update furniture set idFurniture = ?, idSubcategory = ?, name = ?, width = ?, length = ?, height = ?, price = ?, rebate = ?, isActive = ?, description = ? where idFurniture = ?");
             stmt.setInt(1, furniture.getIdSubcategory());
             stmt.setString(2, furniture.getName());
             stmt.setFloat(3, furniture.getWidth());
@@ -97,7 +97,7 @@ public class FurnitureRepository {
             stmt.setFloat(5, furniture.getHeight());
             stmt.setBigDecimal(6, furniture.getPrice());
             stmt.setDouble(7, furniture.getRebate());
-            stmt.setString(8, furniture.getDescription());
+            stmt.setBoolean(8, furniture.getIsActive());
             stmt.setInt(9, furniture.getIdFurniture());
 
             stmt.executeUpdate();
@@ -130,7 +130,7 @@ public class FurnitureRepository {
         fur.setHeight(rs.getFloat("height"));
         fur.setPrice(rs.getBigDecimal("price"));
         fur.setRebate(rs.getDouble("rebate"));
-        fur.setPictureAddress(rs.getString("pictureAddress"));
+        fur.setIsActive(rs.getBoolean("isActive"));
         fur.setDescription(rs.getString("description"));
 
         return fur;

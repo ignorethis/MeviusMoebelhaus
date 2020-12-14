@@ -11,7 +11,7 @@ public class Furniture {
     private float height = 0;
     private BigDecimal price = null;
     private double rebate = 0;
-    private String pictureAddress = null;
+    private boolean isActive = true;
     private String description = null;
 
     public int getIdFurniture() {
@@ -78,12 +78,12 @@ public class Furniture {
         this.rebate = rebate;
     }
 
-    public String getPictureAddress(){
-        return pictureAddress;
+    public boolean getIsActive(){
+        return isActive;
     }
 
-    public void setPictureAddress(String pictureAddress){
-        this.pictureAddress = pictureAddress;
+    public void setIsActive(Boolean isActive){
+        this.isActive = isActive;
     }
 
     public String getDescription(){
@@ -109,7 +109,7 @@ public class Furniture {
         sb.append("height: ").append(height).append(", ");
         sb.append("price: ").append(price).append(", ");
         sb.append("rebate: ").append(rebate).append(", ");
-        sb.append("pictureAddress: ").append(pictureAddress);
+        sb.append("isActive: ").append(isActive);
         sb.append("description").append(description);
         return sb.toString();
     }
