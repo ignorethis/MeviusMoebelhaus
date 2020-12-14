@@ -33,7 +33,6 @@
             <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelOCE" text="Cancel" />
          </children>
       </HBox>
-
       <Label fx:id="errorMessageLabel" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.columnSpan="2" />
    </GridPane>
 </AnchorPane>
