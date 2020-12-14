@@ -10,10 +10,12 @@ import javafx.scene.layout.AnchorPane;
 import meviusmoebelhouse.gui.ApplicationController;
 import meviusmoebelhouse.model.Customer;
 import meviusmoebelhouse.model.Staff;
+import meviusmoebelhouse.model.User;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class AdminAccountManagerController implements Initializable {
@@ -68,14 +70,19 @@ public class AdminAccountManagerController implements Initializable {
         allCustomers = (ArrayList<Customer>) applicationController.getAllCustomers();
         allStaffs = (ArrayList<Staff>) applicationController.getAllStaffs();
 
-        allAdmins.addAll(Arrays.asList(allStaffs.get(50), allStaffs.get(51), allStaffs.get(52),
-                allStaffs.get(53), allStaffs.get(54), allStaffs.get(55), allStaffs.get(56), allStaffs.get(57),
-                allStaffs.get(58), allStaffs.get(59), allStaffs.get(60))); //Admin class? change
+        List<Staff> staffToRemove = new ArrayList<>();
 
-
+        for(Staff s : allStaffs){
+            if(applicationController.getUserRoleByUserId(s.getIdUser()) == 1){
+                allAdmins.add(s);
+                staffToRemove.add(s);
+            }
+        }
+        for(Staff s : staffToRemove){
+            allStaffs.remove(s);
+        }
 
         for(AnchorPane a : listAnchorPanes){
-            //a.setStyle("-fx-border-color: black");;
             a.setVisible(false);
         }
 
@@ -170,7 +177,7 @@ public class AdminAccountManagerController implements Initializable {
         switch (role){
             case "Customer":
 
-                customerListCounter = customerListCounter + 6;
+                customerListCounter = customerListCounter + 7;
                 for(int i = 0; (i + customerListCounter) <= allCustomers.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
                     listAnchorPaneNameLabels.get(i).setText(
                             allCustomers.get(i + customerListCounter).getLastName()
@@ -179,10 +186,16 @@ public class AdminAccountManagerController implements Initializable {
                     listAnchorPanes.get(i).setStyle("-fx-border-color: black");
                     listAnchorPanes.get(i).setVisible(true);
                 }
+                for(int i = 6; ((i + customerListCounter) > allCustomers.size() - 1) && i >= 0; i--){
+                    listAnchorPaneNameLabels.get(i).setText("");
+                    listAnchorPaneRoleLabels.get(i).setText("");
+                    listAnchorPanes.get(i).setStyle("-fx-border-color: black");
+                    listAnchorPanes.get(i).setVisible(false);
+                }
                 break;
             case "Staff":
 
-                staffListCounter = staffListCounter + 6;
+                staffListCounter = staffListCounter + 7;
                 for(int i = 0; (i + staffListCounter) <= allStaffs.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
                     listAnchorPaneNameLabels.get(i).setText(
                             allStaffs.get(i + staffListCounter).getLastName()
@@ -191,9 +204,15 @@ public class AdminAccountManagerController implements Initializable {
                     listAnchorPanes.get(i).setStyle("-fx-border-color: black");
                     listAnchorPanes.get(i).setVisible(true);
                 }
+                for(int i = 6; ((i + staffListCounter) > allStaffs.size() - 1) && i >= 0; i--){
+                    listAnchorPaneNameLabels.get(i).setText("");
+                    listAnchorPaneRoleLabels.get(i).setText("");
+                    listAnchorPanes.get(i).setStyle("-fx-border-color: black");
+                    listAnchorPanes.get(i).setVisible(false);
+                }
                 break;
             case "Admin":
-                adminListCounter = adminListCounter + 6;
+                adminListCounter = adminListCounter + 7;
                 for(int i = 0; (i + adminListCounter) <= allAdmins.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
                     listAnchorPaneNameLabels.get(i).setText(
                             allAdmins.get(i + staffListCounter).getLastName()
@@ -202,7 +221,12 @@ public class AdminAccountManagerController implements Initializable {
                     listAnchorPanes.get(i).setStyle("-fx-border-color: black");
                     listAnchorPanes.get(i).setVisible(true);
                 }
-
+                for(int i = 6; ((i + adminListCounter) > allAdmins.size() - 1) && i >= 0; i--){
+                    listAnchorPaneNameLabels.get(i).setText("");
+                    listAnchorPaneRoleLabels.get(i).setText("");
+                    listAnchorPanes.get(i).setStyle("-fx-border-color: black");
+                    listAnchorPanes.get(i).setVisible(false);
+                }
         }
     }
 
@@ -210,7 +234,7 @@ public class AdminAccountManagerController implements Initializable {
 
         switch (role){
             case "Customer":
-                customerListCounter = customerListCounter - 6;
+                customerListCounter = customerListCounter - 7;
                 for(int i = 0; (i + customerListCounter) <= allCustomers.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
                     listAnchorPaneNameLabels.get(i).setText(
                             allCustomers.get(i + customerListCounter).getLastName()
@@ -221,7 +245,7 @@ public class AdminAccountManagerController implements Initializable {
                 }
                 break;
             case "Staff":
-                staffListCounter = staffListCounter - 6;
+                staffListCounter = staffListCounter - 7;
                 for(int i = 0; (i + staffListCounter) <= allStaffs.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
                     listAnchorPaneNameLabels.get(i).setText(
                             allStaffs.get(i + staffListCounter).getLastName()
@@ -232,7 +256,7 @@ public class AdminAccountManagerController implements Initializable {
                 }
                 break;
             case "Admin":
-                adminListCounter = adminListCounter - 6;
+                adminListCounter = adminListCounter - 7;
                 for(int i = 0; (i + adminListCounter) <= allAdmins.size() - 1 && i <= listAnchorPanes.size() - 1; i++){
                     listAnchorPaneNameLabels.get(i).setText(
                             allAdmins.get(i + staffListCounter).getLastName()
@@ -247,28 +271,26 @@ public class AdminAccountManagerController implements Initializable {
 
     public void customerBorderPrev(){
         anchorPaneListPrevious.setDisable(customerListCounter <= 0);
-
    }
 
    public void staffBorderPrev() {
        anchorPaneListPrevious.setDisable(staffListCounter <= 0);
    }
+
    public void adminBorderPrev(){
        anchorPaneListPrevious.setDisable(adminListCounter <= 0);
-
    }
 
     public void customerBorderNext(){
-        anchorPaneListNext.setDisable(customerListCounter >= allCustomers.size() - 1);
-
+        anchorPaneListNext.setDisable(customerListCounter >= allCustomers.size() - 8);
     }
 
     public void staffBorderNext() {
-        anchorPaneListNext.setDisable(staffListCounter >= allStaffs.size() - 1);
+        anchorPaneListNext.setDisable(staffListCounter >= allStaffs.size() - 8);
     }
-    public void adminBorderNext(){
-        anchorPaneListNext.setDisable(adminListCounter >= allAdmins.size() - 1);
 
+    public void adminBorderNext(){
+        anchorPaneListNext.setDisable(adminListCounter >= allAdmins.size() - 8);
     }
 
 
@@ -315,7 +337,21 @@ public class AdminAccountManagerController implements Initializable {
     }
 
     public void openAdminAccountEdit(ActionEvent actionEvent) throws Exception {
-        applicationController.switchScene(mainAnchorPane, "AdminAccountEdit");
+        RadioButton selectedToggle = (RadioButton) accountChoice.getSelectedToggle();
+
+        String buttonName = ((Button) actionEvent.getSource()).getId();
+        int buttonId = Integer.parseInt(buttonName.substring(buttonName.length() - 1)) - 1;
+
+        User temp = null;
+
+        if (adminRadioButton.equals(selectedToggle)) {
+            temp = applicationController.getUserRepository().getByIdUser(allAdmins.get(buttonId + adminListCounter).getIdUser());
+        } else if (staffRadioButton.equals(selectedToggle)) {
+            temp = applicationController.getUserRepository().getByIdUser(allStaffs.get(buttonId + staffListCounter).getIdUser());
+        } else if (customerRadioButton.equals(selectedToggle)) {
+            temp = applicationController.getUserRepository().getByIdUser(allCustomers.get(buttonId + customerListCounter).getIdUser());
+        }
+        applicationController.openAccountManagerEdit(mainAnchorPane, temp);
     }
 
     public void back(ActionEvent actionEvent) {

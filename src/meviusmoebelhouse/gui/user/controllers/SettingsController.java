@@ -44,6 +44,7 @@ public class SettingsController implements Initializable {
             errorMessageLabel.setText(e.getMessage());
         }
     }
+
     public void changePasswordOCE(){
         if (passwordLabel.isDisable()){
             passwordLabel.setDisable(false);

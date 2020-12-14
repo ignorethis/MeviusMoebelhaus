@@ -25,6 +25,7 @@ public class ApplicationController {
     Subcategory currentSubcategory;
     Furniture   currentFurniture;
     User currentUser;
+    User currentUserToChange = null;
 
     List<Category>          allCategories;
     List<Customer>          allCustomers;
@@ -33,6 +34,7 @@ public class ApplicationController {
     List<InvoiceDetails>    allInvoiceDetails;
     List<Staff>             allStaffs;
     List<Subcategory>       allSubcategories;
+    List<User>              allUsers;
 
     ArrayList<Furniture>    newShoppingcart = new ArrayList<>();
 
@@ -86,6 +88,8 @@ public class ApplicationController {
             allSubcategories = subcategoryRepository.getAll();
 
             userRepository = new UserRepository(conn);
+            allUsers = userRepository.getAll();
+
 
             userRoleRepository = new UserRoleRepository(conn);
 
@@ -213,6 +217,7 @@ public class ApplicationController {
                 throw new Exception("Please add a controller factory for '" + viewName + "'");
         }
     }
+
 
     public Category getCurrentCategory() {
         return currentCategory;
@@ -467,11 +472,33 @@ public class ApplicationController {
         return allStaffs;
     }
 
+    public Staff getStaffById(int id){
+        return allStaffs.stream().filter(s -> s.getIdStaff() == id).findFirst().orElse(null);
+    }
+
     public ArrayList<Furniture> getNewShoppingcart() {
         return newShoppingcart;
     }
 
     public void addFurnitureToShoppingCart(Furniture f){
         newShoppingcart.add(f);
+    }
+
+    public User getCurrentUserToChange() {
+        return currentUserToChange;
+    }
+
+    public void openAccountManagerEdit(AnchorPane mainAnchorPane, User temp) throws Exception {
+        currentUserToChange = temp;
+
+        switchScene(mainAnchorPane, "AdminAccountEdit");
+    }
+
+    public Customer getCustomerById(int id){
+        return allCustomers.stream().filter(s -> s.getIdCustomer() == id).findFirst().orElse(null);
+    }
+
+    public int getUserRoleByUserId(int id) {
+        return (allUsers.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null)).getIdUserRole();
     }
 }
