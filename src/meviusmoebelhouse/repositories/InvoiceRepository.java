@@ -66,7 +66,7 @@ public class InvoiceRepository {
             stmt.setString(3, invoice.getFirstName());
             stmt.setString(4, invoice.getLastName());
             stmt.setString(5, invoice.getShippingAddress());
-            stmt.setString(6, invoice.getBillOfGoods());
+            stmt.setInt(6, invoice.getBillOfGoods());
             stmt.setBigDecimal(7, invoice.getTotalPrice());
 
             stmt.executeUpdate();
@@ -92,7 +92,7 @@ public class InvoiceRepository {
             stmt.setString(3, invoice.getFirstName());
             stmt.setString(4, invoice.getLastName());
             stmt.setString(5, invoice.getShippingAddress());
-            stmt.setString(6, invoice.getBillOfGoods());
+            stmt.setInt(6, invoice.getBillOfGoods());
             stmt.setBigDecimal(7, invoice.getTotalPrice());
             stmt.setInt(8, invoice.getIdInvoice());
             
@@ -123,7 +123,7 @@ public class InvoiceRepository {
         inv.setFirstName(rs.getString("firstName"));
         inv.setLastName(rs.getString("lastName"));
         inv.setShippingAddress(rs.getString("shippingAddress"));
-        inv.setBillOfGoods(rs.getString("billOfGoods"));
+        inv.setBillOfGoods(rs.getInt("billOfGoods"));
         inv.setTotalPrice(rs.getBigDecimal("totalPrice"));
 
         return inv;

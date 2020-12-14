@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 public class RegisterController implements Initializable{
     ApplicationController applicationController;
     public AnchorPane mainAnchorPane;
-    public TextField usernameTextField, firstnameTextField, lastnameTextField, IBANTextField, emailAddressTextField, passwordTextField;
+    public TextField usernameTextField, firstnameTextField, lastnameTextField, IBANTextField, emailAddressTextField, defaultShippingAddressTextField, passwordTextField;
     public DatePicker birthdayDatePicker;
     public Label errorMessageLabel,passwordLabel;
     public Button saveButton,cancelButton,changePasswordButton;
@@ -49,6 +49,7 @@ public class RegisterController implements Initializable{
         customer.setBirthday(birthdayDatePicker.getValue());
         customer.setIBAN(IBANTextField.getText());
         customer.setEmailAddress(emailAddressTextField.getText());
+        customer.setDefaultShippingAddress(defaultShippingAddressTextField.getText());
         customer.setIdUser(registeredUser.getIdUser());
         applicationController.getCustomerRepository().create(customer);
 
