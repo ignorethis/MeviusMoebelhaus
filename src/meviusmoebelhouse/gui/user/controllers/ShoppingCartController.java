@@ -14,6 +14,8 @@ import meviusmoebelhouse.gui.user.fxmlfiles.FXML;
 import meviusmoebelhouse.model.Customer;
 import meviusmoebelhouse.model.Invoice;
 import meviusmoebelhouse.model.InvoiceDetails;
+import meviusmoebelhouse.repositories.InvoiceDetailsRepository;
+import meviusmoebelhouse.repositories.InvoiceRepository;
 import meviusmoebelhouse.viewmodel.FurnitureItem;
 import meviusmoebelhouse.viewmodel.ShoppingCart;
 
@@ -56,17 +58,36 @@ public class ShoppingCartController implements Initializable {
     }
 
     public void orderOCE() throws Exception{
-        Invoice invoice = new Invoice();
-        InvoiceDetails invoiceDetails = new InvoiceDetails();
+        if (!applicationController.isUserLoggedIn()){
+            applicationController.switchScene(mainAnchorPane,"Login");
+            return;
+        }
+
+        ShoppingCart shoppingCart = applicationController.getShoppingCart();
         Customer customer = applicationController.getCustomerRepository().getByIdUser(applicationController.getCurrentUser().getIdUser());
+        InvoiceDetailsRepository invoiceDetailsRepository = applicationController.getInvoiceDetailsRepository();
+        InvoiceRepository invoiceRepository = applicationController.getInvoiceRepository();
+
+        Invoice invoice = new Invoice();
         invoice.setIdCustomer(customer.getIdCustomer());
         invoice.setFirstName(customer.getFirstName());
         invoice.setLastName(customer.getLastName());
         invoice.setShippingAddress(customer.getDefaultShippingAddress());
-        invoice.setBillOfGoods(invoiceDetails.getIdInvoiceDetails());
-        invoice.setTotalPrice(applicationController.getShoppingCart().getTotalPrice());
-        invoiceDetails.setIdInvoice(invoice.getIdInvoice());
-        //TODO Change InvoiceDetails to a list of idFurniture and Furniture Amount then write in db
+        invoice.setTotalPrice(shoppingCart.getTotalPrice());
+        invoiceRepository.create(invoice);
+
+        for (FurnitureItem furnitureItem: shoppingCart.getShoppingList()) {
+            InvoiceDetails invoiceDetails = new InvoiceDetails();
+            invoiceDetails.setIdInvoice(invoice.getIdInvoice());
+            invoiceDetails.setIdFurniture(furnitureItem.getFurniture().getIdFurniture());
+            invoiceDetails.setAmount(furnitureItem.getFurnitureCount());
+            invoiceDetails.setPrice(furnitureItem.getFurniture().getActualPrice());
+            invoiceDetails.setTotalPrice(furnitureItem.getFurnitureItemPrice());
+            invoiceDetailsRepository.create(invoiceDetails);
+        }
+
+        shoppingCart.clear();
+        applicationController.switchScene(mainAnchorPane, "Home");
         //TODO Print PDF of Invoice
     }
 

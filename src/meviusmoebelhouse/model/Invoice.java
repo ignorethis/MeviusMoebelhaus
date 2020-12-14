@@ -9,7 +9,6 @@ public class Invoice {
     private String firstName = null;
     private String lastName = null;
     private String shippingAddress = null;
-    private int billOfGoods = 0;
     private BigDecimal totalPrice = null;
 
     public int getIdInvoice() { return idInvoice; }
@@ -24,9 +23,9 @@ public class Invoice {
         this.idCustomer = idCustomer;
     }
 
-    public int getIdStaff() { return idStaff; }
+    public Integer getIdStaff() { return idStaff; }
 
-    public void setIdStaff(int idStaff) { this.idStaff = idStaff; }
+    public void setIdStaff(Integer idStaff) { this.idStaff = idStaff; }
 
     public String getFirstName() {
         return firstName;
@@ -44,10 +43,6 @@ public class Invoice {
 
     public void setShippingAddress(String shippingAddress) { this.shippingAddress = shippingAddress; }
 
-    public int getBillOfGoods() { return billOfGoods; }
-
-    public void setBillOfGoods(int billOfGoods) { this.billOfGoods = billOfGoods; }
-
     public BigDecimal getTotalPrice() { return totalPrice; }
 
     public void setTotalPrice(BigDecimal totalPrice) { this.totalPrice = totalPrice; }
@@ -61,7 +56,6 @@ public class Invoice {
         sb.append("firstName: ").append(firstName).append(", ");
         sb.append("lastName: ").append(lastName).append(", ");
         sb.append("shippingAddress: ").append(shippingAddress).append(", ");
-        sb.append("billOfGoods: ").append(billOfGoods).append(", ");
         sb.append("totalPrice: ").append(totalPrice).append(", ");
         return sb.toString();
     }

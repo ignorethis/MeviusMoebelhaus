@@ -50,4 +50,8 @@ public class ShoppingCart {
         }
         return total;
     }
+
+    public void clear(){
+        shoppingList.clear();
+    }
 }
