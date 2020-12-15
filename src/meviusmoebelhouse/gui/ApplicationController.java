@@ -7,10 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import meviusmoebelhouse.gui.admin.controllers.AdminAccountEditController;
-import meviusmoebelhouse.gui.admin.controllers.AdminAccountManagerController;
-import meviusmoebelhouse.gui.admin.controllers.AdminFurnitureManagerController;
-import meviusmoebelhouse.gui.admin.controllers.AdminHomeController;
+import meviusmoebelhouse.gui.admin.controllers.*;
 import meviusmoebelhouse.gui.admin.fxmlfiles.FXMLADMIN;
 import meviusmoebelhouse.gui.user.controllers.*;
 import meviusmoebelhouse.gui.user.fxmlfiles.FXML;
@@ -221,6 +218,9 @@ public class ApplicationController {
                 break;
             case "AdminFurnitureManager":
                 loader.setControllerFactory(c -> new AdminFurnitureManagerController(this));
+                break;
+            case "AdminAccountAdd":
+                loader.setControllerFactory(c -> new AdminAccountAddController(this));
                 break;
             default:
                 throw new Exception("Please add a controller factory for '" + viewName + "'");
@@ -532,5 +532,24 @@ public class ApplicationController {
 
     public Staff getStaffByUserId(int id) {
         return allStaffs.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null);
+    }
+
+    public void addNewUserToDatabase(User newUser) throws Exception {
+        userRepository.create(newUser);
+        allUsers = userRepository.getAll();
+    }
+
+    public void addNewStaffToDatabase(Staff newStaff) throws Exception {
+        staffRepository.create(newStaff);
+        allStaffs = staffRepository.getAll();
+    }
+
+    public void addNewCustomerToDatabase(Customer newCustomer) throws Exception {
+        customerRepository.create(newCustomer);
+        allCustomers = customerRepository.getAll();
+    }
+
+    public int getUserByUsername(String username) {
+        return Objects.requireNonNull(allUsers.stream().filter(s -> s.getUsername().equals(username)).findFirst().orElse(null)).getIdUser();
     }
 }

@@ -69,7 +69,7 @@
       <Button fx:id="editUser5" layoutX="320.0" layoutY="273.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
       <Button fx:id="editUser6" layoutX="320.0" layoutY="313.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
       <Button fx:id="editUser7" layoutX="320.0" layoutY="353.0" mnemonicParsing="false" onAction="#openAdminAccountEdit" text="Edit" />
-      <Button fx:id="addUserButton" layoutX="249.0" layoutY="387.0" mnemonicParsing="false" text="Add" />
+      <Button fx:id="addUserButton" layoutX="249.0" layoutY="387.0" mnemonicParsing="false" onAction="#openAddWindow" text="Add" />
       <Button layoutX="5.0" layoutY="5.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <Button fx:id="searchByIdButton" layoutX="285.0" layoutY="67.0" mnemonicParsing="false" onAction="#searchByIdButtonOCE" text="Search" />
    </children>

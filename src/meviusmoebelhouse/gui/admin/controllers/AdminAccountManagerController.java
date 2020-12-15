@@ -333,7 +333,7 @@ public class AdminAccountManagerController implements Initializable {
             int input = Integer.parseInt(searchByIdTextField.getText());
             for(int i = 0; i <= allAdmins.size() - 1; i++){
                 if(allAdmins.get(i).getIdUser() == input){
-                    listAnchorPaneNameLabels.get(0).setText(allAdmins.get(i).getFirstName() + "" + allAdmins.get(i).getLastName() );
+                    listAnchorPaneNameLabels.get(0).setText(allAdmins.get(i).getFirstName() + "  " + allAdmins.get(i).getLastName() );
                     listAnchorPaneRoleLabels.get(0).setText("Admin");
                     listAnchorPanes.get(0).setStyle("-fx-border-color: black");
                     listAnchorPanes.get(0).setVisible(true);
@@ -342,7 +342,7 @@ public class AdminAccountManagerController implements Initializable {
                 }
                 for(int j = 0; j <= allCustomers.size() - 1; j++){
                     if(allCustomers.get(j).getIdUser() == input){
-                        listAnchorPaneNameLabels.get(0).setText(allCustomers.get(j).getFirstName() + "" + allCustomers.get(j).getLastName());
+                        listAnchorPaneNameLabels.get(0).setText(allCustomers.get(j).getFirstName() + "  " + allCustomers.get(j).getLastName());
                         listAnchorPaneRoleLabels.get(0).setText("Customer");
                         listAnchorPanes.get(0).setStyle("-fx-border-color: black");
                         listAnchorPanes.get(0).setVisible(true);
@@ -353,7 +353,7 @@ public class AdminAccountManagerController implements Initializable {
 
                 for(int k = 0; k <= allStaffs.size() - 1; k++){
                     if(allStaffs.get(k).getIdUser() == input){
-                        listAnchorPaneNameLabels.get(0).setText(allStaffs.get(k).getFirstName() + "" + allStaffs.get(k).getLastName());
+                        listAnchorPaneNameLabels.get(0).setText(allStaffs.get(k).getFirstName() + "  " + allStaffs.get(k).getLastName());
                         listAnchorPaneRoleLabels.get(0).setText("Staff");
                         listAnchorPanes.get(0).setStyle("-fx-border-color: black");
                         listAnchorPanes.get(0).setVisible(true);
@@ -376,4 +376,7 @@ public class AdminAccountManagerController implements Initializable {
     }
 
 
+    public void openAddWindow(ActionEvent actionEvent) throws Exception {
+        applicationController.switchScene(mainAnchorPane, "AdminAccountAdd");
+    }
 }

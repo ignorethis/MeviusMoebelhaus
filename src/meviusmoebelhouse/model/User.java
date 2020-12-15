@@ -64,4 +64,7 @@ public class User {
         sb.append("failedLoginAttempts: ").append(failedLoginAttempts).append(", ");
         return sb.toString();
     }
+
+
+
 }
