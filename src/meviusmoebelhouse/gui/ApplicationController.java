@@ -534,6 +534,26 @@ public class ApplicationController {
         return allStaffs.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null);
     }
 
+    public List<String> getAllCategoryNames(){
+        List<String> strings = new ArrayList<>();
+
+        for(Category c : allCategories){
+            strings.add(c.getName());
+        }
+
+        return strings;
+    }
+
+    public List<String> getAllSubcategoryNamesOfCategory(String categoryName){
+        List<String> strings = new ArrayList<>();
+
+        for(Subcategory s : allSubcategories){
+            strings.add(s.getName());
+        }
+
+        return strings;
+    }
+
     public void addNewUserToDatabase(User newUser) throws Exception {
         userRepository.create(newUser);
         allUsers = userRepository.getAll();
