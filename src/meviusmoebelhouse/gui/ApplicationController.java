@@ -9,6 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import meviusmoebelhouse.gui.admin.controllers.AdminAccountEditController;
 import meviusmoebelhouse.gui.admin.controllers.AdminAccountManagerController;
+import meviusmoebelhouse.gui.admin.controllers.AdminFurnitureManagerController;
 import meviusmoebelhouse.gui.admin.controllers.AdminHomeController;
 import meviusmoebelhouse.gui.admin.fxmlfiles.FXMLADMIN;
 import meviusmoebelhouse.gui.user.controllers.*;
@@ -217,6 +218,9 @@ public class ApplicationController {
                 break;
             case "AdminAccountEdit":
                 loader.setControllerFactory(c -> new AdminAccountEditController(this));
+                break;
+            case "AdminFurnitureManager":
+                loader.setControllerFactory(c -> new AdminFurnitureManagerController(this));
                 break;
             default:
                 throw new Exception("Please add a controller factory for '" + viewName + "'");
@@ -512,5 +516,9 @@ public class ApplicationController {
     public void logout(AnchorPane anchorPane) throws Exception {
         currentUser = null;
         switchScene(anchorPane, "Home");
+    }
+
+    public void addFurnitureToDatabase(Furniture furniture) {
+        //TODO add furniture to database and refresh the furniture list
     }
 }
