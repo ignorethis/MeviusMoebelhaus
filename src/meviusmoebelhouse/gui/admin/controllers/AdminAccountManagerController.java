@@ -43,9 +43,9 @@ public class AdminAccountManagerController implements Initializable {
 
     public TextField searchByIdTextField;
 
-    ArrayList<Customer> allCustomers = new ArrayList<>();
-    ArrayList<Staff> allStaffs = new ArrayList<>();
-    ArrayList<Staff> allAdmins = new ArrayList<>();
+    List<Customer> allCustomers = new ArrayList<>();
+    List<Staff> allStaffs = new ArrayList<>();
+    List<Staff> allAdmins = new ArrayList<>();
 
     ArrayList<Label> listAnchorPaneNameLabels = new ArrayList<>();
     ArrayList<Label> listAnchorPaneRoleLabels = new ArrayList<>();
@@ -66,19 +66,17 @@ public class AdminAccountManagerController implements Initializable {
         listEditButtons.addAll(Arrays.asList(editUser1, editUser2, editUser3, editUser4,
                 editUser5, editUser6, editUser7));
 
-        allCustomers = (ArrayList<Customer>) applicationController.getAllCustomers();
-        allStaffs = (ArrayList<Staff>) applicationController.getAllStaffs();
+        allCustomers = applicationController.getAllCustomers();
 
-        List<Staff> staffToRemove = new ArrayList<>();
+        List<Staff> allStaffsTemp = applicationController.getAllStaffs();
 
-        for (Staff s : allStaffs) {
+        for (Staff s : allStaffsTemp) {
             if (applicationController.getUserRoleByUserId(s.getIdUser()) == 1) {
                 allAdmins.add(s);
-                staffToRemove.add(s);
             }
-        }
-        for (Staff s : staffToRemove) {
-            allStaffs.remove(s);
+            else{
+                allStaffs.add(s);
+            }
         }
 
         for (AnchorPane a : listAnchorPanes) {
@@ -304,11 +302,11 @@ public class AdminAccountManagerController implements Initializable {
         User temp = null;
 
         if (adminRadioButton.equals(selectedToggle)) {
-            temp = applicationController.getUserRepository().getByIdUser(allAdmins.get(buttonId + adminListCounter).getIdUser());
+            temp = applicationController.getUserByUserId(allAdmins.get(adminListCounter + buttonId).getIdUser());
         } else if (staffRadioButton.equals(selectedToggle)) {
-            temp = applicationController.getUserRepository().getByIdUser(allStaffs.get(buttonId + staffListCounter).getIdUser());
+            temp = applicationController.getUserByUserId(allStaffs.get(staffListCounter + buttonId).getIdUser());
         } else if (customerRadioButton.equals(selectedToggle)) {
-            temp = applicationController.getUserRepository().getByIdUser(allCustomers.get(buttonId + customerListCounter).getIdUser());
+            temp = applicationController.getUserByUserId(allCustomers.get(customerListCounter + buttonId).getIdUser());
         }
         applicationController.openAccountManagerEdit(mainAnchorPane, temp);
     }

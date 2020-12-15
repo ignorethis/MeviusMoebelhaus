@@ -44,22 +44,27 @@ public class AdminFurnitureManagerController implements Initializable {
     }
 
     public void searchFurnitureByIdOCE(ActionEvent actionEvent) {
-        Furniture f = applicationController.getFurnitureById(Integer.parseInt(searchforFurnitureByIdTextField.getText()));
-        if(f == null){
+        try{
+            currentFurniture = applicationController.getFurnitureById(Integer.parseInt(searchforFurnitureByIdTextField.getText()));
+            if(currentFurniture == null){
+                throw new Exception();
+            }
+        } catch (Exception e){
             errorMessageLabelSearchFurniture.setText("ERROR! No furniture found with the given id");
-        } else{
-            fillTextFieldsWithFurnitureInformation(f);
+            return;
         }
+        fillTextFieldsWithFurnitureInformation();
+        adjustButtonsForFurnitureOptions();
     }
 
-    private void fillTextFieldsWithFurnitureInformation(Furniture f){
-        widthTextField.setText(String.valueOf(f.getWidth()));
-        heightTextField.setText(String.valueOf(f.getHeight()));
-        lengthTextField.setText(String.valueOf(f.getLength()));
-        priceTextField.setText(String.valueOf(f.getPrice()));
-        rebateTextField.setText(String.valueOf(f.getRebate()));
-        nameTextField.setText(f.getName());
-        descriptionTextArea.setText(f.getDescription());
+    private void fillTextFieldsWithFurnitureInformation(){
+        widthTextField.setText(String.valueOf(currentFurniture.getWidth()));
+        heightTextField.setText(String.valueOf(currentFurniture.getHeight()));
+        lengthTextField.setText(String.valueOf(currentFurniture.getLength()));
+        priceTextField.setText(String.valueOf(currentFurniture.getPrice()));
+        rebateTextField.setText(String.valueOf(currentFurniture.getRebate()));
+        nameTextField.setText(currentFurniture.getName());
+        descriptionTextArea.setText(currentFurniture.getDescription());
     }
 
     public void addFurnitureButtonOCE(ActionEvent actionEvent) {

@@ -38,22 +38,19 @@ public class AdminAccountEditController implements Initializable {
         try {
             userToChange = applicationController.getCurrentUserToChange();
             if(userToChange.getIdUserRole() == 1 || userToChange.getIdUserRole() == 2){
-                staffDataOfUser = applicationController.getStaffById(userToChange.getIdUser());
+                staffDataOfUser = applicationController.getStaffByUserId(userToChange.getIdUser());
 
                 firstnameTextField.setText(staffDataOfUser.getFirstName());
                 lastnameTextField.setText(staffDataOfUser.getLastName());
 
-                for(int i = 3; i < 6; i++){
-                    gridPane.getColumnConstraints().get(i).setMaxWidth(0);
-                }
             } else{
-                customerDataOfUser = applicationController.getCustomerById(userToChange.getIdUser());
+                customerDataOfUser = applicationController.getCustomerByUserId(userToChange.getIdUser());
 
-                customerDataOfUser.setFirstName(firstnameTextField.getText());
-                customerDataOfUser.setLastName(lastnameTextField.getText());
-                customerDataOfUser.setBirthday(birthdayDatePicker.getValue());
-                customerDataOfUser.setIBAN(IBANTextField.getText());
-                customerDataOfUser.setEmailAddress(emailAddressTextField.getText());
+                firstnameTextField.setText(customerDataOfUser.getFirstName());
+                lastnameTextField.setText(customerDataOfUser.getLastName());
+                //birthdayDatePicker.setChronology(197785456);
+                IBANTextField.setText(customerDataOfUser.getIBAN());
+                emailAddressTextField.setText(customerDataOfUser.getEmailAddress());
             }
             usernameTextField.setText(userToChange.getUsername());
         }

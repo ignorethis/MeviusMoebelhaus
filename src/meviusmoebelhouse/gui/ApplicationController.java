@@ -509,8 +509,16 @@ public class ApplicationController {
         return allCustomers.stream().filter(s -> s.getIdCustomer() == id).findFirst().orElse(null);
     }
 
+    public Customer getCustomerByUserId(int id){
+        return allCustomers.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null);
+    }
+
     public int getUserRoleByUserId(int id) {
         return (allUsers.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null)).getIdUserRole();
+    }
+
+    public User getUserByUserId(int id){
+        return (allUsers.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null));
     }
 
     public void logout(AnchorPane anchorPane) throws Exception {
@@ -520,5 +528,9 @@ public class ApplicationController {
 
     public void addFurnitureToDatabase(Furniture furniture) {
         //TODO add furniture to database and refresh the furniture list
+    }
+
+    public Staff getStaffByUserId(int id) {
+        return allStaffs.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null);
     }
 }
