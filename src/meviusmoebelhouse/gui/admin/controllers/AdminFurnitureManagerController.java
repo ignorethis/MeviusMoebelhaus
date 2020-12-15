@@ -2,10 +2,7 @@ package meviusmoebelhouse.gui.admin.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import meviusmoebelhouse.gui.ApplicationController;
 import meviusmoebelhouse.model.Furniture;
@@ -24,7 +21,10 @@ public class AdminFurnitureManagerController implements Initializable {
 
     public TextField    searchforFurnitureByIdTextField, widthTextField, heightTextField, lengthTextField,
                         priceTextField, rebateTextField, nameTextField;
+
     public TextArea     descriptionTextArea;
+
+    public ChoiceBox categoryChoiceBox, subcategoryChoiceBox;
 
     public Label    errorMessageLabelSearchFurniture, MessageLabelAddingFurniture;
 
@@ -37,6 +37,10 @@ public class AdminFurnitureManagerController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         adjustButtonsForFurnitureOptions();
+
+        for(String str : applicationController.getAllCategoryNames()){
+            categoryChoiceBox.getItems().add(str);
+        }
     }
 
     public void back(ActionEvent actionEvent) throws Exception {
@@ -71,6 +75,7 @@ public class AdminFurnitureManagerController implements Initializable {
         checkNewFurnitureInformation();
 
         Furniture furniture = new Furniture();
+
         furniture.setName(nameTextField.getText());
         furniture.setDescription(descriptionTextArea.getText());
         furniture.setWidth(Float.parseFloat(widthTextField.getText().replace(",", ".")));
@@ -175,5 +180,11 @@ public class AdminFurnitureManagerController implements Initializable {
             addFurnitureButton.setDisable(!currentFurnitureIsNull);
             changeFurnitureButton.setDisable(currentFurnitureIsNull);
             deactivateFurnitureButton.setDisable(currentFurnitureIsNull);
+    }
+
+    private void adjustSubcategoryChoiceBox(ActionEvent actionEvent){
+        ChoiceBox choiceBox = (ChoiceBox) actionEvent.getSource();
+
+
     }
 }
