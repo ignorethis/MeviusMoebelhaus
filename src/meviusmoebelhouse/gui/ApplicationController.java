@@ -3,7 +3,6 @@ package meviusmoebelhouse.gui;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -16,6 +15,7 @@ import meviusmoebelhouse.repositories.*;
 import meviusmoebelhouse.viewmodel.ShoppingCart;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.*;
@@ -36,6 +36,7 @@ public class ApplicationController {
     List<Staff>             allStaffs;
     List<Subcategory>       allSubcategories;
     List<User>              allUsers;
+    List<UserRole>          allUserRoles;
 
     ArrayList<Furniture>    newShoppingcart = new ArrayList<>();
 
@@ -43,6 +44,7 @@ public class ApplicationController {
     HashMap<Integer, HashMap<Integer, List<Image>>> allFurnituresImages = new HashMap<>(); //HashMap<Category.id, HashMap<Subcategory.id, List<Furnitures>>>
     HashMap<Integer, List<Image>>                   allSubcategoryImages = new HashMap<>(); //HashMap<CategoryID, List<Subcategory>
     List<Image>                                     allCategoryImages = new ArrayList<>(); //List of All Images for categories
+    HashMap<Integer, List<Image>>   allFurnitureImages = new HashMap<>();
 
     //to access the id of the furniture/category/subcategory when an image is clicked later on
     HashMap<Image, Integer> IdForFurnitureImages     = new HashMap<>(); //Hashmap that saves the ID of an furniture image as a value with the image as a key
@@ -91,67 +93,20 @@ public class ApplicationController {
             userRepository = new UserRepository(conn);
             allUsers = userRepository.getAll();
 
-
             userRoleRepository = new UserRoleRepository(conn);
+            allUserRoles = userRoleRepository.getAll();
 
             shoppingCart = new ShoppingCart();
 
             //iterates all furnitures and fills the allFurnituresImages Hashmap and the IdForFurnitureImages Hashmap
-            for(Furniture f : allFurnitures){
-                Image t;
-                if(allFurnituresImages.containsKey(getSubcategoryById(f.getIdSubcategory()).getIdCategory())) {
-                    //case when the hashmap has already entries in the category (at least 1)
-                    if (allFurnituresImages.get(getSubcategoryById(f.getIdSubcategory()).getIdCategory()).containsKey(f.getIdSubcategory())) {
-                        //case when the hashmap has already entries in the subcategory (at least 1)
-                        //adds the next entry to the existing list
-                        t = getFurnitureImageByFurniture(f);
-                        allFurnituresImages.get(getSubcategoryById(f.getIdSubcategory()).getIdCategory()).get(f.getIdSubcategory()).add(t);
-                    } else {
-                        //case when the hashmap has no entry in the subcategory yet
-                        //adds a new HashMap with the first entry
-                        HashMap<Integer, List<Image>> h = new HashMap<>();
-                        List<Image> i = new ArrayList<>();
-                        t = getFurnitureImageByFurniture(f);
-                        i.add(t);
-                        h.put(f.getIdSubcategory(), i);
-                        allFurnituresImages.put(getSubcategoryById(f.getIdSubcategory()).getIdCategory(), h);
-                    }
-                } else {
-                    //case when the hashmap has no entry in the category yet
-                    //adds a new hashmap with the first entry
-                    HashMap<Integer, List<Image>> h = new HashMap<>();
-                    List<Image> i = new ArrayList<>();
-                    t = getFurnitureImageByFurniture(f);
-                    i.add(t);
-                    h.put(f.getIdSubcategory(), i);
-                    allFurnituresImages.put(getSubcategoryById(f.getIdSubcategory()).getIdCategory(), h);
-                }
-                IdForFurnitureImages.put(t, f.getIdFurniture());
-            }
+            fillAllFurnitureImages();
 
             //iterates all subcategories and fills the allSubcategoriesImages Hashmap and the IdForSubcategoryImages Hashmap
-            for(Subcategory s : allSubcategories){
-                Image t;
-                if(allSubcategoryImages.containsKey(s.getIdCategory())){
-                    //case when the hashmap has already entries in the category (at least 1)
-                    t = getSubcategoryImageBySubcategory(s);
-                    allSubcategoryImages.get(s.getIdCategory()).add(t);
-                } else {
-                    //case when the hashmap has no entry yet in the category
-                    List<Image> i = new ArrayList<>();
-                    t = getSubcategoryImageBySubcategory(s);
-                    i.add(t);
-                    allSubcategoryImages.put(s.getIdCategory(), i);
-                }
-                IdForSubcategoryImages.put(t, s.getIdSubcategory());
-            }
+            fillAllSubcategoryImages();
 
             //iterates all Categories and fills the allCategoriesImages Hashmap and the IdForCategoryImages Hashmap
-            for(Category c: allCategories){
-                Image t = getCategoryImageByCategory(c);
-                allCategoryImages.add(t);
-                IdForCategoryImages.put(t, c.getIdCategory());
-            }
+            fillAllCategoryImages();
+
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -354,8 +309,13 @@ public class ApplicationController {
      * @return image of given furniture
      */
     public Image getFurnitureImageByFurniture(Furniture f){
-        return new Image(   this.getClass().getResourceAsStream("/images/furniture/"
-                + f.getIdFurniture() + "/" + f.getIdFurniture() + ".png"));
+        try {
+            InputStream inputStream = this.getClass().getResourceAsStream("/images/furniture/"
+                + f.getIdFurniture() + "/" + f.getIdFurniture() + ".png");
+            return new Image(inputStream);
+        } catch (Exception e){
+            return new Image(this.getClass().getResourceAsStream("/images/default_pic.png"));
+        }
     }
 
     /**
@@ -529,6 +489,7 @@ public class ApplicationController {
     public void addFurnitureToDatabase(Furniture furniture) throws Exception {
         furnitureRepository.create(furniture);
         allFurnitures = furnitureRepository.getAll();
+        fillAllFurnitureImages();
     }
 
     public Staff getStaffByUserId(int id) {
@@ -588,5 +549,67 @@ public class ApplicationController {
     public void changeFurnitureInDatabase(Furniture currentFurniture) throws Exception {
         furnitureRepository.update(currentFurniture);
         allFurnitures = furnitureRepository.getAll();
+    }
+
+    private void fillAllFurnitureImages(){
+        allFurnituresImages = new HashMap<>();
+
+        for(Furniture f : allFurnitures){
+            Image t;
+            if(allFurnituresImages.containsKey(getSubcategoryById(f.getIdSubcategory()).getIdCategory())) {
+                //case when the hashmap has already entries in the category (at least 1)
+                if (allFurnituresImages.get(getSubcategoryById(f.getIdSubcategory()).getIdCategory()).containsKey(f.getIdSubcategory())) {
+                    //case when the hashmap has already entries in the subcategory (at least 1)
+                    //adds the next entry to the existing list
+                    t = getFurnitureImageByFurniture(f);
+                    allFurnituresImages.get(getSubcategoryById(f.getIdSubcategory()).getIdCategory()).get(f.getIdSubcategory()).add(t);
+                } else {
+                    //case when the hashmap has no entry in the subcategory yet
+                    //adds a new HashMap with the first entry
+                    HashMap<Integer, List<Image>> h = new HashMap<>();
+                    List<Image> i = new ArrayList<>();
+                    t = getFurnitureImageByFurniture(f);
+                    i.add(t);
+                    h.put(f.getIdSubcategory(), i);
+                    allFurnituresImages.put(getSubcategoryById(f.getIdSubcategory()).getIdCategory(), h);
+                }
+            } else {
+                //case when the hashmap has no entry in the category yet
+                //adds a new hashmap with the first entry
+                HashMap<Integer, List<Image>> h = new HashMap<>();
+                List<Image> i = new ArrayList<>();
+                t = getFurnitureImageByFurniture(f);
+                i.add(t);
+                h.put(f.getIdSubcategory(), i);
+                allFurnituresImages.put(getSubcategoryById(f.getIdSubcategory()).getIdCategory(), h);
+            }
+            IdForFurnitureImages.put(t, f.getIdFurniture());
+        }
+    }
+
+    private void fillAllCategoryImages(){
+        for(Category c: allCategories){
+            Image t = getCategoryImageByCategory(c);
+            allCategoryImages.add(t);
+            IdForCategoryImages.put(t, c.getIdCategory());
+        }
+    }
+
+    private void fillAllSubcategoryImages(){
+        for(Subcategory s : allSubcategories){
+            Image t;
+            if(allSubcategoryImages.containsKey(s.getIdCategory())){
+                //case when the hashmap has already entries in the category (at least 1)
+                t = getSubcategoryImageBySubcategory(s);
+                allSubcategoryImages.get(s.getIdCategory()).add(t);
+            } else {
+                //case when the hashmap has no entry yet in the category
+                List<Image> i = new ArrayList<>();
+                t = getSubcategoryImageBySubcategory(s);
+                i.add(t);
+                allSubcategoryImages.put(s.getIdCategory(), i);
+            }
+            IdForSubcategoryImages.put(t, s.getIdSubcategory());
+        }
     }
 }
