@@ -72,5 +72,6 @@
       <Button fx:id="addUserButton" layoutX="249.0" layoutY="387.0" mnemonicParsing="false" onAction="#openAddWindow" text="Add" />
       <Button layoutX="5.0" layoutY="5.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <Button fx:id="searchByIdButton" layoutX="285.0" layoutY="67.0" mnemonicParsing="false" onAction="#searchByIdButtonOCE" text="Search" />
+      <Button fx:id="editUserById" layoutX="346.0" layoutY="67.0" mnemonicParsing="false" onAction="#openAdminAccountEditById" text="Edit" />
    </children>
 </AnchorPane>

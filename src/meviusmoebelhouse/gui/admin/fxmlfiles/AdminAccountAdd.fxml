@@ -31,8 +31,8 @@
 
         <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="7" />
         <Label fx:id="errorMessageLabel" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="8" />
-      <Label id="addressLabel" fx:id="passwordLabel1" text="Adress" GridPane.rowIndex="8" />
-      <TextField id="addressTextField" fx:id="passwordTextField1" disable="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+      <Label id="addressLabel" fx:id="passwordLabel1" text="Address" GridPane.rowIndex="8" />
+      <TextField id="addressTextField" fx:id="addressTextField" disable="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
       <columnConstraints>
          <ColumnConstraints />
          <ColumnConstraints />

@@ -77,13 +77,14 @@ public class AdminAccountAddController implements Initializable {
                 newUserToAdd.setPassword(passwordTextField.getText());
                 newUserToAdd.setIdUserRole(3);
                 applicationController.addNewUserToDatabase(newUserToAdd);
+
                 newCustomerToAdd.setIdUser(applicationController.getUserByUsername(usernameTextField.getText()));
                 newCustomerToAdd.setFirstName(firstnameTextField.getText());
                 newCustomerToAdd.setLastName(lastnameTextField.getText());
                 newCustomerToAdd.setBirthday(birthdayDatePicker.getValue());
                 newCustomerToAdd.setIBAN(IBANTextField.getText());
-                //newCustomerToAdd.setDefaultShippingAddress(addressTextField.getText()); - unable to store shipping address - will be fixed
-                // Customer user won't be added to Customer Table - will be fixed
+                newCustomerToAdd.setEmailAddress(emailAddressTextField.getText());
+                newCustomerToAdd.setDefaultShippingAddress(addressTextField.getText()); //- unable to store shipping address - will be fixed
 
                 applicationController.addNewCustomerToDatabase(newCustomerToAdd);
                 errorLabel.setText("Added new user successfully");

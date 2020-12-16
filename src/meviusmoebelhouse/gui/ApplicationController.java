@@ -461,7 +461,6 @@ public class ApplicationController {
 
     public void openAccountManagerEdit(AnchorPane mainAnchorPane, User temp) throws Exception {
         currentUserToChange = temp;
-
         switchScene(mainAnchorPane, "AdminAccountEdit");
     }
 
@@ -527,6 +526,11 @@ public class ApplicationController {
         allUsers = userRepository.getAll();
     }
 
+    public void changeUserInDatabase(User currentUser) throws Exception {
+        userRepository.update(currentUser);
+        allUsers = userRepository.getAll();
+    }
+
     public void addNewStaffToDatabase(Staff newStaff) throws Exception {
         staffRepository.create(newStaff);
         allStaffs = staffRepository.getAll();
@@ -550,6 +554,17 @@ public class ApplicationController {
         furnitureRepository.update(currentFurniture);
         allFurnitures = furnitureRepository.getAll();
     }
+
+    public void changeStaffInDatabase(Staff currentStaff) throws Exception {
+        staffRepository.update(currentStaff);
+        allStaffs = staffRepository.getAll();
+    }
+
+    public void changeCustomerInDatabase(Customer currentCustomer) throws Exception {
+        customerRepository.update(currentCustomer);
+        allCustomers = customerRepository.getAll();
+    }
+
 
     private void fillAllFurnitureImages(){
         allFurnituresImages = new HashMap<>();

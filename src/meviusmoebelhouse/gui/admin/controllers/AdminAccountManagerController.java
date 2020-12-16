@@ -20,7 +20,7 @@ public class AdminAccountManagerController implements Initializable {
 
     ApplicationController applicationController;
 
-    int customerListCounter = 0, staffListCounter = 0, adminListCounter = 0;
+    int customerListCounter = 0, staffListCounter = 0, adminListCounter = 0, searchedID = 0;
 
 
     public AnchorPane mainAnchorPane,
@@ -35,7 +35,7 @@ public class AdminAccountManagerController implements Initializable {
             listAnchorPaneRoleLabel6, listAnchorPaneRoleLabel7;
 
     public Button anchorPaneListPreviousButton, anchorPaneListNextButton, editUser1, editUser2, editUser3, editUser4,
-            editUser5, editUser6, editUser7, addUserButton;
+            editUser5, editUser6, editUser7, addUserButton, editUserById, searchByIdButton;
 
     public ToggleGroup accountChoice;
 
@@ -85,6 +85,8 @@ public class AdminAccountManagerController implements Initializable {
 
         anchorPaneListPreviousButton.setDisable(true);
         anchorPaneListNextButton.setDisable(true);
+        editUserById.setDisable(true);
+        searchByIdButton.setDisable(true);
 
         for (Button a : listEditButtons) {
             a.setDisable(true);
@@ -99,10 +101,10 @@ public class AdminAccountManagerController implements Initializable {
     public void accountTypeChosen(ActionEvent actionEvent) {
 
         String clickedRadioButtonId = ((RadioButton) actionEvent.getSource()).getId();
-
+        searchByIdButton.setDisable(false);
         anchorPaneListPreviousButton.setDisable(true);
         anchorPaneListNextButton.setDisable(false);
-
+        editUserById.setDisable(true);
         for (Button a : listEditButtons) {
             a.setDisable(false);
         }
@@ -320,15 +322,18 @@ public class AdminAccountManagerController implements Initializable {
 
         for(int i = 1; i <= listAnchorPanes.size() - 1; i++){
             listAnchorPanes.get(i).setVisible(false);
+        }
+        for(int i = 0; i<= listEditButtons.size() - 1; i++){
             listEditButtons.get(i).setDisable(true);
         }
-
+        anchorPaneListNextButton.setDisable(true);
+        editUserById.setDisable(false);
         if (searchByIdTextField.getText().equals("")){
             listAnchorPaneNameLabels.get(0).setText("No input");
             listAnchorPaneRoleLabels.get(0).setText("Error");
             listAnchorPanes.get(0).setStyle("-fx-border-color: black");
             listAnchorPanes.get(0).setVisible(true);
-            listEditButtons.get(0).setVisible(true);
+
         } else {
             int input = Integer.parseInt(searchByIdTextField.getText());
             for(int i = 0; i <= allAdmins.size() - 1; i++){
@@ -338,7 +343,7 @@ public class AdminAccountManagerController implements Initializable {
                     listAnchorPanes.get(0).setStyle("-fx-border-color: black");
                     listAnchorPanes.get(0).setVisible(true);
                     listEditButtons.get(0).setVisible(true);
-                    editUser1.setDisable(false);
+
                 }
                 for(int j = 0; j <= allCustomers.size() - 1; j++){
                     if(allCustomers.get(j).getIdUser() == input){
@@ -347,7 +352,7 @@ public class AdminAccountManagerController implements Initializable {
                         listAnchorPanes.get(0).setStyle("-fx-border-color: black");
                         listAnchorPanes.get(0).setVisible(true);
                         listEditButtons.get(0).setVisible(true);
-                        editUser1.setDisable(false);
+
                     }
                 }
 
@@ -358,7 +363,6 @@ public class AdminAccountManagerController implements Initializable {
                         listAnchorPanes.get(0).setStyle("-fx-border-color: black");
                         listAnchorPanes.get(0).setVisible(true);
                         listEditButtons.get(0).setVisible(true);
-                        editUser1.setDisable(false);
                     }
                 }
 
@@ -367,8 +371,7 @@ public class AdminAccountManagerController implements Initializable {
             }
 
         }
-
-
+        searchedID = Integer.parseInt(searchByIdTextField.getText());
 }
 
 
@@ -378,5 +381,11 @@ public class AdminAccountManagerController implements Initializable {
 
     public void openAddWindow(ActionEvent actionEvent) throws Exception {
         applicationController.switchScene(mainAnchorPane, "AdminAccountAdd");
+    }
+
+    public void openAdminAccountEditById(ActionEvent actionEvent) throws Exception {
+        RadioButton selectedToggle = (RadioButton) accountChoice.getSelectedToggle();
+        User temp = applicationController.getUserByUserId(searchedID);
+        applicationController.openAccountManagerEdit(mainAnchorPane, temp);
     }
 }

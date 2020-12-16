@@ -1,5 +1,6 @@
 package meviusmoebelhouse.gui.admin.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -24,7 +25,7 @@ public class AdminAccountEditController implements Initializable {
     private Customer customerDataOfUser = null;
 
     public AnchorPane mainAnchorPane;
-    public TextField usernameTextField, firstnameTextField, lastnameTextField, IBANTextField, emailAddressTextField, passwordTextField;
+    public TextField usernameTextField, firstnameTextField, lastnameTextField, IBANTextField, emailAddressTextField, passwordTextField, addressTextField;
     public DatePicker birthdayDatePicker;
     public Label errorMessageLabel,passwordLabel;
     public Button saveButton,cancelButton,changePasswordButton;
@@ -42,13 +43,12 @@ public class AdminAccountEditController implements Initializable {
                 birthdayDatePicker.setDisable(true);
                 IBANTextField.setDisable(true);
                 emailAddressTextField.setDisable(true);
+                addressTextField.setDisable(true);
 
             } else{
                 customerDataOfUser = applicationController.getCustomerByUserId(userToCreate.getIdUser());
-
                 firstnameTextField.setText(customerDataOfUser.getFirstName());
                 lastnameTextField.setText(customerDataOfUser.getLastName());
-                //birthdayDatePicker.setChronology(197785456);
                 IBANTextField.setText(customerDataOfUser.getIBAN());
                 emailAddressTextField.setText(customerDataOfUser.getEmailAddress());
             }
@@ -69,19 +69,39 @@ public class AdminAccountEditController implements Initializable {
     }
 
     public void saveOCE() throws Exception{
-        staffDataOfUser.setFirstName(firstnameTextField.getText());
-        staffDataOfUser.setLastName(lastnameTextField.getText());
-        applicationController.getStaffRepository().update(staffDataOfUser);
 
-        if (!passwordLabel.isDisable()) {
-            userToCreate.setPassword(passwordTextField.getText());
-            applicationController.getUserRepository().update(userToCreate);
+        if(userToCreate.getIdUserRole() == 1 || userToCreate.getIdUserRole() == 2){
+            staffDataOfUser.setFirstName(firstnameTextField.getText());
+            staffDataOfUser.setLastName(lastnameTextField.getText());
+            applicationController.getStaffRepository().update(staffDataOfUser);
+
+            if (!passwordTextField.isDisable()) {
+                userToCreate.setPassword(passwordTextField.getText());
+                applicationController.changeUserInDatabase(userToCreate);
+            }
+
+            applicationController.switchScene(mainAnchorPane, "AdminAccountManager");
+            applicationController.changeStaffInDatabase(staffDataOfUser);
+
         }
 
-        applicationController.switchScene(mainAnchorPane, "AdminAccountManager");
+        else if(userToCreate.getIdUserRole() == 3){
+            customerDataOfUser.setFirstName(firstnameTextField.getText());
+            customerDataOfUser.setLastName(lastnameTextField.getText());
+            applicationController.getCustomerRepository().update(customerDataOfUser);
 
-        userToCreate = applicationController.getCurrentUser();
-        staffDataOfUser = applicationController.getStaffRepository().getByIdStaff(userToCreate.getIdUser());
+            if (!passwordTextField.isDisable()) {
+                userToCreate.setPassword(passwordTextField.getText());
+                applicationController.changeUserInDatabase(userToCreate);
+            }
+
+            customerDataOfUser.setEmailAddress(emailAddressTextField.getText());
+            customerDataOfUser.setDefaultShippingAddress(addressTextField.getText());
+            customerDataOfUser.setIBAN(IBANTextField.getText());
+            applicationController.switchScene(mainAnchorPane, "AdminAccountManager");
+            applicationController.changeCustomerInDatabase(customerDataOfUser);
+        }
+
     }
 
     public void updateTable(){
@@ -89,5 +109,9 @@ public class AdminAccountEditController implements Initializable {
         firstnameTextField.setText(staffDataOfUser.getFirstName());
         lastnameTextField.setText(staffDataOfUser.getLastName());
         passwordLabel.setDisable(true);
+    }
+
+    public void changePasswordOCE(ActionEvent actionEvent) {
+        passwordTextField.setDisable(false);
     }
 }

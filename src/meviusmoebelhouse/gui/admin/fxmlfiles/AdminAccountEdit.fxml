@@ -1,39 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<?import javafx.scene.layout.AnchorPane?>
 <AnchorPane fx:id="mainAnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meviusmoebelhouse.gui.admin.controllers.AdminAccountEditController">
-   <GridPane alignment="CENTER" fx:id="gridPane">
-      <Label GridPane.columnIndex="0" GridPane.rowIndex="0" text="Username" />
-      <TextField fx:id="usernameTextField" GridPane.columnIndex="1" GridPane.rowIndex="0" disable="true"/>
-      <Label GridPane.columnIndex="0" GridPane.rowIndex="1" text="Firstname" />
+   <GridPane fx:id="gridPane" alignment="CENTER">
+      <Label text="Username" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+      <TextField fx:id="usernameTextField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+      <Label text="Firstname" GridPane.columnIndex="0" GridPane.rowIndex="1" />
       <TextField fx:id="firstnameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Label GridPane.columnIndex="0" GridPane.rowIndex="2" text="Lastname" />
+      <Label text="Lastname" GridPane.columnIndex="0" GridPane.rowIndex="2" />
       <TextField fx:id="lastnameTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <Label GridPane.columnIndex="0" GridPane.rowIndex="3" text="Birthday" />
+      <Label text="Birthday" GridPane.columnIndex="0" GridPane.rowIndex="3" />
       <DatePicker fx:id="birthdayDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <Label GridPane.columnIndex="0" GridPane.rowIndex="4" text="IBAN" />
+      <Label text="IBAN" GridPane.columnIndex="0" GridPane.rowIndex="4" />
       <TextField fx:id="IBANTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <Label GridPane.columnIndex="0" GridPane.rowIndex="5" text="E-mail address" />
+      <Label text="E-mail address" GridPane.columnIndex="0" GridPane.rowIndex="5" />
       <TextField fx:id="emailAddressTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-      <Label fx:id="passwordLabel" GridPane.columnIndex="0" GridPane.rowIndex="6" text="Password" disable="true"/>
-      <TextField fx:id="passwordTextField" GridPane.columnIndex="1" GridPane.rowIndex="6" disable="true"/>
 
-      <Button fx:id="changePasswordButton" GridPane.columnIndex="0" GridPane.rowIndex="7" mnemonicParsing="false" onAction="#changePasswordOCE" text="Change password" />
-
-      <HBox GridPane.columnIndex="1" GridPane.rowIndex="7" alignment="CENTER_RIGHT">
-         <children>
-            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveOCE" text="Save" />
-            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelOCE" text="Cancel" />
-         </children>
-      </HBox>
-      <Label fx:id="errorMessageLabel" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.columnSpan="2" />
+      <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+      <Label fx:id="errorMessageLabel" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+      <Label text="Address" GridPane.rowIndex="8" />
+      <TextField fx:id="addressTextField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+      <columnConstraints>
+         <ColumnConstraints />
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
    </GridPane>
-</AnchorPane>
 
+   <Button fx:id="changePasswordButton" layoutX="3.0" layoutY="207.0" mnemonicParsing="false" onAction="#changePasswordOCE" text="Change password" />
+   <Button fx:id="saveButton" layoutX="150.0" layoutY="205.0" mnemonicParsing="false" onAction="#saveOCE" text="Save" />
+   <Button fx:id="cancelButton" layoutX="211.0" layoutY="205.0" mnemonicParsing="false" onAction="#cancelOCE" text="Cancel" />
+   <Label fx:id="passwordLabel" disable="true" layoutX="3.0" layoutY="181.0" text="Password" />
+   <TextField fx:id="passwordTextField" disable="true" layoutX="75.0" layoutY="177.0" />
+</AnchorPane>
