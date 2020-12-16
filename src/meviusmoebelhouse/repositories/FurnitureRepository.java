@@ -37,25 +37,6 @@ public class FurnitureRepository {
         }
     }
 
-    public Furniture getByIdFurniture(int idFurniture) throws Exception {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            stmt = conn.prepareStatement("select * from furniture where idFurniture = ?");
-            stmt.setInt(1, idFurniture);
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return fromResultSet(rs);
-            } else {
-                return null;
-            }
-        } finally {
-            RepositoryHelper.CloseIfExists(rs, stmt);
-        }
-    }
-
     public void create(Furniture furniture) throws Exception {
         PreparedStatement stmt = null;
         ResultSet generatedKeysResultSet = null;
@@ -90,15 +71,17 @@ public class FurnitureRepository {
 
         try {
             stmt = conn.prepareStatement("update furniture set idFurniture = ?, idSubcategory = ?, name = ?, width = ?, length = ?, height = ?, price = ?, rebate = ?, isActive = ?, description = ? where idFurniture = ?");
-            stmt.setInt(1, furniture.getIdSubcategory());
-            stmt.setString(2, furniture.getName());
-            stmt.setFloat(3, furniture.getWidth());
-            stmt.setFloat(4, furniture.getLength());
-            stmt.setFloat(5, furniture.getHeight());
-            stmt.setBigDecimal(6, furniture.getPrice());
-            stmt.setDouble(7, furniture.getRebate());
-            stmt.setBoolean(8, furniture.getIsActive());
-            stmt.setInt(9, furniture.getIdFurniture());
+            stmt.setInt(1, furniture.getIdFurniture());
+            stmt.setInt(2, furniture.getIdSubcategory());
+            stmt.setString(3, furniture.getName());
+            stmt.setFloat(4, furniture.getWidth());
+            stmt.setFloat(5, furniture.getLength());
+            stmt.setFloat(6, furniture.getHeight());
+            stmt.setBigDecimal(7, furniture.getPrice());
+            stmt.setDouble(8, furniture.getRebate());
+            stmt.setBoolean(9, furniture.getIsActive());
+            stmt.setString(10, furniture.getDescription());
+            stmt.setInt(11, furniture.getIdFurniture());
 
             stmt.executeUpdate();
         } finally {

@@ -32,7 +32,7 @@ public class SettingsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         try {
             user = applicationController.getCurrentUser();
-            customer = applicationController.getCustomerRepository().getByIdUser(user.getIdUser());
+            customer = applicationController.getCustomerByUserId(user.getIdUser());
             usernameTextField.setText(user.getUsername());
             firstnameTextField.setText(customer.getFirstName());
             lastnameTextField.setText(customer.getLastName());

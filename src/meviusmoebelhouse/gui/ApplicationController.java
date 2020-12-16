@@ -526,8 +526,9 @@ public class ApplicationController {
         switchScene(anchorPane, "Home");
     }
 
-    public void addFurnitureToDatabase(Furniture furniture) {
-        //TODO add furniture to database and refresh the furniture list
+    public void addFurnitureToDatabase(Furniture furniture) throws Exception {
+        furnitureRepository.create(furniture);
+        allFurnitures = furnitureRepository.getAll();
     }
 
     public Staff getStaffByUserId(int id) {
@@ -546,12 +547,18 @@ public class ApplicationController {
 
     public List<String> getAllSubcategoryNamesOfCategory(String categoryName){
         List<String> strings = new ArrayList<>();
+        int categoryId = getCategoryByName(categoryName).getIdCategory();
 
         for(Subcategory s : allSubcategories){
+            if(s.getIdCategory() == categoryId)
             strings.add(s.getName());
         }
 
         return strings;
+    }
+
+    public Category getCategoryByName(String categoryName){
+        return allCategories.stream().filter(s -> s.getName().equals(categoryName)).findFirst().orElse(null);
     }
 
     public void addNewUserToDatabase(User newUser) throws Exception {
@@ -570,6 +577,16 @@ public class ApplicationController {
     }
 
     public int getUserByUsername(String username) {
-        return Objects.requireNonNull(allUsers.stream().filter(s -> s.getUsername().equals(username)).findFirst().orElse(null)).getIdUser();
+        return Objects.requireNonNull(allUsers.stream().filter(
+                s -> s.getUsername().equals(username)).findFirst().orElse(null)).getIdUser();
+    }
+
+    public Subcategory getSubcategoryByName(String subcategoryName) {
+        return  allSubcategories.stream().filter(s -> s.getName().equals(subcategoryName)).findFirst().orElse(null);
+    }
+
+    public void changeFurnitureInDatabase(Furniture currentFurniture) throws Exception {
+        furnitureRepository.update(currentFurniture);
+        allFurnitures = furnitureRepository.getAll();
     }
 }

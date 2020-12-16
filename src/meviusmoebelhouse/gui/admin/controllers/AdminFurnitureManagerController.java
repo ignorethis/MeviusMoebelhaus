@@ -1,11 +1,15 @@
 package meviusmoebelhouse.gui.admin.controllers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import meviusmoebelhouse.gui.ApplicationController;
+import meviusmoebelhouse.model.Category;
 import meviusmoebelhouse.model.Furniture;
+import meviusmoebelhouse.model.Subcategory;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -41,6 +45,25 @@ public class AdminFurnitureManagerController implements Initializable {
         for(String str : applicationController.getAllCategoryNames()){
             categoryChoiceBox.getItems().add(str);
         }
+
+        //create an selectedIndexPropertyListener for the category choicebox to adjust the subcategory choicebox
+        categoryChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if((Integer)newValue != -1){
+                    String categoryChosen = categoryChoiceBox.getItems().get((Integer) newValue).toString();
+                    subcategoryChoiceBox.getItems().removeAll(subcategoryChoiceBox.getItems());
+
+                    for(String subcategoryName : applicationController.getAllSubcategoryNamesOfCategory(categoryChosen)){
+                        subcategoryChoiceBox.getItems().add(subcategoryName);
+                    }
+                    if(currentFurniture != null){
+                        subcategoryChoiceBox.setValue(applicationController.getSubcategoryById(
+                                currentFurniture.getIdSubcategory()).getName());
+                    }
+                }
+            }
+        });
     }
 
     public void back(ActionEvent actionEvent) throws Exception {
@@ -57,11 +80,12 @@ public class AdminFurnitureManagerController implements Initializable {
             errorMessageLabelSearchFurniture.setText("ERROR! No furniture found with the given id");
             return;
         }
-        fillTextFieldsWithFurnitureInformation();
+        fillFieldsWithFurnitureInformation();
         adjustButtonsForFurnitureOptions();
     }
 
-    private void fillTextFieldsWithFurnitureInformation(){
+    private void fillFieldsWithFurnitureInformation(){
+        //set textfields
         widthTextField.setText(String.valueOf(currentFurniture.getWidth()));
         heightTextField.setText(String.valueOf(currentFurniture.getHeight()));
         lengthTextField.setText(String.valueOf(currentFurniture.getLength()));
@@ -69,46 +93,57 @@ public class AdminFurnitureManagerController implements Initializable {
         rebateTextField.setText(String.valueOf(currentFurniture.getRebate()));
         nameTextField.setText(currentFurniture.getName());
         descriptionTextArea.setText(currentFurniture.getDescription());
+
+        //set new values for subcategories in the category of the furniture
+        Subcategory subcategoryOfFurniture = applicationController.getSubcategoryById(currentFurniture.getIdSubcategory());
+        Category categoryOfFurniture = applicationController.getCategoryById(subcategoryOfFurniture.getIdCategory());
+
+        subcategoryChoiceBox.getItems().removeAll(subcategoryChoiceBox.getItems());
+
+        for(String subcategoryName : applicationController.getAllSubcategoryNamesOfCategory(categoryOfFurniture.getName())){
+            subcategoryChoiceBox.getItems().add(subcategoryName);
+        }
+        subcategoryChoiceBox.setValue(subcategoryChoiceBox.getItems().get(0));
+
+        //reset categorychoicebox with category chosen the furniture is in
+        categoryChoiceBox.setValue(null);
+        categoryChoiceBox.getItems().removeAll(categoryChoiceBox.getItems());
+        for(String str : applicationController.getAllCategoryNames()){
+            categoryChoiceBox.getItems().add(str);
+        }
+        categoryChoiceBox.setValue(categoryOfFurniture.getName());
     }
 
-    public void addFurnitureButtonOCE(ActionEvent actionEvent) {
-        checkNewFurnitureInformation();
-
+    public void addFurnitureButtonOCE(ActionEvent actionEvent) throws Exception {
         Furniture furniture = new Furniture();
-
-        furniture.setName(nameTextField.getText());
-        furniture.setDescription(descriptionTextArea.getText());
-        furniture.setWidth(Float.parseFloat(widthTextField.getText().replace(",", ".")));
-        furniture.setHeight(Float.parseFloat(heightTextField.getText().replace(",", ".")));
-        furniture.setLength(Float.parseFloat(lengthTextField.getText().replace(",", ".")));
-        furniture.setPrice(new BigDecimal(priceTextField.getText().replace(",", ".")));
-        furniture.setRebate(Double.parseDouble(rebateTextField.getText().replace(",", ".")));
-
-        applicationController.addFurnitureToDatabase(furniture);
+        if(checkAndSetNewFurnitureInformation(furniture)){
+            applicationController.addFurnitureToDatabase(furniture);
+            MessageLabelAddingFurniture.setText("Furniture successfully added into the database.");
+        }
     }
 
-    private boolean checkNewFurnitureInformation() {
+    private boolean checkAndSetNewFurnitureInformation(Furniture furniture) {
         MessageLabelAddingFurniture.setText("");
 
-        String name=nameTextField.getText(), description=descriptionTextArea.getText();
-        float width, height, length;
-        double rebate;
-        BigDecimal price;
-
+        String name = nameTextField.getText();
         if(name.equals("")){
             MessageLabelAddingFurniture.setText("Wrong input for the new name, cannot be empty");
             return false;
         }
+        furniture.setName(name);
 
+        String description = descriptionTextArea.getText();
         if(description.equals("")){
             MessageLabelAddingFurniture.setText("Wrong input for the new description, cannot be empty");
             return false;
         }
+        furniture.setDescription(description);
 
         try{
-            width = Float.parseFloat(widthTextField.getText().replace(",", "."));
+            float width = Float.parseFloat(widthTextField.getText().replace(",", "."));
             if(width <= 0)
                 throw new Exception();
+            furniture.setWidth(width);
         } catch (NumberFormatException e){
             MessageLabelAddingFurniture.setText("Wrong input for the new width. Must be a float number");
             return false;
@@ -118,9 +153,10 @@ public class AdminFurnitureManagerController implements Initializable {
         }
 
         try{
-            height = Float.parseFloat(heightTextField.getText().replace(",", "."));
+            float height = Float.parseFloat(heightTextField.getText().replace(",", "."));
             if(height <= 0)
                 throw new Exception();
+            furniture.setHeight(height);
         } catch (NumberFormatException e){
             MessageLabelAddingFurniture.setText("Wrong input for the new height. Must be a float number");
             return false;
@@ -130,9 +166,10 @@ public class AdminFurnitureManagerController implements Initializable {
         }
 
         try{
-            length = Float.parseFloat(lengthTextField.getText().replace(",", "."));
+            float length = Float.parseFloat(lengthTextField.getText().replace(",", "."));
             if(length <= 0)
                 throw new Exception();
+            furniture.setLength(length);
         } catch (NumberFormatException e){
             MessageLabelAddingFurniture.setText("Wrong input for the new length. Must be a float number");
             return false;
@@ -142,9 +179,10 @@ public class AdminFurnitureManagerController implements Initializable {
         }
 
         try{
-            price = new BigDecimal(priceTextField.getText().replace(",", "."));
+            BigDecimal price = new BigDecimal(priceTextField.getText().replace(",", "."));
             if((price.compareTo(new BigDecimal("0")) <= 0))
                 throw new Exception();
+            furniture.setPrice(price);
         } catch (NumberFormatException e){
             MessageLabelAddingFurniture.setText("Wrong input for the new price. Must be a big decimal number");
             return false;
@@ -154,9 +192,15 @@ public class AdminFurnitureManagerController implements Initializable {
         }
 
         try{
-            rebate = Double.parseDouble(rebateTextField.getText().replace(",", "."));
-            if(rebate < 0 || rebate > 100)
-                throw new Exception();
+            double rebate;
+            if(rebateTextField.getText() != null){
+                rebate = Double.parseDouble(rebateTextField.getText().replace(",", "."));
+                if(rebate < 0 || rebate > 100)
+                    throw new Exception();
+                furniture.setRebate(rebate);
+            } else {
+                furniture.setRebate(0);
+            }
         } catch (NumberFormatException e){
             MessageLabelAddingFurniture.setText("Wrong input for the new rebate. Must be a double value");
             return false;
@@ -165,11 +209,29 @@ public class AdminFurnitureManagerController implements Initializable {
             return false;
         }
 
+        furniture.setIsActive(true);
+
+        try{
+            Subcategory subcategory = applicationController.getSubcategoryByName(
+                    subcategoryChoiceBox.getValue().toString());
+            if(subcategory == null){
+                throw new Exception();
+            } else{
+                furniture.setIdSubcategory(subcategory.getIdSubcategory());
+            }
+        } catch (Exception e){
+            MessageLabelAddingFurniture.setText("Wrong subcategory chosen. ERROR");
+            return false;
+        }
 
         return true;
     }
 
-    public void changeFurnitureButtonOCE(ActionEvent actionEvent) {
+    public void changeFurnitureButtonOCE(ActionEvent actionEvent) throws Exception {
+        if(checkAndSetNewFurnitureInformation(currentFurniture)){
+            applicationController.changeFurnitureInDatabase(currentFurniture);
+            MessageLabelAddingFurniture.setText("Furniture successfully changed in the database.");
+        }
     }
 
     public void deactivateFurnitureButtonOCE(ActionEvent actionEvent) {
@@ -180,11 +242,5 @@ public class AdminFurnitureManagerController implements Initializable {
             addFurnitureButton.setDisable(!currentFurnitureIsNull);
             changeFurnitureButton.setDisable(currentFurnitureIsNull);
             deactivateFurnitureButton.setDisable(currentFurnitureIsNull);
-    }
-
-    private void adjustSubcategoryChoiceBox(ActionEvent actionEvent){
-        ChoiceBox choiceBox = (ChoiceBox) actionEvent.getSource();
-
-
     }
 }

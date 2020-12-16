@@ -37,25 +37,6 @@ public class CategoryRepository {
         }
     }
 
-    public Category getByIdCategory(int idCategory) throws Exception {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            stmt = conn.prepareStatement("select * from category where idCategory = ?");
-            stmt.setInt(1, idCategory);
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return fromResultSet(rs);
-            } else {
-                return null;
-            }
-        } finally {
-            RepositoryHelper.CloseIfExists(rs, stmt);
-        }
-    }
-
     public void create(Category category) throws Exception {
         PreparedStatement stmt = null;
         ResultSet generatedKeysResultSet = null;
