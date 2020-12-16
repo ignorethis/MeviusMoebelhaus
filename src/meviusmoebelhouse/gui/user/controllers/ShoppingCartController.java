@@ -69,7 +69,7 @@ public class ShoppingCartController implements Initializable {
         }
 
         ShoppingCart shoppingCart = applicationController.getShoppingCart();
-        Customer customer = applicationController.getCustomerById(applicationController.getCurrentUser().getIdUser());
+        Customer customer = applicationController.getCustomerByUserId(applicationController.getCurrentUser().getIdUser());
         InvoiceDetailsRepository invoiceDetailsRepository = applicationController.getInvoiceDetailsRepository();
         InvoiceRepository invoiceRepository = applicationController.getInvoiceRepository();
 

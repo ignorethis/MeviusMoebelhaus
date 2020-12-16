@@ -33,24 +33,6 @@ public class InvoiceRepository {
             RepositoryHelper.CloseIfExists(rs, stmt);
         }
     }
-    public Invoice getByIdInvoice(int idInvoice) throws Exception {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            stmt = conn.prepareStatement("select * from invoice where idInvoice = ?");
-            stmt.setInt(1, idInvoice);
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return fromResultSet(rs);
-            } else {
-                return null;
-            }
-        } finally {
-            RepositoryHelper.CloseIfExists(rs, stmt);
-        }
-    }
 
     public void create(Invoice invoice) throws Exception {
         PreparedStatement stmt = null;

@@ -37,25 +37,6 @@ public class InvoiceDetailsRepository {
         }
     }
 
-    public InvoiceDetails getByIdInvoiceDetails(int idInvoiceDetails) throws Exception {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            stmt = conn.prepareStatement("select * from invoiceDetails where idInvoiceDetails = ?");
-            stmt.setInt(1, idInvoiceDetails);
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return fromResultSet(rs);
-            } else {
-                return null;
-            }
-        } finally {
-            RepositoryHelper.CloseIfExists(rs, stmt);
-        }
-    }
-
     public void create(InvoiceDetails invoiceDetails) throws Exception {
         PreparedStatement stmt = null;
         ResultSet generatedKeysResultSet = null;

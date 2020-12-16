@@ -35,45 +35,6 @@ public class CustomerRepository {
         }
     }
 
-    public Customer getByIdCustomer(int idCustomer) throws Exception {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            stmt = conn.prepareStatement("select * from customer where idCustomer = ?");
-            stmt.setInt(1, idCustomer);
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return fromResultSet(rs);
-            } else {
-                return null;
-            }
-        } finally {
-            RepositoryHelper.CloseIfExists(rs, stmt);
-        }
-    }
-
-    public Customer getByIdUser(int idUser) throws Exception {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            stmt = conn.prepareStatement("select * from customer where idUser = ?");
-            stmt.setInt(1, idUser);
-
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return fromResultSet(rs);
-            } else {
-                return null;
-            }
-        } finally {
-            RepositoryHelper.CloseIfExists(rs, stmt);
-        }
-    }
-
     public void create(Customer customer) throws Exception {
         PreparedStatement stmt = null;
         ResultSet generatedKeysResultSet = null;
