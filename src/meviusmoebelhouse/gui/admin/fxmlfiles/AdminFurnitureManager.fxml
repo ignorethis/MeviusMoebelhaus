@@ -39,5 +39,6 @@
       <Label layoutX="248.0" layoutY="324.0" text="Subcategory:" />
       <Label layoutX="322.0" layoutY="291.0" text="Is active:" />
       <ChoiceBox fx:id="activeChoiceBox" layoutX="379.0" layoutY="287.0" prefHeight="25.0" prefWidth="108.0" />
+      <Button layoutX="385.0" layoutY="45.0" mnemonicParsing="false" onAction="#resetScene" text="Reset" />
    </children>
 </AnchorPane>

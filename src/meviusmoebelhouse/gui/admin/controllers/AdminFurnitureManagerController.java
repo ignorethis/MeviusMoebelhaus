@@ -35,9 +35,7 @@ public class AdminFurnitureManagerController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        adjustButtonsForFurnitureOptions();
-
-        adjustChoiceBoxes();
+        adjustAllElementsInScene();
 
         //create an selectedIndexPropertyListener for the category choicebox to adjust the subcategory choicebox
         setCategoryChoiceBoxOnChangeListener();
@@ -58,11 +56,10 @@ public class AdminFurnitureManagerController implements Initializable {
             }
         } catch (Exception e){
             errorMessageLabelSearchFurniture.setText("ERROR! No furniture found with the given id");
+            adjustAllElementsInScene();
             return;
         }
-        fillFieldsWithFurnitureInformation();
-        adjustButtonsForFurnitureOptions();
-        adjustActiveChoiceForFurniture();
+        adjustAllElementsInScene();
     }
 
     @FXML private void addFurnitureButtonOCE(ActionEvent actionEvent) throws Exception {
@@ -70,6 +67,7 @@ public class AdminFurnitureManagerController implements Initializable {
         if(checkAndSetNewFurnitureInformation(furniture)){
             applicationController.addFurnitureToDatabase(furniture);
             MessageLabelAddingFurniture.setText("Furniture successfully added into the database.");
+            adjustAllElementsInScene();
         }
     }
 
@@ -78,35 +76,32 @@ public class AdminFurnitureManagerController implements Initializable {
             applicationController.changeFurnitureInDatabase(currentFurniture);
             MessageLabelAddingFurniture.setText("Furniture successfully changed in the database.");
         }
+        adjustAllElementsInScene();
     }
 
     @FXML private void deactivateFurnitureButtonOCE(ActionEvent actionEvent) throws Exception {
-        applicationController.deactivateFurniture(currentFurniture);
-        MessageLabelAddingFurniture.setText("Furniture successfully changed to deactive.");
+        if(deactivateFurnitureButton.getText().equals("Activate Furniture")){
+            currentFurniture.setIsActive(true);
+            MessageLabelAddingFurniture.setText("Furniture availability successfully changed to active.");
+        } else if(deactivateFurnitureButton.getText().equals("Deactivate Furniture")){
+            currentFurniture.setIsActive(false);
+            MessageLabelAddingFurniture.setText("Furniture availability successfully changed to deactive.");
+        } else{
+            return;
+        }
+        applicationController.changeFurnitureInDatabase(currentFurniture);
+        adjustAllElementsInScene();
     }
 
+    @FXML private void resetScene(ActionEvent actionEvent) {
+        currentFurniture = null;
+        adjustAllElementsInScene();
+    }
 
 
 
     //HELPING FUNCTIONS
 
-    private void adjustChoiceBoxes() {
-        for(String str : applicationController.getAllCategoryNames()){
-            categoryChoiceBox.getItems().add(str);
-        }
-        activeChoiceBox.getItems().add("Yes");
-        activeChoiceBox.getItems().add("No");
-    }
-
-    private void adjustActiveChoiceForFurniture(){
-        if(currentFurniture != null){
-            if(currentFurniture.getIsActive()){
-                activeChoiceBox.setValue("Yes");
-            } else{
-                activeChoiceBox.setValue("No");
-            }
-        }
-    }
 
     private boolean checkAndSetNewFurnitureInformation(Furniture furniture) {
         MessageLabelAddingFurniture.setText("");
@@ -195,8 +190,6 @@ public class AdminFurnitureManagerController implements Initializable {
             return false;
         }
 
-        furniture.setIsActive(true);
-
         try{
             Subcategory subcategory = applicationController.getSubcategoryByName(
                     subcategoryChoiceBox.getValue().toString());
@@ -207,6 +200,15 @@ public class AdminFurnitureManagerController implements Initializable {
             }
         } catch (Exception e){
             MessageLabelAddingFurniture.setText("Wrong subcategory chosen. ERROR");
+            return false;
+        }
+
+        if(activeChoiceBox.getValue() == "Yes"){
+            furniture.setIsActive(true);
+        } else if (activeChoiceBox.getValue() == "No"){
+            furniture.setIsActive(false);
+        } else{
+            MessageLabelAddingFurniture.setText("Wrong choice of activeness in choice box");
             return false;
         }
 
@@ -233,40 +235,88 @@ public class AdminFurnitureManagerController implements Initializable {
         });
     }
 
+    private void adjustAllElementsInScene(){
+        fillFieldsWithFurnitureInformation();
+        adjustButtonsForFurnitureOptions();
+        adjustChoiceBoxes();
+    }
+
     private void fillFieldsWithFurnitureInformation(){
-        //set textfields
-        widthTextField.setText(String.valueOf(currentFurniture.getWidth()));
-        heightTextField.setText(String.valueOf(currentFurniture.getHeight()));
-        lengthTextField.setText(String.valueOf(currentFurniture.getLength()));
-        priceTextField.setText(String.valueOf(currentFurniture.getPrice()));
-        rebateTextField.setText(String.valueOf(currentFurniture.getRebate()));
-        nameTextField.setText(currentFurniture.getName());
-        descriptionTextArea.setText(currentFurniture.getDescription());
-
-        //set new values for subcategories in the category of the furniture
-        Subcategory subcategoryOfFurniture = applicationController.getSubcategoryById(currentFurniture.getIdSubcategory());
-        Category categoryOfFurniture = applicationController.getCategoryById(subcategoryOfFurniture.getIdCategory());
-
-        subcategoryChoiceBox.getItems().removeAll(subcategoryChoiceBox.getItems());
-
-        for(String subcategoryName : applicationController.getAllSubcategoryNamesOfCategory(categoryOfFurniture.getName())){
-            subcategoryChoiceBox.getItems().add(subcategoryName);
+        if(currentFurniture != null){
+            widthTextField.setText(String.valueOf(currentFurniture.getWidth()));
+            heightTextField.setText(String.valueOf(currentFurniture.getHeight()));
+            lengthTextField.setText(String.valueOf(currentFurniture.getLength()));
+            priceTextField.setText(String.valueOf(currentFurniture.getPrice()));
+            rebateTextField.setText(String.valueOf(currentFurniture.getRebate()));
+            nameTextField.setText(currentFurniture.getName());
+            descriptionTextArea.setText(currentFurniture.getDescription());
+        } else{
+            clearTextFields();
         }
-        subcategoryChoiceBox.setValue(subcategoryChoiceBox.getItems().get(0));
+    }
 
-        //reset categorychoicebox with category chosen the furniture is in
-        categoryChoiceBox.setValue(null);
-        categoryChoiceBox.getItems().removeAll(categoryChoiceBox.getItems());
-        for(String str : applicationController.getAllCategoryNames()){
-            categoryChoiceBox.getItems().add(str);
-        }
-        categoryChoiceBox.setValue(categoryOfFurniture.getName());
+    private void clearTextFields() {
+        searchforFurnitureByIdTextField.setText("");
+        widthTextField.setText("");
+        heightTextField.setText("");
+        lengthTextField.setText("");
+        priceTextField.setText("");
+        rebateTextField.setText("");
+        nameTextField.setText("");
+        descriptionTextArea.setText("");
     }
 
     private void adjustButtonsForFurnitureOptions(){
         Boolean currentFurnitureIsNull = (currentFurniture == null);
-            addFurnitureButton.setDisable(!currentFurnitureIsNull);
-            changeFurnitureButton.setDisable(currentFurnitureIsNull);
-            deactivateFurnitureButton.setDisable(currentFurnitureIsNull);
+        addFurnitureButton.setDisable(!currentFurnitureIsNull);
+        changeFurnitureButton.setDisable(currentFurnitureIsNull);
+        deactivateFurnitureButton.setDisable(currentFurnitureIsNull);
+        if(currentFurniture != null){
+            if(currentFurniture.getIsActive()){
+                deactivateFurnitureButton.setText("Deactivate Furniture");
+            } else {
+                deactivateFurnitureButton.setText("Activate Furniture");
+            }
+        }
+    }
+
+    private void adjustChoiceBoxes() {
+        categoryChoiceBox.getItems().removeAll(categoryChoiceBox.getItems());
+        for(String str : applicationController.getAllCategoryNames()){
+            categoryChoiceBox.getItems().add(str);
+        }
+        subcategoryChoiceBox.getItems().removeAll(subcategoryChoiceBox.getItems());
+        activeChoiceBox.getItems().removeAll(activeChoiceBox.getItems());
+        activeChoiceBox.getItems().add("Yes");
+        activeChoiceBox.getItems().add("No");
+
+        if(currentFurniture != null){
+            //set new values for subcategories in the category of the furniture
+            Subcategory subcategoryOfFurniture = applicationController.getSubcategoryById(currentFurniture.getIdSubcategory());
+            Category categoryOfFurniture = applicationController.getCategoryById(subcategoryOfFurniture.getIdCategory());
+
+            subcategoryChoiceBox.getItems().removeAll(subcategoryChoiceBox.getItems());
+
+            for(String subcategoryName : applicationController.getAllSubcategoryNamesOfCategory(categoryOfFurniture.getName())){
+                subcategoryChoiceBox.getItems().add(subcategoryName);
+            }
+            subcategoryChoiceBox.setValue(subcategoryChoiceBox.getItems().get(0));
+
+            //reset categorychoicebox with category chosen the furniture is in
+            categoryChoiceBox.setValue(null);
+            categoryChoiceBox.getItems().removeAll(categoryChoiceBox.getItems());
+            for(String str : applicationController.getAllCategoryNames()){
+                categoryChoiceBox.getItems().add(str);
+            }
+            categoryChoiceBox.setValue(categoryOfFurniture.getName());
+
+            if(currentFurniture != null){
+                if(currentFurniture.getIsActive()){
+                    activeChoiceBox.setValue("Yes");
+                } else{
+                    activeChoiceBox.setValue("No");
+                }
+            }
+        }
     }
 }
