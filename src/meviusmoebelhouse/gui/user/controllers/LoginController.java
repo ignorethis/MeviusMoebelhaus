@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import meviusmoebelhouse.gui.ApplicationController;
@@ -13,7 +14,8 @@ import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
     @FXML private AnchorPane mainAnchorPane;
-    @FXML private TextField usernameField, passwordField;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
     @FXML private Label errorMessageLabel;
     @FXML private Button loginButton, registerButton, backToHomeButton;
 

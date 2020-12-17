@@ -22,7 +22,7 @@ public class AdminFurnitureManagerController implements Initializable {
     @FXML private TextField searchforFurnitureByIdTextField, widthTextField, heightTextField, lengthTextField,
             priceTextField, rebateTextField, nameTextField;
     @FXML private TextArea     descriptionTextArea;
-    @FXML private ChoiceBox categoryChoiceBox, subcategoryChoiceBox;
+    @FXML private ChoiceBox categoryChoiceBox, subcategoryChoiceBox, activeChoiceBox;
     @FXML private Label    errorMessageLabelSearchFurniture, MessageLabelAddingFurniture;
     @FXML private Button changeFurnitureButton, deactivateFurnitureButton, addFurnitureButton;
 
@@ -37,9 +37,7 @@ public class AdminFurnitureManagerController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         adjustButtonsForFurnitureOptions();
 
-        for(String str : applicationController.getAllCategoryNames()){
-            categoryChoiceBox.getItems().add(str);
-        }
+        adjustChoiceBoxes();
 
         //create an selectedIndexPropertyListener for the category choicebox to adjust the subcategory choicebox
         setCategoryChoiceBoxOnChangeListener();
@@ -64,6 +62,7 @@ public class AdminFurnitureManagerController implements Initializable {
         }
         fillFieldsWithFurnitureInformation();
         adjustButtonsForFurnitureOptions();
+        adjustActiveChoiceForFurniture();
     }
 
     @FXML private void addFurnitureButtonOCE(ActionEvent actionEvent) throws Exception {
@@ -81,13 +80,33 @@ public class AdminFurnitureManagerController implements Initializable {
         }
     }
 
-    @FXML private void deactivateFurnitureButtonOCE(ActionEvent actionEvent) {
+    @FXML private void deactivateFurnitureButtonOCE(ActionEvent actionEvent) throws Exception {
+        applicationController.deactivateFurniture(currentFurniture);
+        MessageLabelAddingFurniture.setText("Furniture successfully changed to deactive.");
     }
 
 
 
 
     //HELPING FUNCTIONS
+
+    private void adjustChoiceBoxes() {
+        for(String str : applicationController.getAllCategoryNames()){
+            categoryChoiceBox.getItems().add(str);
+        }
+        activeChoiceBox.getItems().add("Yes");
+        activeChoiceBox.getItems().add("No");
+    }
+
+    private void adjustActiveChoiceForFurniture(){
+        if(currentFurniture != null){
+            if(currentFurniture.getIsActive()){
+                activeChoiceBox.setValue("Yes");
+            } else{
+                activeChoiceBox.setValue("No");
+            }
+        }
+    }
 
     private boolean checkAndSetNewFurnitureInformation(Furniture furniture) {
         MessageLabelAddingFurniture.setText("");

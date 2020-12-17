@@ -248,6 +248,11 @@ public class ApplicationController {
         allFurnitures = furnitureRepository.getAll();
     }
 
+    public void deactivateFurniture(Furniture currentFurniture) throws Exception {
+        currentFurniture.setIsActive(false);
+        furnitureRepository.update(currentFurniture);
+    }
+
 
 
     /////////////////////////////INVOICE SECTION
@@ -616,11 +621,6 @@ public class ApplicationController {
         currentUser = null;
         switchScene(anchorPane, "Home");
     }
-
-
-
-
-
 
 
 }

@@ -5,11 +5,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
+<?import javafx.scene.control.PasswordField?>
 <AnchorPane fx:id="mainAnchorPane" prefHeight="286.0" prefWidth="423.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meviusmoebelhouse.gui.user.controllers.LoginController">
     <Label layoutX="93.0" layoutY="71.0" text="Username" />
     <TextField fx:id="usernameField" layoutX="164.0" layoutY="67.0" promptText="Enter username" />
     <Label layoutX="95.0" layoutY="110.0" text="Password" />
-    <TextField fx:id="passwordField" layoutX="164.0" layoutY="106.0" promptText="Enter password" />
+    <PasswordField fx:id="passwordField" layoutX="164.0" layoutY="106.0" promptText="Enter password" />
 
     <Button fx:id="loginButton" layoutX="267.0" layoutY="149.0" mnemonicParsing="false" onAction="#loginOCE" text="Login" />
     <Button fx:id="registerButton" layoutX="95.0" layoutY="149.0" mnemonicParsing="false" onAction="#registerOCE" text="Register" />

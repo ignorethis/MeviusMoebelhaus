@@ -13,6 +13,7 @@ import meviusmoebelhouse.gui.ApplicationController;
 import meviusmoebelhouse.model.Category;
 import meviusmoebelhouse.model.Furniture;
 import meviusmoebelhouse.model.Subcategory;
+import meviusmoebelhouse.model.User;
 
 import java.net.URL;
 import java.util.*;
@@ -20,7 +21,8 @@ import java.util.*;
 public class HomeController implements Initializable {
     @FXML private AnchorPane mainAnchorPane;
     @FXML private Button   homeSalesSliderLeftButton, homeSalesSliderRightButton,
-            homeCategoriesSliderLeftButton, homeCategoriesSliderRightButton, menuBarLogin, menuBarLogout, menuBarSettings;
+            homeCategoriesSliderLeftButton, homeCategoriesSliderRightButton,
+            menuBarLogin, menuBarLogout, menuBarSettings, menuBarAdminSection;
     @FXML private AnchorPane   homeSalesSliderPane1, homeSalesSliderPane2,
             homeSalesSliderPane3, homeSalesSliderPane4,
             homeCategoriesSliderPane1, homeCategoriesSliderPane2,
@@ -193,6 +195,12 @@ public class HomeController implements Initializable {
         menuBarLogin.setDisable(userLoggedIn);
         menuBarLogout.setDisable(!userLoggedIn);
         menuBarSettings.setDisable(!userLoggedIn);
+        User currentUser = applicationController.getCurrentUser();
+        if(currentUser != null){
+            if(currentUser.getIdUserRole() == 1 || currentUser.getIdUserRole() == 2){
+                menuBarAdminSection.setVisible(true);
+            }
+        }
     }
 
     private void fillImageViewListsWithAllImageViews() {

@@ -19,7 +19,8 @@ import java.util.*;
 
 public class AdminAccountAddController implements Initializable {
     @FXML private AnchorPane mainAnchorPane;
-    @FXML private TextField usernameTextField, firstnameTextField, lastnameTextField, IBANTextField, emailAddressTextField, passwordTextField, addressTextField;
+    @FXML private TextField usernameTextField, firstnameTextField, lastnameTextField,
+                            IBANTextField, emailAddressTextField, passwordTextField, addressTextField;
     @FXML private DatePicker birthdayDatePicker;
     @FXML private Label errorMessageLabel,passwordLabel, errorLabel;
     @FXML private Button saveButton,cancelButton,changePasswordButton;

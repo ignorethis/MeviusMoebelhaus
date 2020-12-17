@@ -21,6 +21,7 @@
             <Button fx:id="menuBarLogout" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#logout" text="Logout" />
             <Button fx:id="menuBarSettings" mnemonicParsing="false" onAction="#openSettings" text="Settings" />
             <Button fx:id="menuBarShoppingCart" mnemonicParsing="false" onAction="#openShoppingCart" text="Shopping cart" />
+         <Button fx:id="menuBarAdminSection" mnemonicParsing="false" onAction="#testGui" text="Admin section" visible="false" />
         </items>
     </ToolBar>
     <Button fx:id="homeSalesSliderLeftButton" layoutX="38.0" layoutY="226.0" mnemonicParsing="false" onAction="#homeSalesSliderLeftOCE" text="Left" />
@@ -101,5 +102,4 @@
          <Font name="System Bold Italic" size="22.0" />
       </font>
    </Label>
-   <Button layoutX="924.0" layoutY="51.0" mnemonicParsing="false" onAction="#testGui" text="Options" />
 </AnchorPane>

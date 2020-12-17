@@ -16,6 +16,7 @@ import meviusmoebelhouse.gui.user.fxmlfiles.FXMLFinder;
 import meviusmoebelhouse.model.Customer;
 import meviusmoebelhouse.model.Invoice;
 import meviusmoebelhouse.model.InvoiceDetails;
+import meviusmoebelhouse.model.User;
 import meviusmoebelhouse.viewmodel.FurnitureItem;
 import meviusmoebelhouse.viewmodel.ShoppingCart;
 
@@ -26,7 +27,7 @@ public class ShoppingCartController implements Initializable {
     private ApplicationController applicationController;
 
     @FXML private AnchorPane mainAnchorPane;
-    @FXML private Label    furnitureName1, furnitureName2, furnitureName3,
+    @FXML private Label    furnitureName1, furnitureName2, furnitureName3, orderLabelMessage,
                     furnitureDescription1, furnitureDescription2, furnitureDescription3;
     @FXML private ChoiceBox<Integer> furnitureAmount1, furnitureAmount2, furnitureAmount3;
     @FXML private TextField    furniturePricePerUnit1, furniturePricePerUnit2, furniturePricePerUnit3;
@@ -62,36 +63,37 @@ public class ShoppingCartController implements Initializable {
     }
 
     @FXML private void orderOCE() throws Exception{
-        if (!applicationController.isUserLoggedIn()){
+        User currentUser = applicationController.getCurrentUser();
+        if (currentUser == null){
             applicationController.switchScene(mainAnchorPane,"Login");
             return;
+        } else if (currentUser.getIdUserRole() == 3 || currentUser.getIdUserRole() == 4){
+            ShoppingCart shoppingCart = applicationController.getShoppingCart();
+            Customer customer = applicationController.getCustomerByUserId(applicationController.getCurrentUser().getIdUser());
+
+            Invoice invoice = new Invoice();
+            invoice.setIdCustomer(customer.getIdCustomer());
+            invoice.setFirstName(customer.getFirstName());
+            invoice.setLastName(customer.getLastName());
+            invoice.setShippingAddress(customer.getDefaultShippingAddress());
+            invoice.setTotalPrice(shoppingCart.getTotalPrice());
+            applicationController.addInvoiceToDatabase(invoice);
+
+            for (FurnitureItem furnitureItem: shoppingCart.getShoppingList()) {
+                InvoiceDetails invoiceDetails = new InvoiceDetails();
+                invoiceDetails.setIdInvoice(invoice.getIdInvoice());
+                invoiceDetails.setIdFurniture(furnitureItem.getFurniture().getIdFurniture());
+                invoiceDetails.setAmount(furnitureItem.getFurnitureCount());
+                invoiceDetails.setPrice(furnitureItem.getFurniture().getActualPrice());
+                invoiceDetails.setTotalPrice(furnitureItem.getFurnitureItemPrice());
+                applicationController.addInvoiceDetailsToDatabase(invoiceDetails);
+            }
+
+            shoppingCart.clear();
+            applicationController.switchScene(mainAnchorPane, "Home");
+        } else{
+            orderLabelMessage.setText("Cannot order as an admin or staff.");
         }
-
-        ShoppingCart shoppingCart = applicationController.getShoppingCart();
-        Customer customer = applicationController.getCustomerByUserId(applicationController.getCurrentUser().getIdUser());
-
-        Invoice invoice = new Invoice();
-        invoice.setIdCustomer(customer.getIdCustomer());
-        invoice.setFirstName(customer.getFirstName());
-        invoice.setLastName(customer.getLastName());
-        invoice.setShippingAddress(customer.getDefaultShippingAddress());
-        invoice.setTotalPrice(shoppingCart.getTotalPrice());
-        applicationController.addInvoiceToDatabase(invoice);
-
-        for (FurnitureItem furnitureItem: shoppingCart.getShoppingList()) {
-            InvoiceDetails invoiceDetails = new InvoiceDetails();
-            invoiceDetails.setIdInvoice(invoice.getIdInvoice());
-            invoiceDetails.setIdFurniture(furnitureItem.getFurniture().getIdFurniture());
-            invoiceDetails.setAmount(furnitureItem.getFurnitureCount());
-            invoiceDetails.setPrice(furnitureItem.getFurniture().getActualPrice());
-            invoiceDetails.setTotalPrice(furnitureItem.getFurnitureItemPrice());
-            applicationController.addInvoiceDetailsToDatabase(invoiceDetails);
-
-        }
-
-        shoppingCart.clear();
-        applicationController.switchScene(mainAnchorPane, "Home");
-        //TODO Print PDF of Invoice
     }
 
     public void updateViewFromViewModel(){
