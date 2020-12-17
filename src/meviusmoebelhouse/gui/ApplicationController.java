@@ -221,31 +221,38 @@ public class ApplicationController {
 
     public void addFurnitureToDatabase(Furniture furniture) throws Exception {
         furnitureRepository.create(furniture);
-        allFurnitures = furnitureRepository.getAll();
-        fillAllFurnituresBySubcategory();
-        setAllFurnituresImage();
+        updateFurnitureList();
     }
 
     private void fillAllFurnituresBySubcategory(){
         allFurnituresBySubcategory = new HashMap<>();
 
         for(Furniture furniture : allFurnitures){
-            Subcategory subcategoryOfFurniture = getSubcategoryById(furniture.getIdSubcategory());
-            if(allFurnituresBySubcategory.containsKey(subcategoryOfFurniture)){
-                //subcategory already exists with list
-                allFurnituresBySubcategory.get(subcategoryOfFurniture).add(furniture);
-            } else{
-                //subcategory does not exist with list
-                List<Furniture> list = new ArrayList<>();
-                list.add(furniture);
-                allFurnituresBySubcategory.put(subcategoryOfFurniture, list);
+            if(furniture.getIsActive()){
+                Subcategory subcategoryOfFurniture = getSubcategoryById(furniture.getIdSubcategory());
+                if(allFurnituresBySubcategory.containsKey(subcategoryOfFurniture)){
+                    //subcategory already exists with list
+                    allFurnituresBySubcategory.get(subcategoryOfFurniture).add(furniture);
+                } else{
+                    //subcategory does not exist with list
+                    List<Furniture> list = new ArrayList<>();
+                    list.add(furniture);
+                    allFurnituresBySubcategory.put(subcategoryOfFurniture, list);
+                }
             }
         }
     }
 
     public void changeFurnitureInDatabase(Furniture currentFurniture) throws Exception {
         furnitureRepository.update(currentFurniture);
+        updateFurnitureList();
+    }
+
+    public void updateFurnitureList() throws Exception {
+
         allFurnitures = furnitureRepository.getAll();
+        fillAllFurnituresBySubcategory();
+        setAllFurnituresImage();
     }
 
 

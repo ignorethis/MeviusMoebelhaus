@@ -94,8 +94,8 @@ public class SubcategoryController implements Initializable {
      * @param actionEvent actionEvent
      */
     @FXML private void subcategoryFurnituresSliderLeftOCE(ActionEvent actionEvent) {
-        if(counterFurnitures > 0){
-            counterFurnitures--;
+        if(counterFurnitures >= 0){
+            counterFurnitures = counterFurnitures - 12;
             showFurnitureImages();
         }
     }
@@ -106,7 +106,7 @@ public class SubcategoryController implements Initializable {
      */
     @FXML private void subcategoryFurnituresSliderRightOCE(ActionEvent actionEvent) {
         if(counterFurnitures < allFurnitures.size() - allFurnitureImageViews.size()){
-            counterFurnitures++;
+            counterFurnitures = counterFurnitures + 12;
             showFurnitureImages();
         }
     }
@@ -131,14 +131,15 @@ public class SubcategoryController implements Initializable {
      * Disables the unused furniture image views
      */
     private void showFurnitureImages(){
-        for(int i = 0; i < allFurnitureImageViews.size() && i < allFurnitures.size(); i++){
-            allFurnitureImageViews.get(i).setImage(allFurnitures
-                    .get(counterFurnitures + i).getImage());
-            allFurnitureImageViews.get(i).setId(String.valueOf(allFurnitures
-                    .get(counterFurnitures + i).getIdFurniture()));
+        for(int i = 0; i < allFurnitureImageViews.size() && (i + counterFurnitures) < allFurnitures.size(); i++){
+            ImageView imageView = allFurnitureImageViews.get(i);
+            imageView.setImage(allFurnitures.get(counterFurnitures + i).getImage());
+            imageView.setId(String.valueOf(allFurnitures.get(counterFurnitures + i).getIdFurniture()));
+            imageView.setDisable(false);
         }
         //disable all unused image views
-        for(int i = allFurnitureImageViews.size() - 1; i > allFurnitures.size() - 1; i--){
+        for(int i = allFurnitureImageViews.size() - 1; i > (allFurnitures.size() - 1 - counterFurnitures); i--){
+            allFurnitureImageViews.get(i).setImage(null);
             allFurnitureImageViews.get(i).setDisable(true);
         }
         //Dis/Enable Buttons of furnitures if it is negative or too big

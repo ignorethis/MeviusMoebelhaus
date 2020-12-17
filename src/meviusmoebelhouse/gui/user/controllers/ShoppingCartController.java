@@ -68,6 +68,12 @@ public class ShoppingCartController implements Initializable {
             applicationController.switchScene(mainAnchorPane,"Login");
             return;
         } else if (currentUser.getIdUserRole() == 3 || currentUser.getIdUserRole() == 4){
+            try{
+                shoppingCartItemsContainer.getChildren().get(0);
+            } catch (Exception e){
+                orderLabelMessage.setText("Cannot oder with no elements.");
+                return;
+            }
             ShoppingCart shoppingCart = applicationController.getShoppingCart();
             Customer customer = applicationController.getCustomerByUserId(applicationController.getCurrentUser().getIdUser());
 
