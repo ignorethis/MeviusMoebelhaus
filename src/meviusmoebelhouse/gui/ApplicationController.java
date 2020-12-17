@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import meviusmoebelhouse.gui.admin.controllers.*;
 import meviusmoebelhouse.gui.admin.fxmlfiles.FXMLADMIN;
 import meviusmoebelhouse.gui.user.controllers.*;
-import meviusmoebelhouse.gui.user.fxmlfiles.FXML;
+import meviusmoebelhouse.gui.user.fxmlfiles.FXMLFinder;
 import meviusmoebelhouse.model.*;
 import meviusmoebelhouse.repositories.*;
 import meviusmoebelhouse.viewmodel.ShoppingCart;
@@ -130,7 +130,7 @@ public class ApplicationController {
         if(fxmlName.startsWith("Admin")){
             loader = new FXMLLoader(FXMLADMIN.class.getResource(fxmlName + ".fxml"));
         } else{
-            loader = new FXMLLoader(FXML.class.getResource(fxmlName + ".fxml"));
+            loader = new FXMLLoader(FXMLFinder.class.getResource(fxmlName + ".fxml"));
         }
         setControllerFactory(fxmlName, loader);
 

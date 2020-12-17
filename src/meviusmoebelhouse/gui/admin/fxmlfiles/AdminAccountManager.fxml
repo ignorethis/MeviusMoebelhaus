@@ -17,7 +17,7 @@
       <RadioButton fx:id="staffRadioButton" layoutX="166.0" layoutY="37.0" mnemonicParsing="false" onAction="#accountTypeChosen" text="Staff" toggleGroup="$accountChoice" />
       <RadioButton fx:id="adminRadioButton" layoutX="268.0" layoutY="37.0" mnemonicParsing="false" onAction="#accountTypeChosen" text="Admin" toggleGroup="$accountChoice" />
       <Label layoutX="38.0" layoutY="71.0" text="Search by id" />
-      <TextField fx:id="searchByIdTextField" layoutX="126.0" layoutY="67.0" onAction="#searchById" />
+      <TextField fx:id="searchByIdTextField" layoutX="126.0" layoutY="67.0"/>
       <AnchorPane fx:id="listAnchorPane1" layoutX="35.0" layoutY="110.0" prefHeight="30.0" prefWidth="250.0">
          <children>
             <Label fx:id="listAnchorPaneNameLabel1" layoutX="7.0" layoutY="6.0" prefHeight="17.0" prefWidth="111.0" text="Lastname, Firstname" />

@@ -1,5 +1,6 @@
 package meviusmoebelhouse.gui.user.controllers;
 
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,13 +12,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
+    @FXML private AnchorPane mainAnchorPane;
+    @FXML private TextField usernameField, passwordField;
+    @FXML private Label errorMessageLabel;
+    @FXML private Button loginButton, registerButton, backToHomeButton;
+
     private ApplicationController applicationController;
-
-    public AnchorPane mainAnchorPane;
-
-    public TextField usernameField, passwordField;
-    public Label errorMessageLabel;
-    public Button loginButton, registerButton, backToHomeButton;
 
     public LoginController(ApplicationController applicationController) {
         this.applicationController = applicationController;
@@ -28,7 +28,10 @@ public class LoginController implements Initializable {
 
     }
 
-    public void loginOCE() throws Exception {
+
+    //ALL FUNCTIONS ACCESSED BY THE FXML BUTTONS
+
+    @FXML private void loginOCE() throws Exception {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
@@ -46,12 +49,16 @@ public class LoginController implements Initializable {
         }
     }
 
-    public void registerOCE() throws Exception {
+    @FXML private void registerOCE() throws Exception {
         applicationController.switchScene(mainAnchorPane,"Register");
     }
 
-    public void backToHomeOCE() throws Exception {
+    @FXML private void backToHomeOCE() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Home");
     }
+
+
+
+    //HELPING FUNCTIONS
 
 }

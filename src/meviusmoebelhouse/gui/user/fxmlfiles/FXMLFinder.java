@@ -1,4 +1,4 @@
 package meviusmoebelhouse.gui.user.fxmlfiles;
 
-public class FXML {
+public class FXMLFinder {
 }

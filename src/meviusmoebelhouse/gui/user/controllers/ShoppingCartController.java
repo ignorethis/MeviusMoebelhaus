@@ -1,5 +1,6 @@
 package meviusmoebelhouse.gui.user.controllers;
 
+import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,12 +12,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import meviusmoebelhouse.gui.ApplicationController;
-import meviusmoebelhouse.gui.user.fxmlfiles.FXML;
+import meviusmoebelhouse.gui.user.fxmlfiles.FXMLFinder;
 import meviusmoebelhouse.model.Customer;
 import meviusmoebelhouse.model.Invoice;
 import meviusmoebelhouse.model.InvoiceDetails;
-import meviusmoebelhouse.repositories.InvoiceDetailsRepository;
-import meviusmoebelhouse.repositories.InvoiceRepository;
 import meviusmoebelhouse.viewmodel.FurnitureItem;
 import meviusmoebelhouse.viewmodel.ShoppingCart;
 
@@ -26,14 +25,14 @@ import java.util.ResourceBundle;
 public class ShoppingCartController implements Initializable {
     private ApplicationController applicationController;
 
-    public AnchorPane mainAnchorPane;
-    public Label    furnitureName1, furnitureName2, furnitureName3,
+    @FXML private AnchorPane mainAnchorPane;
+    @FXML private Label    furnitureName1, furnitureName2, furnitureName3,
                     furnitureDescription1, furnitureDescription2, furnitureDescription3;
-    public ChoiceBox<Integer> furnitureAmount1, furnitureAmount2, furnitureAmount3;
-    public TextField    furniturePricePerUnit1, furniturePricePerUnit2, furniturePricePerUnit3;
-    public Text totalPriceText;
-    public VBox shoppingCartItemsContainer;
-    public Button menuBarLogin, menuBarLogout, menuBarSettings;
+    @FXML private ChoiceBox<Integer> furnitureAmount1, furnitureAmount2, furnitureAmount3;
+    @FXML private TextField    furniturePricePerUnit1, furniturePricePerUnit2, furniturePricePerUnit3;
+    @FXML private Text totalPriceText;
+    @FXML private VBox shoppingCartItemsContainer;
+    @FXML private Button menuBarLogin, menuBarLogout, menuBarSettings;
 
     public ShoppingCartController(ApplicationController applicationController) {
         this.applicationController = applicationController;
@@ -46,23 +45,23 @@ public class ShoppingCartController implements Initializable {
         updateViewFromViewModel();
     }
 
-    public void openLogin(ActionEvent actionEvent) throws Exception {
+    @FXML private void openLogin(ActionEvent actionEvent) throws Exception {
         applicationController.switchScene(mainAnchorPane, "Login");
     }
 
-    public void logout() throws Exception {
+    @FXML private void logout() throws Exception {
         applicationController.logout(mainAnchorPane);
     }
 
-    public void openSettings(ActionEvent actionEvent) throws Exception {
+    @FXML private void openSettings(ActionEvent actionEvent) throws Exception {
         applicationController.switchScene(mainAnchorPane, "Settings");
     }
 
-    public void backToHomeOCE(ActionEvent actionEvent) throws Exception {
+    @FXML private void backToHomeOCE(ActionEvent actionEvent) throws Exception {
         applicationController.switchScene(mainAnchorPane, "Home");
     }
 
-    public void orderOCE() throws Exception{
+    @FXML private void orderOCE() throws Exception{
         if (!applicationController.isUserLoggedIn()){
             applicationController.switchScene(mainAnchorPane,"Login");
             return;
@@ -101,7 +100,7 @@ public class ShoppingCartController implements Initializable {
         for (FurnitureItem furnitureItem: shoppingCart.getShoppingList()) {
             try {
                 //furnitureItem.fxml
-                FXMLLoader loader = new FXMLLoader(FXML.class.getResource("FurnitureItem.fxml"));
+                FXMLLoader loader = new FXMLLoader(FXMLFinder.class.getResource("FurnitureItem.fxml"));
                 loader.setControllerFactory(fic -> new FurnitureItemController(furnitureItem, this));
                 shoppingCartItemsContainer.getChildren().add(loader.load());
             } catch (Exception e) {

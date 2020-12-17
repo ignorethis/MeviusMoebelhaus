@@ -1,6 +1,7 @@
 package meviusmoebelhouse.gui.admin.controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -17,6 +18,13 @@ import java.net.URL;
 import java.util.*;
 
 public class AdminAccountAddController implements Initializable {
+    @FXML private AnchorPane mainAnchorPane;
+    @FXML private TextField usernameTextField, firstnameTextField, lastnameTextField, IBANTextField, emailAddressTextField, passwordTextField, addressTextField;
+    @FXML private DatePicker birthdayDatePicker;
+    @FXML private Label errorMessageLabel,passwordLabel, errorLabel;
+    @FXML private Button saveButton,cancelButton,changePasswordButton;
+    @FXML private GridPane gridPane;
+    @FXML private RadioButton addAdminAccountRadio, addStuffAccountRadio, addCustomerAccountRadio;
 
     private ApplicationController applicationController;
 
@@ -24,33 +32,29 @@ public class AdminAccountAddController implements Initializable {
     private Staff staffDataOfUser = null;
     private Customer customerDataOfUser = null;
 
-    public AnchorPane mainAnchorPane;
-    public TextField usernameTextField, firstnameTextField, lastnameTextField, IBANTextField, emailAddressTextField, passwordTextField, addressTextField;
-    public DatePicker birthdayDatePicker;
-    public Label errorMessageLabel,passwordLabel, errorLabel;
-    public Button saveButton,cancelButton,changePasswordButton;
-    public GridPane gridPane;
-    public RadioButton addAdminAccountRadio, addStuffAccountRadio, addCustomerAccountRadio;
+    private boolean adminSelected = false;
+    private boolean staffSelected = false;
+    private boolean customerSelected = false;
 
-    boolean adminSelected = false;
-    boolean staffSelected = false;
-    boolean customerSelected = false;
+
+    public AdminAccountAddController(ApplicationController applicationController){
+        this.applicationController = applicationController;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
     }
 
-    public AdminAccountAddController(ApplicationController applicationController){
-        this.applicationController = applicationController;
-    }
+
+    //ALL FUNCTIONS ACCESSED BY THE FXML BUTTONS
 
 
-    public void cancelOCE() throws Exception{
+    @FXML private void cancelOCE() throws Exception{
         applicationController.switchScene(mainAnchorPane, "AdminAccountManager");
     }
 
-    public void saveOCE() throws Exception{
+    @FXML private void saveOCE() throws Exception{
 
         User newUserToAdd = new User();
         Staff newStaffToAdd = new Staff();
@@ -96,9 +100,8 @@ public class AdminAccountAddController implements Initializable {
         }
 
     }
-    
 
-    public void selectAdminAccountType(ActionEvent actionEvent) {
+    @FXML private void selectAdminAccountType(ActionEvent actionEvent) {
         birthdayDatePicker.setDisable(true);
         IBANTextField.setDisable(true);
         emailAddressTextField.setDisable(true);
@@ -108,7 +111,7 @@ public class AdminAccountAddController implements Initializable {
 
     }
 
-    public void selectStuffAccountType(ActionEvent actionEvent) {
+    @FXML private void selectStuffAccountType(ActionEvent actionEvent) {
         birthdayDatePicker.setDisable(true);
         IBANTextField.setDisable(true);
         emailAddressTextField.setDisable(true);
@@ -117,7 +120,7 @@ public class AdminAccountAddController implements Initializable {
         customerSelected = false;
     }
 
-    public void selectCustomerAccountType(ActionEvent actionEvent) {
+    @FXML private void selectCustomerAccountType(ActionEvent actionEvent) {
         birthdayDatePicker.setDisable(false);
         IBANTextField.setDisable(false);
         emailAddressTextField.setDisable(false);
@@ -125,4 +128,9 @@ public class AdminAccountAddController implements Initializable {
         staffSelected = false;
         customerSelected = true;
     }
+
+
+
+
+    //HELPING FUNCTIONS
 }

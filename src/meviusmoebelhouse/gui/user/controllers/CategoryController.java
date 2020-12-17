@@ -32,120 +32,108 @@ public class CategoryController implements Initializable {
 
     @FXML private Label categoryLabel;
 
+    @FXML private AnchorPane mainAnchorPane;
+
     private ApplicationController applicationController = null;
 
-    public AnchorPane mainAnchorPane;
+    private int counterSales = 0;            //Index of which first furniture in sales is showing (0/1/2/3/4/5...)
+    private int counterFurnitures = 0;       //Index of which first furniture in furnitures is showing (0/1/2/3/4/5...)
+    private int counterSubcategories = 0;    //Index of which first category in categories is showing (0/1/2/3/4/5...)
 
-    public int counterSales = 0;            //Index of which first furniture in sales is showing (0/1/2/3/4/5...)
-    public int counterFurnitures = 0;       //Index of which first furniture in furnitures is showing (0/1/2/3/4/5...)
-    public int counterSubcategories = 0;    //Index of which first category in categories is showing (0/1/2/3/4/5...)
+    private Category currentCategory;
 
-    public Category currentCategory;
+    private ArrayList<ImageView> allSalesImageViews = new ArrayList<>(); //List with all categorySalesImageViews
+    private ArrayList<ImageView> allFurnitureImageViews = new ArrayList<>(); //List with all categoryFurnitureImageViews
+    private ArrayList<ImageView> allSubcategoryImageViews = new ArrayList<>(); //List with all categorySubcategoryImageViews
 
-    ArrayList<ImageView> allSalesImageViews = new ArrayList<>(); //List with all categorySalesImageViews
-    ArrayList<ImageView> allFurnitureImageViews = new ArrayList<>(); //List with all categoryFurnitureImageViews
-    ArrayList<ImageView> allSubcategoryImageViews = new ArrayList<>(); //List with all categorySubcategoryImageViews
+    private ArrayList<Furniture> allSalesFurnitures = new ArrayList<>(); //List with all sales images in this category
+    private ArrayList<Furniture> allNotSalesFurnitures = new ArrayList<>(); //List with all furniture images in this category
+    private ArrayList<Subcategory> allSubcategories = new ArrayList<>(); //List with all subcategory images in this category
 
-    ArrayList<Furniture> allSalesFurnitures = new ArrayList<>(); //List with all sales images in this category
-    ArrayList<Furniture> allNotSalesFurnitures = new ArrayList<>(); //List with all furniture images in this category
-    ArrayList<Subcategory> allSubcategories = new ArrayList<>(); //List with all subcategory images in this category
 
     public CategoryController(ApplicationController applicationController) {
         this.applicationController = applicationController;
     }
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         currentCategory = applicationController.getCurrentCategory();
 
-        updateUiBasedOnLoginState();
-
         categoryLabel.setText(currentCategory.getName());
 
-        allSalesImageViews.addAll(Arrays.asList(        categoriesSalesImage1, categoriesSalesImage2,
-                categoriesSalesImage3, categoriesSalesImage4));
-        allFurnitureImageViews.addAll(Arrays.asList(    categoriesFurnituresImage1, categoriesFurnituresImage2,
-                categoriesFurnituresImage3, categoriesFurnituresImage4));
-        allSubcategoryImageViews.addAll(Arrays.asList(  categoriesSubcategoriesImage1, categoriesSubcategoriesImage2,
-                categoriesSubcategoriesImage3, categoriesSubcategoriesImage4));
+        fillImageViewListsWithAllImageViews();
 
-        //stores every furniture with rebate in sales, others in nosales and subcategories in allsubcategories
-        HashMap<Subcategory, List<Furniture>> allFurnituresBySubcategory = applicationController.getAllFurnituresBySubcategory();
-        for(Map.Entry<Subcategory, List<Furniture>> entrySet : allFurnituresBySubcategory.entrySet()){
-            if(currentCategory.getIdCategory() == entrySet.getKey().getIdCategory()){
-                for(Furniture furniture : entrySet.getValue()){
-                    if(furniture.getRebate() != 0){
-                        allSalesFurnitures.add(furniture);
-                    } else{
-                        allNotSalesFurnitures.add(furniture);
-                    }
-                }
-                allSubcategories.add(entrySet.getKey());
-            }
-        }
+        updateUiButtonsBasedOnLoginState();
 
-        //show all images in the scene/frame
+        fillFurnitureAndSubcategoryLists();
+
         showSalesImages();
+
         showFurnitureImages();
+
         showSubcategoryImages();
     }
 
-    public void backToHomeOCE() throws Exception {
+
+    //ALL FUNCTIONS ACCESSED BY THE FXML BUTTONS
+
+    @FXML private void backToHomeOCE() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Home");
     }
 
-    public void openLogin() throws Exception {
+    @FXML private void openLogin() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Login");
     }
 
-    public void logout() throws Exception {
+    @FXML private void logout() throws Exception {
         applicationController.logout(mainAnchorPane);
     }
 
-    public void openSettings() throws Exception {
+    @FXML private void openSettings() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Settings");
     }
 
-    public void openShoppingCart() throws Exception {
+    @FXML private void openShoppingCart() throws Exception {
         applicationController.switchScene(mainAnchorPane, "ShoppingCart");
     }
 
-    public void categorySalesSliderLeftOCE() {
+    @FXML private void categorySalesSliderLeftOCE() {
         if(counterSales > 0){
             counterSales--;
             showSalesImages();
         }
     }
 
-    public void categorySalesSliderRightOCE() {
+    @FXML private void categorySalesSliderRightOCE() {
         if(counterSales < allSalesFurnitures.size() - allSalesImageViews.size()){
             counterSales++;
             showSalesImages();
         }
     }
 
-    public void categoryFurnituresSliderLeftOCE() {
+    @FXML private void categoryFurnituresSliderLeftOCE() {
         if(counterFurnitures > 0){
             counterFurnitures--;
             showFurnitureImages();
         }
     }
 
-    public void categoryFurnituresSliderRightOCE() {
+    @FXML private void categoryFurnituresSliderRightOCE() {
         if(counterFurnitures < allNotSalesFurnitures.size() - allFurnitureImageViews.size()){
             counterFurnitures++;
             showFurnitureImages();
         }
     }
 
-    public void categoriesSubcategoriesSliderLeftOCE() {
+    @FXML private void categoriesSubcategoriesSliderLeftOCE() {
         if(counterSubcategories > 0){
             counterSubcategories--;
             showSubcategoryImages();
         }
     }
 
-    public void categoriesSubcategoriesSliderRightOCE() {
+    @FXML private void categoriesSubcategoriesSliderRightOCE() {
         if(counterSubcategories < allSubcategories.size() - allSubcategoryImageViews.size()){
             counterSubcategories++;
             showSubcategoryImages();
@@ -158,15 +146,20 @@ public class CategoryController implements Initializable {
      * @param mouseEvent mouseEvent
      * @throws Exception exception
      */
-    public void openSingleView(MouseEvent mouseEvent) throws Exception {
+    @FXML private void openSingleView(MouseEvent mouseEvent) throws Exception {
         int idOfFurniture = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
         applicationController.openSingleView(idOfFurniture, mainAnchorPane);
     }
 
-    public void openSubcategory(MouseEvent mouseEvent) throws Exception {
+    @FXML private void openSubcategory(MouseEvent mouseEvent) throws Exception {
         int idOfSubcategory = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
         applicationController.openSubcategory(idOfSubcategory, mainAnchorPane);
     }
+
+
+
+
+    //HELPING FUNCTIONS
 
     /**
      * Fills all furniture sales image views with furniture sales images
@@ -228,10 +221,35 @@ public class CategoryController implements Initializable {
         categoriesSubcategoriesSliderLeftButton.setDisable(counterSubcategories <= 0);
     }
 
-    private void updateUiBasedOnLoginState() {
+    private void updateUiButtonsBasedOnLoginState() {
         boolean userLoggedIn = applicationController.isUserLoggedIn();
         menuBarLogin.setDisable(userLoggedIn);
         menuBarLogout.setDisable(!userLoggedIn);
         menuBarSettings.setDisable(!userLoggedIn);
+    }
+
+    private void fillFurnitureAndSubcategoryLists() {
+        HashMap<Subcategory, List<Furniture>> allFurnituresBySubcategory = applicationController.getAllFurnituresBySubcategory();
+        for(Map.Entry<Subcategory, List<Furniture>> entrySet : allFurnituresBySubcategory.entrySet()){
+            if(currentCategory.getIdCategory() == entrySet.getKey().getIdCategory()){
+                for(Furniture furniture : entrySet.getValue()){
+                    if(furniture.getRebate() != 0){
+                        allSalesFurnitures.add(furniture);
+                    } else{
+                        allNotSalesFurnitures.add(furniture);
+                    }
+                }
+                allSubcategories.add(entrySet.getKey());
+            }
+        }
+    }
+
+    private void fillImageViewListsWithAllImageViews() {
+        allSalesImageViews.addAll(Arrays.asList(        categoriesSalesImage1, categoriesSalesImage2,
+                categoriesSalesImage3, categoriesSalesImage4));
+        allFurnitureImageViews.addAll(Arrays.asList(    categoriesFurnituresImage1, categoriesFurnituresImage2,
+                categoriesFurnituresImage3, categoriesFurnituresImage4));
+        allSubcategoryImageViews.addAll(Arrays.asList(  categoriesSubcategoriesImage1, categoriesSubcategoriesImage2,
+                categoriesSubcategoriesImage3, categoriesSubcategoriesImage4));
     }
 }

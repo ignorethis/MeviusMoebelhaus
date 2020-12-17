@@ -1,5 +1,6 @@
 package meviusmoebelhouse.gui.user.controllers;
 
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -14,15 +15,17 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SettingsController implements Initializable {
+    @FXML private AnchorPane mainAnchorPane;
+    @FXML private TextField usernameTextField, firstnameTextField, lastnameTextField,
+            IBANTextField, emailAddressTextField, passwordTextField;
+    @FXML private DatePicker birthdayDatePicker;
+    @FXML private Label errorMessageLabel,passwordLabel;
+    @FXML private Button saveButton,cancelButton,changePasswordButton;
+
     private ApplicationController applicationController;
     private User user;
     private Customer customer;
 
-    public AnchorPane mainAnchorPane;
-    public TextField usernameTextField, firstnameTextField, lastnameTextField, IBANTextField, emailAddressTextField, passwordTextField;
-    public DatePicker birthdayDatePicker;
-    public Label errorMessageLabel,passwordLabel;
-    public Button saveButton,cancelButton,changePasswordButton;
 
     public SettingsController(ApplicationController applicationController) {
         this.applicationController = applicationController;
@@ -45,18 +48,21 @@ public class SettingsController implements Initializable {
         }
     }
 
-    public void changePasswordOCE(){
+
+    //ALL FUNCTIONS ACCESSED BY THE FXML BUTTONS
+
+    @FXML private void changePasswordOCE(){
         if (passwordLabel.isDisable()){
             passwordLabel.setDisable(false);
             passwordTextField.setDisable(false);
         }
     }
 
-    public void cancelOCE() throws Exception{
+    @FXML private void cancelOCE() throws Exception{
         applicationController.switchScene(mainAnchorPane, "Home");
     }
 
-    public void saveOCE() throws Exception{
+    @FXML private void saveOCE() throws Exception{
         customer.setFirstName(firstnameTextField.getText());
         customer.setLastName(lastnameTextField.getText());
         customer.setBirthday(birthdayDatePicker.getValue());
@@ -71,4 +77,8 @@ public class SettingsController implements Initializable {
 
         applicationController.switchScene(mainAnchorPane, "Home");
     }
+
+
+
+    //HELPING FUNCTIONS
 }

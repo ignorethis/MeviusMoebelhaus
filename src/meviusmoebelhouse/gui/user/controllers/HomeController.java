@@ -1,6 +1,7 @@
 package meviusmoebelhouse.gui.user.controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -16,29 +17,27 @@ import java.net.URL;
 import java.util.*;
 
 public class HomeController implements Initializable {
-    private ApplicationController applicationController;
-
-    public int counterSales = 0;        //Index of which first furniture in sales is showing (0/1/2/3/4/5...)
-    public int counterCategories = 0;   //Index of which first category in categories is showing (0/1/2/3/4/5...)
-
-    public AnchorPane mainAnchorPane;
-
-    public Button   homeSalesSliderLeftButton, homeSalesSliderRightButton,
+    @FXML private AnchorPane mainAnchorPane;
+    @FXML private Button   homeSalesSliderLeftButton, homeSalesSliderRightButton,
             homeCategoriesSliderLeftButton, homeCategoriesSliderRightButton, menuBarLogin, menuBarLogout, menuBarSettings;
-
-    public AnchorPane   homeSalesSliderPane1, homeSalesSliderPane2,
+    @FXML private AnchorPane   homeSalesSliderPane1, homeSalesSliderPane2,
             homeSalesSliderPane3, homeSalesSliderPane4,
             homeCategoriesSliderPane1, homeCategoriesSliderPane2,
             homeCategoriesSliderPane3, homeCategoriesSliderPane4;
-
-    public ImageView    homeSalesImage1, homeSalesImage2, homeSalesImage3, homeSalesImage4,
+    @FXML private ImageView    homeSalesImage1, homeSalesImage2, homeSalesImage3, homeSalesImage4,
             homeCategoriesImage1, homeCategoriesImage2, homeCategoriesImage3, homeCategoriesImage4;
 
-    ArrayList<ImageView> allSalesImageViews = new ArrayList<>(); //List with all homeSalesImageViews
-    ArrayList<ImageView> allCategoryImageViews = new ArrayList<>(); //List with all homeCategoryImageViews
+    private ApplicationController applicationController;
 
-    List<Furniture> allSalesFurnitures = new ArrayList<>(); //List with all sales images
-    List<Category> allCategories = new ArrayList<>(); //List with all category images
+    private int counterSales = 0;        //Index of which first furniture in sales is showing (0/1/2/3/4/5...)
+    private int counterCategories = 0;   //Index of which first category in categories is showing (0/1/2/3/4/5...)
+
+    private ArrayList<ImageView> allSalesImageViews = new ArrayList<>(); //List with all homeSalesImageViews
+    private ArrayList<ImageView> allCategoryImageViews = new ArrayList<>(); //List with all homeCategoryImageViews
+
+    private List<Furniture> allSalesFurnitures = new ArrayList<>(); //List with all sales images
+    private List<Category> allCategories = new ArrayList<>(); //List with all category images
+
 
     public HomeController(ApplicationController applicationController) {
         this.applicationController = applicationController;
@@ -47,35 +46,27 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //create bundle with all sales and all categories image views
-        allSalesImageViews.addAll(Arrays.asList(    homeSalesImage1, homeSalesImage2,
-                                                    homeSalesImage3, homeSalesImage4));
-        allCategoryImageViews.addAll(Arrays.asList( homeCategoriesImage1, homeCategoriesImage2,
-                                                    homeCategoriesImage3, homeCategoriesImage4));
+
+        fillImageViewListsWithAllImageViews();
 
         updateUiBasedOnLoginState();
-
         //load all furnitures with rebates in the allSalesFurnitures list
-        HashMap<Subcategory, List<Furniture>> allFurnituresBySubcategory = applicationController.getAllFurnituresBySubcategory();
-        for(List<Furniture> furnitureList : allFurnituresBySubcategory.values()){
-            for(Furniture furniture : furnitureList){
-                if(furniture.getRebate() != 0){
-                    allSalesFurnitures.add(furniture);
-                }
-            }
-        }
-
+        fillAllFurnitureSalesList();
         //load all categories in allCategories list
         allCategories = applicationController.getAllCategories();
-
         //show the images of the sales and categories in the image views
         showSalesImages();
+
         showCategoryImages();
     }
+
+
+    //ALL FUNCTIONS ACCESSED BY THE FXML BUTTONS
 
     /**
      * Adjusts the images in the image views showing the previous image in the list
      */
-    public void homeSalesSliderLeftOCE() { //slides the sales images of the slider to the left
+    @FXML private void homeSalesSliderLeftOCE() { //slides the sales images of the slider to the left
         if(counterSales > 0){
             counterSales-- ;
             showSalesImages();
@@ -85,7 +76,7 @@ public class HomeController implements Initializable {
     /**
      * Adjusts the images in the image views showing the next image in the list
      */
-    public void homeSalesSliderRightOCE() { //slides the sales images of the slider to the right
+    @FXML private void homeSalesSliderRightOCE() { //slides the sales images of the slider to the right
         if(counterSales < allSalesFurnitures.size() - allSalesImageViews.size()){
             counterSales++ ;
             showSalesImages();
@@ -95,7 +86,7 @@ public class HomeController implements Initializable {
     /**
      * Adjusts the images in the image views showing the previous image in the list
      */
-    public void homeCategoriesSliderLeftOCE() { //slides the category images of the slider to the left
+    @FXML private void homeCategoriesSliderLeftOCE() { //slides the category images of the slider to the left
         if(counterCategories > 0){
             counterCategories--;
             showCategoryImages();
@@ -105,7 +96,7 @@ public class HomeController implements Initializable {
     /**
      * Adjusts the images in the image views showing the next image in the list
      */
-    public void homeCategoriesSliderRightOCE() { //slides the category images of the slider to the right
+    @FXML private void homeCategoriesSliderRightOCE() { //slides the category images of the slider to the right
         if(counterCategories < allCategories.size() - allCategoryImageViews.size()){
             counterCategories++;
             showCategoryImages();
@@ -118,31 +109,39 @@ public class HomeController implements Initializable {
      * @param mouseEvent mouseEvent
      * @throws Exception exception
      */
-    public void openSingleView(MouseEvent mouseEvent) throws Exception {
+    @FXML private void openSingleView(MouseEvent mouseEvent) throws Exception {
         int idOfFurniture = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
         applicationController.openSingleView(idOfFurniture, mainAnchorPane);
     }
 
-    public void openCategory(MouseEvent mouseEvent) throws Exception {
+    @FXML private void openCategory(MouseEvent mouseEvent) throws Exception {
         int idOfCategory = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
         applicationController.openCategory(idOfCategory, mainAnchorPane);
     }
 
-    public void openLogin() throws Exception {
+    @FXML private void openLogin() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Login");
     }
 
-    public void openSettings() throws Exception {
+    @FXML private void openSettings() throws Exception {
         applicationController.switchScene(mainAnchorPane, "Settings");
     }
 
-    public void openShoppingCart() throws Exception {
+    @FXML private void openShoppingCart() throws Exception {
         applicationController.switchScene(mainAnchorPane, "ShoppingCart");
     }
 
-    public void logout() throws Exception {
+    @FXML private void logout() throws Exception {
         applicationController.logout(mainAnchorPane);
     }
+
+    @FXML private void testGui(ActionEvent actionEvent) throws Exception {
+        applicationController.switchScene(mainAnchorPane, "AdminHome");
+    }
+
+
+
+    //HELPING FUNCTIONS
 
     /**
      * Fills all furniture sales image views with furniture sales images
@@ -195,7 +194,21 @@ public class HomeController implements Initializable {
         menuBarSettings.setDisable(!userLoggedIn);
     }
 
-    public void testGui(ActionEvent actionEvent) throws Exception {
-        applicationController.switchScene(mainAnchorPane, "AdminHome");
+    private void fillImageViewListsWithAllImageViews() {
+        allSalesImageViews.addAll(Arrays.asList(    homeSalesImage1, homeSalesImage2,
+                homeSalesImage3, homeSalesImage4));
+        allCategoryImageViews.addAll(Arrays.asList( homeCategoriesImage1, homeCategoriesImage2,
+                homeCategoriesImage3, homeCategoriesImage4));
+    }
+
+    private void fillAllFurnitureSalesList() {
+        HashMap<Subcategory, List<Furniture>> allFurnituresBySubcategory = applicationController.getAllFurnituresBySubcategory();
+        for(List<Furniture> furnitureList : allFurnituresBySubcategory.values()){
+            for(Furniture furniture : furnitureList){
+                if(furniture.getRebate() != 0){
+                    allSalesFurnitures.add(furniture);
+                }
+            }
+        }
     }
 }

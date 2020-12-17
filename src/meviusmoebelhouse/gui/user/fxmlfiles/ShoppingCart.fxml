@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<AnchorPane maxHeight="800.0" maxWidth="1000.0"
-            minHeight="800.0" minWidth="1000.0"
-            prefHeight="800.0" prefWidth="1000.0"
-            xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="meviusmoebelhouse.gui.user.controllers.ShoppingCartController"
-            fx:id="mainAnchorPane">
+
+<AnchorPane fx:id="mainAnchorPane" maxHeight="800.0" maxWidth="1000.0" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meviusmoebelhouse.gui.user.controllers.ShoppingCartController">
 
     <Label layoutX="389.0" layoutY="51.0" prefHeight="54.0" prefWidth="516.0" text="Shopping cart" textAlignment="CENTER">
         <font>
@@ -30,7 +27,8 @@
     <VBox fx:id="shoppingCartItemsContainer" layoutX="100" layoutY="100">
     </VBox>
 
-    <Button fx:id="orderButton" onAction="#orderOCE" layoutX="376.0" layoutY="709.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="225.0" text="Order" />
+    <Button fx:id="orderButton" layoutX="376.0" layoutY="709.0" mnemonicParsing="false" onAction="#orderOCE" prefHeight="40.0" prefWidth="225.0" text="Order" />
     <Label layoutX="728.0" layoutY="721.0" text="Total price:" />
-    <Text fx:id="totalPriceText" layoutX="805.0" layoutY="717.0" />
+    <Text fx:id="totalPriceText" layoutX="795.0" layoutY="735.0" />
+   <Label fx:id="orderLabelMessage" layoutX="190.0" layoutY="721.0" />
 </AnchorPane>

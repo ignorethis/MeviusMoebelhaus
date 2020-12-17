@@ -1,5 +1,6 @@
 package meviusmoebelhouse.gui.user.controllers;
 
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -15,12 +16,15 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class RegisterController implements Initializable{
-    ApplicationController applicationController;
-    public AnchorPane mainAnchorPane;
-    public TextField usernameTextField, firstnameTextField, lastnameTextField, IBANTextField, emailAddressTextField, defaultShippingAddressTextField, passwordTextField;
-    public DatePicker birthdayDatePicker;
-    public Label errorMessageLabel,passwordLabel;
-    public Button saveButton,cancelButton,changePasswordButton;
+    @FXML private AnchorPane mainAnchorPane;
+    @FXML private TextField usernameTextField, firstnameTextField, lastnameTextField,
+                            IBANTextField, emailAddressTextField, defaultShippingAddressTextField,
+                            passwordTextField;
+    @FXML private DatePicker birthdayDatePicker;
+    @FXML private Label errorMessageLabel,passwordLabel;
+    @FXML private Button saveButton,cancelButton,changePasswordButton;
+
+    private ApplicationController applicationController;
 
     public RegisterController(ApplicationController applicationController) {
         this.applicationController = applicationController;
@@ -31,11 +35,14 @@ public class RegisterController implements Initializable{
 
     }
 
-    public void cancelOCE() throws Exception{
+
+    //ALL FUNCTIONS ACCESSED BY THE FXML BUTTONS
+
+    @FXML private void cancelOCE() throws Exception{
         applicationController.switchScene(mainAnchorPane, "Home");
     }
 
-    public void saveOCE() throws Exception{
+    @FXML private void saveOCE() throws Exception{
         User registeredUser = new User();
         registeredUser.setUserRole(UserRoleEnum.Customer);
         registeredUser.setUsername(usernameTextField.getText());
@@ -56,4 +63,8 @@ public class RegisterController implements Initializable{
 
         applicationController.switchScene(mainAnchorPane, "Home");
     }
+
+
+
+    //HELPING FUNCTIONS
 }

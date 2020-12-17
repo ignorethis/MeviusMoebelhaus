@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import meviusmoebelhouse.gui.ApplicationController;
-import meviusmoebelhouse.gui.user.fxmlfiles.FXML;
+import meviusmoebelhouse.gui.user.fxmlfiles.FXMLFinder;
 import meviusmoebelhouse.gui.user.controllers.*;
 
 public class Main extends Application {
@@ -14,7 +14,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         ApplicationController applicationController = new ApplicationController();
 
-        FXMLLoader loader = new FXMLLoader(FXML.class.getResource("Home.fxml"));
+        FXMLLoader loader = new FXMLLoader(FXMLFinder.class.getResource("Home.fxml"));
         loader.setControllerFactory(c -> new HomeController(applicationController));
         Parent root = loader.load();
         Scene scene = new Scene(root);

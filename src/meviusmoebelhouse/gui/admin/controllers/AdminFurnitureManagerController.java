@@ -3,6 +3,7 @@ package meviusmoebelhouse.gui.admin.controllers;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -16,23 +17,17 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AdminFurnitureManagerController implements Initializable {
+    @FXML private AnchorPane mainAnchorPane;
+    @FXML private Furniture currentFurniture = null;
+    @FXML private TextField searchforFurnitureByIdTextField, widthTextField, heightTextField, lengthTextField,
+            priceTextField, rebateTextField, nameTextField;
+    @FXML private TextArea     descriptionTextArea;
+    @FXML private ChoiceBox categoryChoiceBox, subcategoryChoiceBox;
+    @FXML private Label    errorMessageLabelSearchFurniture, MessageLabelAddingFurniture;
+    @FXML private Button changeFurnitureButton, deactivateFurnitureButton, addFurnitureButton;
 
-    ApplicationController applicationController = null;
 
-    public AnchorPane mainAnchorPane;
-
-    public Furniture currentFurniture = null;
-
-    public TextField    searchforFurnitureByIdTextField, widthTextField, heightTextField, lengthTextField,
-                        priceTextField, rebateTextField, nameTextField;
-
-    public TextArea     descriptionTextArea;
-
-    public ChoiceBox categoryChoiceBox, subcategoryChoiceBox;
-
-    public Label    errorMessageLabelSearchFurniture, MessageLabelAddingFurniture;
-
-    public Button changeFurnitureButton, deactivateFurnitureButton, addFurnitureButton;
+    private ApplicationController applicationController = null;
 
     public AdminFurnitureManagerController(ApplicationController applicationController){
         this.applicationController = applicationController;
@@ -47,30 +42,17 @@ public class AdminFurnitureManagerController implements Initializable {
         }
 
         //create an selectedIndexPropertyListener for the category choicebox to adjust the subcategory choicebox
-        categoryChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if((Integer)newValue != -1){
-                    String categoryChosen = categoryChoiceBox.getItems().get((Integer) newValue).toString();
-                    subcategoryChoiceBox.getItems().removeAll(subcategoryChoiceBox.getItems());
-
-                    for(String subcategoryName : applicationController.getAllSubcategoryNamesOfCategory(categoryChosen)){
-                        subcategoryChoiceBox.getItems().add(subcategoryName);
-                    }
-                    if(currentFurniture != null){
-                        subcategoryChoiceBox.setValue(applicationController.getSubcategoryById(
-                                currentFurniture.getIdSubcategory()).getName());
-                    }
-                }
-            }
-        });
+        setCategoryChoiceBoxOnChangeListener();
     }
 
-    public void back(ActionEvent actionEvent) throws Exception {
+
+    //ALL FUNCTIONS ACCESSED BY THE FXML BUTTONS
+
+    @FXML private void back(ActionEvent actionEvent) throws Exception {
         applicationController.switchScene(mainAnchorPane, "AdminHome");
     }
 
-    public void searchFurnitureByIdOCE(ActionEvent actionEvent) {
+    @FXML private void searchFurnitureByIdOCE(ActionEvent actionEvent) {
         try{
             currentFurniture = applicationController.getFurnitureById(Integer.parseInt(searchforFurnitureByIdTextField.getText()));
             if(currentFurniture == null){
@@ -84,43 +66,28 @@ public class AdminFurnitureManagerController implements Initializable {
         adjustButtonsForFurnitureOptions();
     }
 
-    private void fillFieldsWithFurnitureInformation(){
-        //set textfields
-        widthTextField.setText(String.valueOf(currentFurniture.getWidth()));
-        heightTextField.setText(String.valueOf(currentFurniture.getHeight()));
-        lengthTextField.setText(String.valueOf(currentFurniture.getLength()));
-        priceTextField.setText(String.valueOf(currentFurniture.getPrice()));
-        rebateTextField.setText(String.valueOf(currentFurniture.getRebate()));
-        nameTextField.setText(currentFurniture.getName());
-        descriptionTextArea.setText(currentFurniture.getDescription());
-
-        //set new values for subcategories in the category of the furniture
-        Subcategory subcategoryOfFurniture = applicationController.getSubcategoryById(currentFurniture.getIdSubcategory());
-        Category categoryOfFurniture = applicationController.getCategoryById(subcategoryOfFurniture.getIdCategory());
-
-        subcategoryChoiceBox.getItems().removeAll(subcategoryChoiceBox.getItems());
-
-        for(String subcategoryName : applicationController.getAllSubcategoryNamesOfCategory(categoryOfFurniture.getName())){
-            subcategoryChoiceBox.getItems().add(subcategoryName);
-        }
-        subcategoryChoiceBox.setValue(subcategoryChoiceBox.getItems().get(0));
-
-        //reset categorychoicebox with category chosen the furniture is in
-        categoryChoiceBox.setValue(null);
-        categoryChoiceBox.getItems().removeAll(categoryChoiceBox.getItems());
-        for(String str : applicationController.getAllCategoryNames()){
-            categoryChoiceBox.getItems().add(str);
-        }
-        categoryChoiceBox.setValue(categoryOfFurniture.getName());
-    }
-
-    public void addFurnitureButtonOCE(ActionEvent actionEvent) throws Exception {
+    @FXML private void addFurnitureButtonOCE(ActionEvent actionEvent) throws Exception {
         Furniture furniture = new Furniture();
         if(checkAndSetNewFurnitureInformation(furniture)){
             applicationController.addFurnitureToDatabase(furniture);
             MessageLabelAddingFurniture.setText("Furniture successfully added into the database.");
         }
     }
+
+    @FXML private void changeFurnitureButtonOCE(ActionEvent actionEvent) throws Exception {
+        if(checkAndSetNewFurnitureInformation(currentFurniture)){
+            applicationController.changeFurnitureInDatabase(currentFurniture);
+            MessageLabelAddingFurniture.setText("Furniture successfully changed in the database.");
+        }
+    }
+
+    @FXML private void deactivateFurnitureButtonOCE(ActionEvent actionEvent) {
+    }
+
+
+
+
+    //HELPING FUNCTIONS
 
     private boolean checkAndSetNewFurnitureInformation(Furniture furniture) {
         MessageLabelAddingFurniture.setText("");
@@ -227,14 +194,54 @@ public class AdminFurnitureManagerController implements Initializable {
         return true;
     }
 
-    public void changeFurnitureButtonOCE(ActionEvent actionEvent) throws Exception {
-        if(checkAndSetNewFurnitureInformation(currentFurniture)){
-            applicationController.changeFurnitureInDatabase(currentFurniture);
-            MessageLabelAddingFurniture.setText("Furniture successfully changed in the database.");
-        }
+    private void setCategoryChoiceBoxOnChangeListener() {
+        categoryChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if((Integer)newValue != -1){
+                    String categoryChosen = categoryChoiceBox.getItems().get((Integer) newValue).toString();
+                    subcategoryChoiceBox.getItems().removeAll(subcategoryChoiceBox.getItems());
+
+                    for(String subcategoryName : applicationController.getAllSubcategoryNamesOfCategory(categoryChosen)){
+                        subcategoryChoiceBox.getItems().add(subcategoryName);
+                    }
+                    if(currentFurniture != null){
+                        subcategoryChoiceBox.setValue(applicationController.getSubcategoryById(
+                                currentFurniture.getIdSubcategory()).getName());
+                    }
+                }
+            }
+        });
     }
 
-    public void deactivateFurnitureButtonOCE(ActionEvent actionEvent) {
+    private void fillFieldsWithFurnitureInformation(){
+        //set textfields
+        widthTextField.setText(String.valueOf(currentFurniture.getWidth()));
+        heightTextField.setText(String.valueOf(currentFurniture.getHeight()));
+        lengthTextField.setText(String.valueOf(currentFurniture.getLength()));
+        priceTextField.setText(String.valueOf(currentFurniture.getPrice()));
+        rebateTextField.setText(String.valueOf(currentFurniture.getRebate()));
+        nameTextField.setText(currentFurniture.getName());
+        descriptionTextArea.setText(currentFurniture.getDescription());
+
+        //set new values for subcategories in the category of the furniture
+        Subcategory subcategoryOfFurniture = applicationController.getSubcategoryById(currentFurniture.getIdSubcategory());
+        Category categoryOfFurniture = applicationController.getCategoryById(subcategoryOfFurniture.getIdCategory());
+
+        subcategoryChoiceBox.getItems().removeAll(subcategoryChoiceBox.getItems());
+
+        for(String subcategoryName : applicationController.getAllSubcategoryNamesOfCategory(categoryOfFurniture.getName())){
+            subcategoryChoiceBox.getItems().add(subcategoryName);
+        }
+        subcategoryChoiceBox.setValue(subcategoryChoiceBox.getItems().get(0));
+
+        //reset categorychoicebox with category chosen the furniture is in
+        categoryChoiceBox.setValue(null);
+        categoryChoiceBox.getItems().removeAll(categoryChoiceBox.getItems());
+        for(String str : applicationController.getAllCategoryNames()){
+            categoryChoiceBox.getItems().add(str);
+        }
+        categoryChoiceBox.setValue(categoryOfFurniture.getName());
     }
 
     private void adjustButtonsForFurnitureOptions(){
