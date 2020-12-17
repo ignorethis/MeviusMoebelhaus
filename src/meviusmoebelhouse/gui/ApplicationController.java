@@ -119,100 +119,15 @@ public class ApplicationController {
         }
     }
 
-    /**
-     * Function that takes control of switching a scene/frame
-     * @param anchorPane is the main anchor pane of the calling controller
-     * @param fxmlName is the name of the requested new frame
-     * @throws Exception e
-     */
-    public void switchScene(AnchorPane anchorPane, String fxmlName) throws Exception {
-        FXMLLoader loader;
-        if(fxmlName.startsWith("Admin")){
-            loader = new FXMLLoader(FXMLADMIN.class.getResource(fxmlName + ".fxml"));
-        } else{
-            loader = new FXMLLoader(FXMLFinder.class.getResource(fxmlName + ".fxml"));
-        }
-        setControllerFactory(fxmlName, loader);
 
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
 
-        Stage stage = (Stage) anchorPane.getScene().getWindow();
-        stage.setScene(scene);
-        stage.setTitle(fxmlName);
-        stage.show();
-    }
-
-    public void setControllerFactory(String viewName, FXMLLoader loader) throws Exception {
-        switch (viewName) {
-            case "Category":
-                loader.setControllerFactory(c -> new CategoryController(this));
-                break;
-            case "Home":
-                loader.setControllerFactory(c -> new HomeController(this));
-                break;
-            case "Login":
-                loader.setControllerFactory(c -> new LoginController(this));
-                break;
-            case "Settings":
-                loader.setControllerFactory(c -> new SettingsController(this));
-                break;
-            case "ShoppingCart":
-                loader.setControllerFactory(c -> new ShoppingCartController(this));
-                break;
-            case "Singleitem":
-                loader.setControllerFactory(c -> new SingleItemController(this));
-                break;
-            case "Subcategory":
-                loader.setControllerFactory(c -> new SubcategoryController(this));
-                break;
-            case "Register":
-                loader.setControllerFactory(c -> new RegisterController(this));
-                break;
-            case "AdminHome":
-                loader.setControllerFactory(c -> new AdminHomeController(this));
-                break;
-            case "AdminAccountManager":
-                loader.setControllerFactory(c -> new AdminAccountManagerController(this));
-                break;
-            case "AdminAccountEdit":
-                loader.setControllerFactory(c -> new AdminAccountEditController(this));
-                break;
-            case "AdminFurnitureManager":
-                loader.setControllerFactory(c -> new AdminFurnitureManagerController(this));
-                break;
-            case "AdminAccountAdd":
-                loader.setControllerFactory(c -> new AdminAccountAddController(this));
-                break;
-            default:
-                throw new Exception("Please add a controller factory for '" + viewName + "'");
-        }
-    }
-
+    /////////////////////////////CATEGORY SECTION
     public Category getCurrentCategory() {
         return currentCategory;
     }
 
-    public Subcategory getCurrentSubcategory() {
-        return currentSubcategory;
-    }
-
-    public Furniture getCurrentFurniture() {
-        return currentFurniture;
-    }
-
-    public ShoppingCart getShoppingCart() { return shoppingCart; }
-
     public void setCurrentCategory(Category currentCategory) {
         this.currentCategory = currentCategory;
-    }
-
-    public void setCurrentSubcategory(Subcategory currentSubcategory) {
-        this.currentSubcategory = currentSubcategory;
-    }
-
-    public void setCurrentFurniture(Furniture currentFurniture) {
-        this.currentFurniture = currentFurniture;
     }
 
     public List<Category> getAllCategories(){
@@ -220,20 +135,16 @@ public class ApplicationController {
     }
 
     /**
-     * Function that is called when a click on a furniture image is done, sets the new current
-     * values (furniture/category/subcategory) and switches the scene
-     * @param imageOfFurniture image that got clicked
-     * @param anchorPane anchorPane of the frame the image layed on
-     * @throws Exception e
+     * Gets an id of a category, returns the category when found in allCategories list or null
+     * @param id of category
+     * @return category found
      */
-    public void openSingleView(int idOfFurniture, AnchorPane anchorPane) throws Exception {
-        currentFurniture = getFurnitureById(idOfFurniture);
+    public Category getCategoryById(int id){
+        return allCategories.stream().filter(c -> c.getIdCategory() == id).findFirst().orElse(null);
+    }
 
-        currentSubcategory = getSubcategoryById(currentFurniture.getIdSubcategory());
-
-        currentCategory = getCategoryById(currentSubcategory.getIdCategory());
-
-        switchScene(anchorPane, "Singleitem");
+    public Category getCategoryByName(String categoryName){
+        return allCategories.stream().filter(s -> s.getName().equals(categoryName)).findFirst().orElse(null);
     }
 
     /**
@@ -253,56 +164,46 @@ public class ApplicationController {
         switchScene(anchorPane, "Category");
     }
 
-    /**
-     * Function that is called when a click on a subcategory image is done, sets the new current
-     * values (furniture/category/subcategory) and switches the scene
-     * @param imageOfSubcategory image that got clicked
-     * @param anchorPane anchorPane of the frame the image layed on
-     * @throws IOException e
-     */
-    public void openSubcategory(int idOfSubcategory, AnchorPane anchorPane) throws Exception {
-        currentSubcategory = getSubcategoryById(idOfSubcategory);
+    public List<String> getAllCategoryNames(){
+        List<String> strings = new ArrayList<>();
 
-        currentCategory = getCategoryById(currentSubcategory.getIdCategory());
-
-        currentFurniture = null;
-
-        switchScene(anchorPane, "Subcategory");
-    }
-
-    /**
-     * Calculates the path of a given furniture and returns its image
-     * @param f given furniture
-     * @return image of given furniture
-     */
-    public Image getFurnitureImageByFurniture(Furniture f){
-        try {
-            InputStream inputStream = this.getClass().getResourceAsStream("/images/furniture/"
-                + f.getIdFurniture() + "/" + f.getIdFurniture() + ".png");
-            return new Image(inputStream);
-        } catch (Exception e){
-            return new Image(this.getClass().getResourceAsStream("/images/default_pic.png"));
+        for(Category c : allCategories){
+            strings.add(c.getName());
         }
+
+        return strings;
     }
 
-    /**
-     * Calculates the path of a given category and returns its image
-     * @param c given category
-     * @return image of given category
-     */
-    public Image getCategoryImageByCategory(Category c){
-        return new Image(   this.getClass().getResourceAsStream("/images/category/"
-                + c.getIdCategory() + "/" + c.getIdCategory() + ".png"));
+
+
+    /////////////////////////////CUSTOMER SECTION
+    public List<Customer> getAllCustomers() {
+        return allCustomers;
     }
 
-    /**
-     * Calculates the path of a given subcategory and returns its image
-     * @param s given subcategory
-     * @return image of given subcategory
-     */
-    public Image getSubcategoryImageBySubcategory(Subcategory s){
-        return new Image(   this.getClass().getResourceAsStream("/images/subcategory/"
-                + s.getIdSubcategory() + "/" + s.getIdSubcategory() + ".png"));
+    public Customer getCustomerByUserId(int id){
+        return allCustomers.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null);
+    }
+
+    public void changeCustomerInDatabase(Customer currentCustomer) throws Exception {
+        customerRepository.update(currentCustomer);
+        allCustomers = customerRepository.getAll();
+    }
+
+    public void addNewCustomerToDatabase(Customer newCustomer) throws Exception {
+        customerRepository.create(newCustomer);
+        allCustomers = customerRepository.getAll();
+    }
+
+
+
+    /////////////////////////////FURNITURE SECTION
+    public Furniture getCurrentFurniture() {
+        return currentFurniture;
+    }
+
+    public void setCurrentFurniture(Furniture currentFurniture) {
+        this.currentFurniture = currentFurniture;
     }
 
     /**
@@ -314,90 +215,8 @@ public class ApplicationController {
         return allFurnitures.stream().filter(f -> f.getIdFurniture() == id).findFirst().orElse(null);
     }
 
-    /**
-     * Gets an id of a category, returns the category when found in allCategories list or null
-     * @param id of category
-     * @return category found
-     */
-    public Category getCategoryById(int id){
-        return allCategories.stream().filter(c -> c.getIdCategory() == id).findFirst().orElse(null);
-    }
-
-    /**
-     * Gets an id of a subcategory, returns the subcategory when found in allSubcategories list or null
-     * @param id of subcategory
-     * @return subcategory found
-     */
-    public Subcategory getSubcategoryById(int id){
-        return allSubcategories.stream().filter(s -> s.getIdSubcategory() == id).findFirst().orElse(null);
-    }
-
-    public void addFurnitureToShoppingCart(int amount) {
-        //add currentFurniture amount times in the shopping cart of the customer
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
-
-
-    public boolean isUserLoggedIn(){
-        return currentUser != null;
-    }
-
-    public List<Customer> getAllCustomers() {
-        return allCustomers;
-    }
-
-    public List<Staff> getAllStaffs() {
-        return allStaffs;
-    }
-
-    public Staff getStaffById(int id){
-        return allStaffs.stream().filter(s -> s.getIdStaff() == id).findFirst().orElse(null);
-    }
-
-    public ArrayList<Furniture> getNewShoppingcart() {
-        return newShoppingcart;
-    }
-
-    public void addFurnitureToShoppingCart(Furniture f){
-        newShoppingcart.add(f);
-    }
-
-    public User getCurrentUserToChange() {
-        return currentUserToChange;
-    }
-
-    public void openAccountManagerEdit(AnchorPane mainAnchorPane, User temp) throws Exception {
-        currentUserToChange = temp;
-        switchScene(mainAnchorPane, "AdminAccountEdit");
-    }
-
-    public Customer getCustomerById(int id){
-        return allCustomers.stream().filter(s -> s.getIdCustomer() == id).findFirst().orElse(null);
-    }
-
-    public Customer getCustomerByUserId(int id){
-        return allCustomers.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null);
-    }
-
-    public int getUserRoleByUserId(int id) {
-        return (allUsers.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null))
-                .getIdUserRole();
-    }
-
-    public User getUserByUserId(int id){
-        return (allUsers.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null));
-    }
-
-    public void logout(AnchorPane anchorPane) throws Exception {
-        currentUser = null;
-        switchScene(anchorPane, "Home");
+    public HashMap<Subcategory, List<Furniture>> getAllFurnituresBySubcategory() {
+        return allFurnituresBySubcategory;
     }
 
     public void addFurnitureToDatabase(Furniture furniture) throws Exception {
@@ -405,80 +224,6 @@ public class ApplicationController {
         allFurnitures = furnitureRepository.getAll();
         fillAllFurnituresBySubcategory();
         setAllFurnituresImage();
-    }
-
-    public Staff getStaffByUserId(int id) {
-        return allStaffs.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null);
-    }
-
-    public List<String> getAllCategoryNames(){
-        List<String> strings = new ArrayList<>();
-
-        for(Category c : allCategories){
-            strings.add(c.getName());
-        }
-
-        return strings;
-    }
-
-    public List<String> getAllSubcategoryNamesOfCategory(String categoryName){
-        List<String> strings = new ArrayList<>();
-        int categoryId = getCategoryByName(categoryName).getIdCategory();
-
-        for(Subcategory s : allSubcategories){
-            if(s.getIdCategory() == categoryId)
-            strings.add(s.getName());
-        }
-
-        return strings;
-    }
-
-    public Category getCategoryByName(String categoryName){
-        return allCategories.stream().filter(s -> s.getName().equals(categoryName)).findFirst().orElse(null);
-    }
-
-    public void addNewUserToDatabase(User newUser) throws Exception {
-        userRepository.create(newUser);
-        allUsers = userRepository.getAll();
-    }
-
-    public void changeUserInDatabase(User currentUser) throws Exception {
-        userRepository.update(currentUser);
-        allUsers = userRepository.getAll();
-    }
-
-    public void addNewStaffToDatabase(Staff newStaff) throws Exception {
-        staffRepository.create(newStaff);
-        allStaffs = staffRepository.getAll();
-    }
-
-    public void addNewCustomerToDatabase(Customer newCustomer) throws Exception {
-        customerRepository.create(newCustomer);
-        allCustomers = customerRepository.getAll();
-    }
-
-    public int getUserByUsername(String username) {
-        return Objects.requireNonNull(allUsers.stream().filter(
-                s -> s.getUsername().equals(username)).findFirst().orElse(null)).getIdUser();
-    }
-
-    public Subcategory getSubcategoryByName(String subcategoryName) {
-        return  allSubcategories.stream().filter(s -> s.getName().equals(subcategoryName)).findFirst().orElse(null);
-    }
-
-    public void changeFurnitureInDatabase(Furniture currentFurniture) throws Exception {
-        furnitureRepository.update(currentFurniture);
-        allFurnitures = furnitureRepository.getAll();
-    }
-
-    public void changeStaffInDatabase(Staff currentStaff) throws Exception {
-        staffRepository.update(currentStaff);
-        allStaffs = staffRepository.getAll();
-    }
-
-    public void changeCustomerInDatabase(Customer currentCustomer) throws Exception {
-        customerRepository.update(currentCustomer);
-        allCustomers = customerRepository.getAll();
     }
 
     private void fillAllFurnituresBySubcategory(){
@@ -498,10 +243,166 @@ public class ApplicationController {
         }
     }
 
-    public HashMap<Subcategory, List<Furniture>> getAllFurnituresBySubcategory() {
-        return allFurnituresBySubcategory;
+    public void changeFurnitureInDatabase(Furniture currentFurniture) throws Exception {
+        furnitureRepository.update(currentFurniture);
+        allFurnitures = furnitureRepository.getAll();
     }
 
+
+
+    /////////////////////////////INVOICE SECTION
+    public void addInvoiceToDatabase(Invoice invoice) throws Exception {
+        invoiceRepository.create(invoice);
+    }
+
+
+
+    /////////////////////////////INVOICEDETAILS SECTION
+    public void addInvoiceDetailsToDatabase(InvoiceDetails invoiceDetails) throws Exception {
+        invoiceDetailsRepository.create(invoiceDetails);
+    }
+
+
+
+    /////////////////////////////STAFF SECTION
+    public Staff getStaffByUserId(int id) {
+        return allStaffs.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null);
+    }
+
+    public List<Staff> getAllStaffs() {
+        return allStaffs;
+    }
+
+    public void updateStaff(Staff staffDataOfUser) throws Exception {
+        staffRepository.update(staffDataOfUser);
+    }
+
+    public void addNewStaffToDatabase(Staff newStaff) throws Exception {
+        staffRepository.create(newStaff);
+        allStaffs = staffRepository.getAll();
+    }
+
+    public void changeStaffInDatabase(Staff currentStaff) throws Exception {
+        staffRepository.update(currentStaff);
+        allStaffs = staffRepository.getAll();
+    }
+
+
+
+    /////////////////////////////SUBCATEGORY SECTION
+    public Subcategory getCurrentSubcategory() {
+        return currentSubcategory;
+    }
+
+    public void setCurrentSubcategory(Subcategory currentSubcategory) {
+        this.currentSubcategory = currentSubcategory;
+    }
+
+    /**
+     * Gets an id of a subcategory, returns the subcategory when found in allSubcategories list or null
+     * @param id of subcategory
+     * @return subcategory found
+     */
+    public Subcategory getSubcategoryById(int id){
+        return allSubcategories.stream().filter(s -> s.getIdSubcategory() == id).findFirst().orElse(null);
+    }
+
+    public List<String> getAllSubcategoryNamesOfCategory(String categoryName){
+        List<String> strings = new ArrayList<>();
+        int categoryId = getCategoryByName(categoryName).getIdCategory();
+
+        for(Subcategory s : allSubcategories){
+            if(s.getIdCategory() == categoryId)
+                strings.add(s.getName());
+        }
+
+        return strings;
+    }
+
+    /**
+     * Function that is called when a click on a subcategory image is done, sets the new current
+     * values (furniture/category/subcategory) and switches the scene
+     * @param imageOfSubcategory image that got clicked
+     * @param anchorPane anchorPane of the frame the image layed on
+     * @throws IOException e
+     */
+    public void openSubcategory(int idOfSubcategory, AnchorPane anchorPane) throws Exception {
+        currentSubcategory = getSubcategoryById(idOfSubcategory);
+
+        currentCategory = getCategoryById(currentSubcategory.getIdCategory());
+
+        currentFurniture = null;
+
+        switchScene(anchorPane, "Subcategory");
+    }
+
+    public Subcategory getSubcategoryByName(String subcategoryName) {
+        return  allSubcategories.stream().filter(s -> s.getName().equals(subcategoryName)).findFirst().orElse(null);
+    }
+
+
+
+    /////////////////////////////USER SECTION
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public boolean isUserLoggedIn(){
+        return currentUser != null;
+    }
+
+    public User getUserToLogIn(String username, String password) {
+        return  allUsers.stream().filter(s -> (s.getUsername().equals(username)) && (s.getPassword().equals(password)))
+                .findFirst().orElse(null);
+    }
+
+    public void addNewUserToDatabase(User newUser) throws Exception {
+        userRepository.create(newUser);
+        allUsers = userRepository.getAll();
+    }
+
+    public User getUserByUserId(int id){
+        return (allUsers.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null));
+    }
+
+    public void changeUserInDatabase(User currentUser) throws Exception {
+        userRepository.update(currentUser);
+        allUsers = userRepository.getAll();
+    }
+
+    public User getCurrentUserToChange() {
+        return currentUserToChange;
+    }
+
+    public int getUserByUsername(String username) {
+        return Objects.requireNonNull(allUsers.stream().filter(
+                s -> s.getUsername().equals(username)).findFirst().orElse(null)).getIdUser();
+    }
+
+
+
+    /////////////////////////////USERROLE SECTION
+    public int getUserRoleByUserId(int id) {
+        return (allUsers.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null))
+                .getIdUserRole();
+    }
+
+
+
+    /////////////////////////////SHOPPINCART SECTION
+    public ShoppingCart getShoppingCart() { return shoppingCart; }
+
+    public ArrayList<Furniture> getNewShoppingcart() {
+        return newShoppingcart;
+    }
+
+
+
+    /////////////////////////////ADJUST IMAGE VIEWS SECTION
     private void setAllFurnituresImage() {
         String furnitureImagesDirectory = pathToWarehouseOut + "images\\furniture\\";
 
@@ -616,20 +517,110 @@ public class ApplicationController {
         }
     }
 
-    public User getUserToLogIn(String username, String password) {
-        return  allUsers.stream().filter(s -> (s.getUsername().equals(username)) && (s.getPassword().equals(password)))
-                .findFirst().orElse(null);
+
+
+    /////////////////////////////SCENE SWITCHING SECTION
+    /**
+     * Function that takes control of switching a scene/frame
+     * @param anchorPane is the main anchor pane of the calling controller
+     * @param fxmlName is the name of the requested new frame
+     * @throws Exception e
+     */
+    public void switchScene(AnchorPane anchorPane, String fxmlName) throws Exception {
+        FXMLLoader loader;
+        if(fxmlName.startsWith("Admin")){
+            loader = new FXMLLoader(FXMLADMIN.class.getResource(fxmlName + ".fxml"));
+        } else{
+            loader = new FXMLLoader(FXMLFinder.class.getResource(fxmlName + ".fxml"));
+        }
+        setControllerFactory(fxmlName, loader);
+
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+
+        Stage stage = (Stage) anchorPane.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle(fxmlName);
+        stage.show();
     }
 
-    public void addInvoiceDetailsToDatabase(InvoiceDetails invoiceDetails) throws Exception {
-        invoiceDetailsRepository.create(invoiceDetails);
+    public void setControllerFactory(String viewName, FXMLLoader loader) throws Exception {
+        switch (viewName) {
+            case "Category":
+                loader.setControllerFactory(c -> new CategoryController(this));
+                break;
+            case "Home":
+                loader.setControllerFactory(c -> new HomeController(this));
+                break;
+            case "Login":
+                loader.setControllerFactory(c -> new LoginController(this));
+                break;
+            case "Settings":
+                loader.setControllerFactory(c -> new SettingsController(this));
+                break;
+            case "ShoppingCart":
+                loader.setControllerFactory(c -> new ShoppingCartController(this));
+                break;
+            case "Singleitem":
+                loader.setControllerFactory(c -> new SingleItemController(this));
+                break;
+            case "Subcategory":
+                loader.setControllerFactory(c -> new SubcategoryController(this));
+                break;
+            case "Register":
+                loader.setControllerFactory(c -> new RegisterController(this));
+                break;
+            case "AdminHome":
+                loader.setControllerFactory(c -> new AdminHomeController(this));
+                break;
+            case "AdminAccountManager":
+                loader.setControllerFactory(c -> new AdminAccountManagerController(this));
+                break;
+            case "AdminAccountEdit":
+                loader.setControllerFactory(c -> new AdminAccountEditController(this));
+                break;
+            case "AdminFurnitureManager":
+                loader.setControllerFactory(c -> new AdminFurnitureManagerController(this));
+                break;
+            case "AdminAccountAdd":
+                loader.setControllerFactory(c -> new AdminAccountAddController(this));
+                break;
+            default:
+                throw new Exception("Please add a controller factory for '" + viewName + "'");
+        }
     }
 
-    public void addInvoiceToDatabase(Invoice invoice) throws Exception {
-        invoiceRepository.create(invoice);
+    /**
+     * Function that is called when a click on a furniture image is done, sets the new current
+     * values (furniture/category/subcategory) and switches the scene
+     * @param imageOfFurniture image that got clicked
+     * @param anchorPane anchorPane of the frame the image layed on
+     * @throws Exception e
+     */
+    public void openSingleView(int idOfFurniture, AnchorPane anchorPane) throws Exception {
+        currentFurniture = getFurnitureById(idOfFurniture);
+
+        currentSubcategory = getSubcategoryById(currentFurniture.getIdSubcategory());
+
+        currentCategory = getCategoryById(currentSubcategory.getIdCategory());
+
+        switchScene(anchorPane, "Singleitem");
     }
 
-    public void updateStaff(Staff staffDataOfUser) throws Exception {
-        staffRepository.update(staffDataOfUser);
+    public void openAccountManagerEdit(AnchorPane mainAnchorPane, User temp) throws Exception {
+        currentUserToChange = temp;
+        switchScene(mainAnchorPane, "AdminAccountEdit");
     }
+
+    public void logout(AnchorPane anchorPane) throws Exception {
+        currentUser = null;
+        switchScene(anchorPane, "Home");
+    }
+
+
+
+
+
+
+
 }

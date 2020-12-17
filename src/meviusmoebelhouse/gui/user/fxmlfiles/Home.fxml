@@ -10,7 +10,7 @@
 
 <AnchorPane fx:id="mainAnchorPane" maxHeight="800.0" maxWidth="1000.0" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meviusmoebelhouse.gui.user.controllers.HomeController">
 
-    <Label layoutX="251.0" layoutY="51.0" prefHeight="54.0" prefWidth="499.0" text="Welcome message" textAlignment="CENTER">
+    <Label fx:id="welcomeMessageLabel" layoutX="99.0" layoutY="51.0" prefHeight="54.0" prefWidth="651.0" textAlignment="CENTER">
         <font>
             <Font name="System Bold Italic" size="25.0" />
         </font>

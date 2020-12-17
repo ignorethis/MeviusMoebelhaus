@@ -100,7 +100,7 @@ public class SingleItemController implements Initializable {
         backToCategoryButton.setText(applicationController.getCurrentCategory().getName());
         backToSubcategoryButton.setText(applicationController.getCurrentSubcategory().getName());
         singleItemViewLabel.setText(currentFurniture.getName());
-        singleItemViewImage.setImage(applicationController.getFurnitureImageByFurniture(currentFurniture));
+        singleItemViewImage.setImage(currentFurniture.getImage());
         singleItemViewDescription.setText(currentFurniture.getDescription());
         singleItemViewWidth.setText(String.valueOf(currentFurniture.getWidth()));
         singleItemViewHeigth.setText(String.valueOf(currentFurniture.getHeight()));

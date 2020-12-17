@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -26,6 +27,7 @@ public class HomeController implements Initializable {
             homeCategoriesSliderPane3, homeCategoriesSliderPane4;
     @FXML private ImageView    homeSalesImage1, homeSalesImage2, homeSalesImage3, homeSalesImage4,
             homeCategoriesImage1, homeCategoriesImage2, homeCategoriesImage3, homeCategoriesImage4;
+    @FXML private Label welcomeMessageLabel;
 
     private ApplicationController applicationController;
 
@@ -45,8 +47,7 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //create bundle with all sales and all categories image views
-
+        welcomeMessageLabel.setText("Welcome to our awesome Mevius Möbelhaus!");
         fillImageViewListsWithAllImageViews();
 
         updateUiBasedOnLoginState();
