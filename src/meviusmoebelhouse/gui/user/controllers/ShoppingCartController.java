@@ -70,8 +70,6 @@ public class ShoppingCartController implements Initializable {
 
         ShoppingCart shoppingCart = applicationController.getShoppingCart();
         Customer customer = applicationController.getCustomerByUserId(applicationController.getCurrentUser().getIdUser());
-        InvoiceDetailsRepository invoiceDetailsRepository = applicationController.getInvoiceDetailsRepository();
-        InvoiceRepository invoiceRepository = applicationController.getInvoiceRepository();
 
         Invoice invoice = new Invoice();
         invoice.setIdCustomer(customer.getIdCustomer());
@@ -79,7 +77,7 @@ public class ShoppingCartController implements Initializable {
         invoice.setLastName(customer.getLastName());
         invoice.setShippingAddress(customer.getDefaultShippingAddress());
         invoice.setTotalPrice(shoppingCart.getTotalPrice());
-        invoiceRepository.create(invoice);
+        applicationController.addInvoiceToDatabase(invoice);
 
         for (FurnitureItem furnitureItem: shoppingCart.getShoppingList()) {
             InvoiceDetails invoiceDetails = new InvoiceDetails();
@@ -88,7 +86,8 @@ public class ShoppingCartController implements Initializable {
             invoiceDetails.setAmount(furnitureItem.getFurnitureCount());
             invoiceDetails.setPrice(furnitureItem.getFurniture().getActualPrice());
             invoiceDetails.setTotalPrice(furnitureItem.getFurnitureItemPrice());
-            invoiceDetailsRepository.create(invoiceDetails);
+            applicationController.addInvoiceDetailsToDatabase(invoiceDetails);
+
         }
 
         shoppingCart.clear();

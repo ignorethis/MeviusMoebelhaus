@@ -30,6 +30,7 @@ public class RegisterController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+
     public void cancelOCE() throws Exception{
         applicationController.switchScene(mainAnchorPane, "Home");
     }
@@ -40,7 +41,7 @@ public class RegisterController implements Initializable{
         registeredUser.setUsername(usernameTextField.getText());
         registeredUser.setPassword(passwordTextField.getText());
         registeredUser.setFailedLoginAttempts(0);
-        applicationController.getUserRepository().create(registeredUser);
+        applicationController.addNewUserToDatabase(registeredUser);
         applicationController.setCurrentUser(registeredUser);
 
         Customer customer = new Customer();
@@ -51,7 +52,7 @@ public class RegisterController implements Initializable{
         customer.setEmailAddress(emailAddressTextField.getText());
         customer.setDefaultShippingAddress(defaultShippingAddressTextField.getText());
         customer.setIdUser(registeredUser.getIdUser());
-        applicationController.getCustomerRepository().create(customer);
+        applicationController.addNewCustomerToDatabase(customer);
 
         applicationController.switchScene(mainAnchorPane, "Home");
     }

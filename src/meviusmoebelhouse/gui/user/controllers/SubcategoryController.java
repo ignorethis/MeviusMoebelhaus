@@ -1,6 +1,7 @@
 package meviusmoebelhouse.gui.user.controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import meviusmoebelhouse.gui.ApplicationController;
+import meviusmoebelhouse.model.Furniture;
 import meviusmoebelhouse.model.Subcategory;
 
 import java.net.URL;
@@ -16,30 +18,30 @@ import java.util.*;
 
 public class SubcategoryController implements Initializable {
 
-    public AnchorPane mainAnchorPane;
-    public Button   subcategoryFurnituresSliderLeftButton, subcategoryFurnituresSliderRightButton,
+    @FXML private AnchorPane mainAnchorPane;
+    @FXML private Button  subcategoryFurnituresSliderLeftButton, subcategoryFurnituresSliderRightButton,
                     menuBarLogin, menuBarLogout, menuBarSettings;
+
+    @FXML private Label subcategoryLabel;
+    @FXML private Button backToCategoryButton;
+
+    @FXML private ImageView    categoriesFurnituresImage1, categoriesFurnituresImage2, categoriesFurnituresImage3,
+            categoriesFurnituresImage4, categoriesFurnituresImage5, categoriesFurnituresImage6,
+            categoriesFurnituresImage7, categoriesFurnituresImage8, categoriesFurnituresImage9,
+            categoriesFurnituresImage10,categoriesFurnituresImage11,categoriesFurnituresImage12;
 
     private ApplicationController applicationController = null;
 
     //Index of which first furniture in furnitures is showing (0/1/2/3/4/5...)
-    public int counterFurnitures = 0;
+    private int counterFurnitures = 0;
 
-    public Subcategory currentSubcategory;
-
-    public Label subcategoryLabel;
-    public Button backToCategoryButton;
-
-    public ImageView    categoriesFurnituresImage1, categoriesFurnituresImage2, categoriesFurnituresImage3,
-            categoriesFurnituresImage4, categoriesFurnituresImage5, categoriesFurnituresImage6,
-            categoriesFurnituresImage7, categoriesFurnituresImage8, categoriesFurnituresImage9,
-            categoriesFurnituresImage10,categoriesFurnituresImage11,categoriesFurnituresImage12;
+    private Subcategory currentSubcategory;
 
     //List with all subcategoryFurnitureImageViews
     ArrayList<ImageView> allFurnitureImageViews = new ArrayList<>();
 
     //List with all furniture images in this subcategory
-    ArrayList<Image> allFurnitureImages = new ArrayList<>();
+    List<Furniture> allFurnitures = new ArrayList<>();
 
     public SubcategoryController(ApplicationController applicationController) {
         this.applicationController = applicationController;
@@ -47,30 +49,27 @@ public class SubcategoryController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        currentSubcategory = applicationController.getCurrentSubcategory();
-
-        updateUiBasedOnLoginState();
-
-        subcategoryLabel.setText(currentSubcategory.getName());
-        backToCategoryButton.setText(applicationController.getCurrentCategory().getName());
-
         allFurnitureImageViews.addAll(Arrays.asList(categoriesFurnituresImage1, categoriesFurnituresImage2,
                 categoriesFurnituresImage3, categoriesFurnituresImage4, categoriesFurnituresImage5,
                 categoriesFurnituresImage6, categoriesFurnituresImage7, categoriesFurnituresImage8,
                 categoriesFurnituresImage9, categoriesFurnituresImage10, categoriesFurnituresImage11,
                 categoriesFurnituresImage12));
 
-        HashMap<Integer, HashMap<Integer, List<Image>>> allFurnituresImages = applicationController.getAllFurnituresImages();
+        updateUiBasedOnLoginState();
+
+        currentSubcategory = applicationController.getCurrentSubcategory();
+
+        subcategoryLabel.setText(currentSubcategory.getName());
+        backToCategoryButton.setText(applicationController.getCurrentCategory().getName());
+
+        HashMap<Subcategory, List<Furniture>> allFurnituresBySubcategory =
+                applicationController.getAllFurnituresBySubcategory();
+
         //load all images of furnitures with rebates of this category in the allSalesImages list and all
         //furnitures without rebates in the allFurnitureImages list
         //early database might not have entries for every cat.
-        if(allFurnituresImages.containsKey(currentSubcategory.getIdCategory())) {
-            //early database might not have entries for every subCat.
-            if(allFurnituresImages.get(currentSubcategory.getIdCategory()).containsKey(currentSubcategory.getIdSubcategory())){
-                for (List<Image> list : allFurnituresImages.get(currentSubcategory.getIdCategory()).values()) {
-                    allFurnitureImages.addAll(list);
-                }
-            }
+        for(Furniture furniture : allFurnituresBySubcategory.get(currentSubcategory)){
+            allFurnitures.add(furniture);
         }
         showFurnitureImages();
     }
@@ -115,7 +114,7 @@ public class SubcategoryController implements Initializable {
      * @param actionEvent actionEvent
      */
     public void subcategoryFurnituresSliderRightOCE(ActionEvent actionEvent) {
-        if(counterFurnitures < allFurnitureImages.size() - allFurnitureImageViews.size()){
+        if(counterFurnitures < allFurnitures.size() - allFurnitureImageViews.size()){
             counterFurnitures++;
             showFurnitureImages();
         }
@@ -128,7 +127,8 @@ public class SubcategoryController implements Initializable {
      * @throws Exception exception
      */
     public void openSingleView(MouseEvent mouseEvent) throws Exception {
-        applicationController.openSingleView(allFurnitureImages.get(Integer.parseInt(mouseEvent.getPickResult().getIntersectedNode().getId())), mainAnchorPane);
+        int idOfFurniture = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
+        applicationController.openSingleView(idOfFurniture, mainAnchorPane);
     }
 
     /**
@@ -136,15 +136,18 @@ public class SubcategoryController implements Initializable {
      * Disables the unused furniture image views
      */
     public void showFurnitureImages(){
-        for(int i = 0; i < allFurnitureImageViews.size() && i < allFurnitureImages.size(); i++){
-            allFurnitureImageViews.get(i).setImage(allFurnitureImages.get(counterFurnitures + i));
-            allFurnitureImageViews.get(i).setId(String.valueOf(counterFurnitures + i));
+        for(int i = 0; i < allFurnitureImageViews.size() && i < allFurnitures.size(); i++){
+            allFurnitureImageViews.get(i).setImage(allFurnitures
+                    .get(counterFurnitures + i).getImage());
+            allFurnitureImageViews.get(i).setId(String.valueOf(allFurnitures
+                    .get(counterFurnitures + i).getIdFurniture()));
         }
-        for(int i = allFurnitureImageViews.size() - 1; i > allFurnitureImages.size() - 1; i--){
+        //disable all unused image views
+        for(int i = allFurnitureImageViews.size() - 1; i > allFurnitures.size() - 1; i--){
             allFurnitureImageViews.get(i).setDisable(true);
         }
         //Dis/Enable Buttons of furnitures if it is negative or too big
-        subcategoryFurnituresSliderRightButton.setDisable(counterFurnitures >= allFurnitureImages.size() - 12);
+        subcategoryFurnituresSliderRightButton.setDisable(counterFurnitures >= allFurnitures.size() - 12);
         subcategoryFurnituresSliderLeftButton.setDisable(counterFurnitures <= 0);
     }
 

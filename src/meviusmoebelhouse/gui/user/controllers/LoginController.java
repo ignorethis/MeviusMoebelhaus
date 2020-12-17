@@ -32,9 +32,9 @@ public class LoginController implements Initializable {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        User user = applicationController.getUserRepository().getByUsernameAndPassword(username, password);
+        User user = applicationController.getUserToLogIn(username, password);
         if (user == null){
-            errorMessageLabel.setText("Wrong username or password");
+            errorMessageLabel.setText("Wrong username or password.");
         }
         else {
             applicationController.setCurrentUser(user);

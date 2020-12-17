@@ -1,5 +1,6 @@
 package meviusmoebelhouse.gui.user.controllers;
 
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,16 +10,27 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import meviusmoebelhouse.gui.ApplicationController;
 import meviusmoebelhouse.model.Category;
+import meviusmoebelhouse.model.Furniture;
+import meviusmoebelhouse.model.Subcategory;
 
 import java.net.URL;
 import java.util.*;
 
 public class CategoryController implements Initializable {
 
-    public Button   categorySalesSliderLeftButton, categorySalesSliderRightButton,
+    @FXML private Button   categorySalesSliderLeftButton, categorySalesSliderRightButton,
                     categoryFurnituresSliderLeftButton, categoryFurnituresSliderRightButton,
                     categoriesSubcategoriesSliderLeftButton, categoriesSubcategoriesSliderRightButton,
                     menuBarLogin, menuBarLogout, menuBarSettings;
+
+    @FXML private ImageView    categoriesSalesImage1, categoriesSalesImage2,
+            categoriesSalesImage3, categoriesSalesImage4,
+            categoriesFurnituresImage1, categoriesFurnituresImage2,
+            categoriesFurnituresImage3, categoriesFurnituresImage4,
+            categoriesSubcategoriesImage1, categoriesSubcategoriesImage2,
+            categoriesSubcategoriesImage3, categoriesSubcategoriesImage4;
+
+    @FXML private Label categoryLabel;
 
     private ApplicationController applicationController = null;
 
@@ -28,24 +40,15 @@ public class CategoryController implements Initializable {
     public int counterFurnitures = 0;       //Index of which first furniture in furnitures is showing (0/1/2/3/4/5...)
     public int counterSubcategories = 0;    //Index of which first category in categories is showing (0/1/2/3/4/5...)
 
-    public Label categoryLabel;
-
     public Category currentCategory;
-
-    public ImageView    categoriesSalesImage1, categoriesSalesImage2,
-            categoriesSalesImage3, categoriesSalesImage4,
-            categoriesFurnituresImage1, categoriesFurnituresImage2,
-            categoriesFurnituresImage3, categoriesFurnituresImage4,
-            categoriesSubcategoriesImage1, categoriesSubcategoriesImage2,
-            categoriesSubcategoriesImage3, categoriesSubcategoriesImage4;
 
     ArrayList<ImageView> allSalesImageViews = new ArrayList<>(); //List with all categorySalesImageViews
     ArrayList<ImageView> allFurnitureImageViews = new ArrayList<>(); //List with all categoryFurnitureImageViews
     ArrayList<ImageView> allSubcategoryImageViews = new ArrayList<>(); //List with all categorySubcategoryImageViews
 
-    ArrayList<Image> allSalesImages = new ArrayList<>(); //List with all sales images in this category
-    ArrayList<Image> allFurnitureImages = new ArrayList<>(); //List with all furniture images in this category
-    ArrayList<Image> allSubcategoryImages = new ArrayList<>(); //List with all subcategory images in this category
+    ArrayList<Furniture> allSalesFurnitures = new ArrayList<>(); //List with all sales images in this category
+    ArrayList<Furniture> allNotSalesFurnitures = new ArrayList<>(); //List with all furniture images in this category
+    ArrayList<Subcategory> allSubcategories = new ArrayList<>(); //List with all subcategory images in this category
 
     public CategoryController(ApplicationController applicationController) {
         this.applicationController = applicationController;
@@ -66,22 +69,21 @@ public class CategoryController implements Initializable {
         allSubcategoryImageViews.addAll(Arrays.asList(  categoriesSubcategoriesImage1, categoriesSubcategoriesImage2,
                 categoriesSubcategoriesImage3, categoriesSubcategoriesImage4));
 
-        HashMap<Integer, HashMap<Integer, List<Image>>> allFurnituresImages = applicationController.getAllFurnituresImages();
-        //load all images of furnitures with rebates of this category in the allSalesImages list and all
-        //furnitures without rebates in the allFurnitureImages list
-        if(allFurnituresImages.containsKey(currentCategory.getIdCategory())){//early database might not have entries for every cat./subCat.
-            for(List<Image> list : allFurnituresImages.get(currentCategory.getIdCategory()).values()){
-                for(Image image : list){
-                    if(applicationController.getFurnitureByImage(image).getRebate() == 0){
-                        allFurnitureImages.add(image);
+        //stores every furniture with rebate in sales, others in nosales and subcategories in allsubcategories
+        HashMap<Subcategory, List<Furniture>> allFurnituresBySubcategory = applicationController.getAllFurnituresBySubcategory();
+        for(Map.Entry<Subcategory, List<Furniture>> entrySet : allFurnituresBySubcategory.entrySet()){
+            if(currentCategory.getIdCategory() == entrySet.getKey().getIdCategory()){
+                for(Furniture furniture : entrySet.getValue()){
+                    if(furniture.getRebate() != 0){
+                        allSalesFurnitures.add(furniture);
                     } else{
-                        allSalesImages.add(image);
+                        allNotSalesFurnitures.add(furniture);
                     }
                 }
+                allSubcategories.add(entrySet.getKey());
             }
-            //load all images of subcategories of this category in allSubcategoryImages list
-            allSubcategoryImages.addAll(applicationController.getAllSubcategoryImages().get(currentCategory.getIdCategory()));
         }
+
         //show all images in the scene/frame
         showSalesImages();
         showFurnitureImages();
@@ -116,7 +118,7 @@ public class CategoryController implements Initializable {
     }
 
     public void categorySalesSliderRightOCE() {
-        if(counterSales < allSalesImages.size() - allSalesImageViews.size()){
+        if(counterSales < allSalesFurnitures.size() - allSalesImageViews.size()){
             counterSales++;
             showSalesImages();
         }
@@ -130,7 +132,7 @@ public class CategoryController implements Initializable {
     }
 
     public void categoryFurnituresSliderRightOCE() {
-        if(counterFurnitures < allFurnitureImages.size() - allFurnitureImageViews.size()){
+        if(counterFurnitures < allNotSalesFurnitures.size() - allFurnitureImageViews.size()){
             counterFurnitures++;
             showFurnitureImages();
         }
@@ -144,7 +146,7 @@ public class CategoryController implements Initializable {
     }
 
     public void categoriesSubcategoriesSliderRightOCE() {
-        if(counterSubcategories < allSubcategoryImages.size() - allSubcategoryImageViews.size()){
+        if(counterSubcategories < allSubcategories.size() - allSubcategoryImageViews.size()){
             counterSubcategories++;
             showSubcategoryImages();
         }
@@ -157,16 +159,13 @@ public class CategoryController implements Initializable {
      * @throws Exception exception
      */
     public void openSingleView(MouseEvent mouseEvent) throws Exception {
-        if(allSalesImageViews.contains((ImageView) mouseEvent.getSource())){
-            applicationController.openSingleView(allSalesImages.get(Integer.parseInt(mouseEvent.getPickResult().getIntersectedNode().getId())), mainAnchorPane);
-        } else{
-            applicationController.openSingleView(allFurnitureImages.get(Integer.parseInt(mouseEvent.getPickResult().getIntersectedNode().getId())), mainAnchorPane);
-        }
+        int idOfFurniture = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
+        applicationController.openSingleView(idOfFurniture, mainAnchorPane);
     }
 
-
     public void openSubcategory(MouseEvent mouseEvent) throws Exception {
-        applicationController.openSubcategory(allSubcategoryImages.get(Integer.parseInt(mouseEvent.getPickResult().getIntersectedNode().getId())), mainAnchorPane);
+        int idOfSubcategory = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
+        applicationController.openSubcategory(idOfSubcategory, mainAnchorPane);
     }
 
     /**
@@ -174,26 +173,19 @@ public class CategoryController implements Initializable {
      * Disables the unused furniture sales image views
      */
     public void showSalesImages(){
-        for(int i = 0; i < allSalesImageViews.size() && i < allSalesImages.size(); i++){
-            allSalesImageViews.get(i).setImage(allSalesImages.get(counterSales + i));
-            allSalesImageViews.get(i).setId(String.valueOf(counterSales + i));
+        for(int i = 0; i < allSalesImageViews.size() && i < allSalesFurnitures.size(); i++){
+            allSalesImageViews.get(i).setImage(allSalesFurnitures
+                    .get(counterSales + i).getImage());
+            allSalesImageViews.get(i).setId(String.valueOf(allSalesFurnitures
+                    .get(counterSales + i).getIdFurniture()));
         }
-        for(int i = allSalesImageViews.size() - 1; i > allSalesImages.size() - 1; i--){
-            //allSalesImageViews.get(i).setDisable(true);
+        for(int i = allSalesImageViews.size() - 1; i > allSalesFurnitures.size() - 1; i--){
             allSalesImageViews.get(i).setVisible(false);
         }
 
         //Disable Buttons of Sales if it is negative or too big
-        if(counterSales >= allSalesImages.size() - 4){
-            categorySalesSliderRightButton.setDisable(true);
-        } else {
-            categorySalesSliderRightButton.setDisable(false);
-        }
-        if(counterSales > 0){
-            categorySalesSliderLeftButton.setDisable(false);
-        } else {
-            categorySalesSliderLeftButton.setDisable(true);
-        }
+        categorySalesSliderRightButton.setDisable((counterSales >= allSalesFurnitures.size() - 4));
+        categorySalesSliderLeftButton.setDisable(counterSales <= 0);
     }
 
     /**
@@ -201,26 +193,19 @@ public class CategoryController implements Initializable {
      * Disables the unused furniture image views
      */
     public void showFurnitureImages(){
-        for(int i = 0; i < allFurnitureImageViews.size() && i < allFurnitureImages.size(); i++){
-            allFurnitureImageViews.get(i).setImage(allFurnitureImages.get(counterFurnitures + i));
-            allFurnitureImageViews.get(i).setId(String.valueOf(counterFurnitures + i));
+        for(int i = 0; i < allFurnitureImageViews.size() && i < allNotSalesFurnitures.size(); i++){
+            allFurnitureImageViews.get(i).setImage(allNotSalesFurnitures
+                    .get(counterFurnitures + i).getImage());
+            allFurnitureImageViews.get(i).setId(String.valueOf(allNotSalesFurnitures
+                    .get(counterFurnitures + i).getIdFurniture()));
         }
-        for(int i = allFurnitureImageViews.size() - 1; i > allFurnitureImages.size() - 1; i--){
-            //allFurnitureImageViews.get(i).setDisable(true);
+        for(int i = allFurnitureImageViews.size() - 1; i > allNotSalesFurnitures.size() - 1; i--){
             allFurnitureImageViews.get(i).setVisible(false);
         }
 
         //Dis/Enable Buttons of Sales if it is negative or too big
-        if(counterFurnitures >= allFurnitureImages.size() - 4){
-            categoryFurnituresSliderRightButton.setDisable(true);
-        } else {
-            categoryFurnituresSliderRightButton.setDisable(false);
-        }
-        if(counterFurnitures > 0){
-            categoryFurnituresSliderLeftButton.setDisable(false);
-        } else {
-            categoryFurnituresSliderLeftButton.setDisable(true);
-        }
+        categoryFurnituresSliderRightButton.setDisable(counterFurnitures >= allNotSalesFurnitures.size() - 4);
+        categoryFurnituresSliderLeftButton.setDisable(counterFurnitures <= 0);
     }
 
     /**
@@ -228,26 +213,19 @@ public class CategoryController implements Initializable {
      * Disables the unused subcategory image views
      */
     public void showSubcategoryImages(){
-        for(int i = 0; i < allSubcategoryImageViews.size() && i < allSubcategoryImages.size(); i++){
-            allSubcategoryImageViews.get(i).setImage(allSubcategoryImages.get(counterSubcategories + i));
-            allSubcategoryImageViews.get(i).setId(String.valueOf(counterSubcategories + i));
+        for(int i = 0; i < allSubcategoryImageViews.size() && i < allSubcategories.size(); i++){
+            allSubcategoryImageViews.get(i).setImage(allSubcategories
+                    .get(counterSubcategories + i).getImage());
+            allSubcategoryImageViews.get(i).setId(String.valueOf(allSubcategories
+                    .get(counterSubcategories + i).getIdSubcategory()));
         }
-        for(int i = allSubcategoryImageViews.size() - 1; i > allSubcategoryImages.size() - 1; i--){
-            //allSubcategoryImageViews.get(i).setDisable(true);
+        for(int i = allSubcategoryImageViews.size() - 1; i > allSubcategories.size() - 1; i--){
             allSubcategoryImageViews.get(i).setVisible(false);
         }
 
         //Dis/Enable Buttons of Subcategory if it is negative or too big
-        if(counterSubcategories >= allSubcategoryImages.size() - 4){
-            categoriesSubcategoriesSliderRightButton.setDisable(true);
-        } else{
-            categoriesSubcategoriesSliderRightButton.setDisable(false);
-        }
-        if(counterSubcategories > 0){
-            categoriesSubcategoriesSliderLeftButton.setDisable(false);
-        } else{
-            categoriesSubcategoriesSliderLeftButton.setDisable(true);
-        }
+        categoriesSubcategoriesSliderRightButton.setDisable(counterSubcategories >= allSubcategories.size() - 4);
+        categoriesSubcategoriesSliderLeftButton.setDisable(counterSubcategories <= 0);
     }
 
     private void updateUiBasedOnLoginState() {

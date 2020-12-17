@@ -73,7 +73,7 @@ public class AdminAccountEditController implements Initializable {
         if(userToCreate.getIdUserRole() == 1 || userToCreate.getIdUserRole() == 2){
             staffDataOfUser.setFirstName(firstnameTextField.getText());
             staffDataOfUser.setLastName(lastnameTextField.getText());
-            applicationController.getStaffRepository().update(staffDataOfUser);
+            applicationController.updateStaff(staffDataOfUser);
 
             if (!passwordTextField.isDisable()) {
                 userToCreate.setPassword(passwordTextField.getText());
@@ -88,7 +88,7 @@ public class AdminAccountEditController implements Initializable {
         else if(userToCreate.getIdUserRole() == 3){
             customerDataOfUser.setFirstName(firstnameTextField.getText());
             customerDataOfUser.setLastName(lastnameTextField.getText());
-            applicationController.getCustomerRepository().update(customerDataOfUser);
+            applicationController.changeCustomerInDatabase(customerDataOfUser);
 
             if (!passwordTextField.isDisable()) {
                 userToCreate.setPassword(passwordTextField.getText());

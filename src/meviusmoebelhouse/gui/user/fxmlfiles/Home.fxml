@@ -31,7 +31,7 @@
         <children>
             <AnchorPane fx:id="homeSalesSliderPane1" maxHeight="200.0" maxWidth="200.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-width: 1px; -fx-border-width: 1px;">
                 <children>
-                    <ImageView fx:id="homeSalesImage1" fitHeight="198.0" fitWidth="198.0" layoutX="2.0" layoutY="2.0" onMouseClicked="#openSingleView" onMouseEntered="#showInformationPane" onMouseExited="#suppressInformationPane" pickOnBounds="true" preserveRatio="true">
+                    <ImageView fx:id="homeSalesImage1" fitHeight="198.0" fitWidth="198.0" layoutX="2.0" layoutY="2.0" onMouseClicked="#openSingleView" pickOnBounds="true" preserveRatio="true">
 
                     </ImageView>
                 </children>

@@ -14,53 +14,56 @@ import meviusmoebelhouse.model.*;
 import meviusmoebelhouse.repositories.*;
 import meviusmoebelhouse.viewmodel.ShoppingCart;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.*;
 
 public class ApplicationController {
-    Category    currentCategory;
-    Subcategory currentSubcategory;
-    Furniture   currentFurniture;
-    User currentUser;
-    User currentUserToChange = null;
-    ShoppingCart shoppingCart;
+    private Category    currentCategory;
+    private Subcategory currentSubcategory;
+    private Furniture   currentFurniture;
+    private User        currentUser;
+    private User        currentUserToChange = null;
+    private ShoppingCart shoppingCart;
 
-    List<Category>          allCategories;
-    List<Customer>          allCustomers;
-    List<Furniture>         allFurnitures;
-    List<Invoice>           allInvoices;
-    List<InvoiceDetails>    allInvoiceDetails;
-    List<Staff>             allStaffs;
-    List<Subcategory>       allSubcategories;
-    List<User>              allUsers;
-    List<UserRole>          allUserRoles;
+    private List<Category>          allCategories;
+    private List<Customer>          allCustomers;
+    private List<Furniture>         allFurnitures;
+    private List<Invoice>           allInvoices;
+    private List<InvoiceDetails>    allInvoiceDetails;
+    private List<Staff>             allStaffs;
+    private List<Subcategory>       allSubcategories;
+    private List<User>              allUsers;
+    private List<UserRole>          allUserRoles;
 
-    ArrayList<Furniture>    newShoppingcart = new ArrayList<>();
+    private ArrayList<Furniture>    newShoppingcart = new ArrayList<>();
 
-    //for easy access to the images and data in general in home/category/subcategory frames
-    HashMap<Integer, HashMap<Integer, List<Image>>> allFurnituresImages = new HashMap<>(); //HashMap<Category.id, HashMap<Subcategory.id, List<Furnitures>>>
-    HashMap<Integer, List<Image>>                   allSubcategoryImages = new HashMap<>(); //HashMap<CategoryID, List<Subcategory>
-    List<Image>                                     allCategoryImages = new ArrayList<>(); //List of All Images for categories
-    HashMap<Integer, List<Image>>   allFurnitureImages = new HashMap<>();
-
-    //to access the id of the furniture/category/subcategory when an image is clicked later on
-    HashMap<Image, Integer> IdForFurnitureImages     = new HashMap<>(); //Hashmap that saves the ID of an furniture image as a value with the image as a key
-    HashMap<Image, Integer> IdForCategoryImages      = new HashMap<>(); //Hashmap that saves the ID of an category image as a value with the image as a key
-    HashMap<Image, Integer> IdForSubcategoryImages   = new HashMap<>(); //Hashmap that saves the ID of an subcategory image as a value with the image as a key
+    //new structure:
+    //HashMap<SubcategoryId, List<Furnitures>
+    private HashMap<Subcategory, List<Furniture>>   allFurnituresBySubcategory = new HashMap<>();
 
     //repositories
-    CategoryRepository categoryRepository = null;
-    CustomerRepository customerRepository = null;
-    FurnitureRepository furnitureRepository = null;
-    InvoiceRepository invoiceRepository = null;
-    InvoiceDetailsRepository invoiceDetailsRepository = null;
-    StaffRepository staffRepository = null;
-    SubcategoryRepository subcategoryRepository = null;
-    UserRepository userRepository = null;
-    UserRoleRepository userRoleRepository = null;
+    private CategoryRepository categoryRepository = null;
+    private CustomerRepository customerRepository = null;
+    private FurnitureRepository furnitureRepository = null;
+    private InvoiceRepository invoiceRepository = null;
+    private InvoiceDetailsRepository invoiceDetailsRepository = null;
+    private StaffRepository staffRepository = null;
+    private SubcategoryRepository subcategoryRepository = null;
+    private UserRepository userRepository = null;
+    private UserRoleRepository userRoleRepository = null;
+
+    private String pathToWarehouseOut = String.valueOf(
+            getClass().getProtectionDomain().getCodeSource().getLocation())
+            .replace("/", "\\").substring(6);
+
 
     public ApplicationController() {
 
@@ -98,15 +101,19 @@ public class ApplicationController {
 
             shoppingCart = new ShoppingCart();
 
-            //iterates all furnitures and fills the allFurnituresImages Hashmap and the IdForFurnitureImages Hashmap
-            fillAllFurnitureImages();
+            /////////////////////new structure
+            fillAllFurnituresBySubcategory();
 
-            //iterates all subcategories and fills the allSubcategoriesImages Hashmap and the IdForSubcategoryImages Hashmap
-            fillAllSubcategoryImages();
+            //set all furnitures image
+            setAllFurnituresImage();
 
-            //iterates all Categories and fills the allCategoriesImages Hashmap and the IdForCategoryImages Hashmap
-            fillAllCategoryImages();
+            //set all categories image
+            setAllCategoriesImage();
 
+            //set all subcategories image
+            setAllSubcategoriesImage();
+
+            System.out.println("Test");
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -182,7 +189,6 @@ public class ApplicationController {
         }
     }
 
-
     public Category getCurrentCategory() {
         return currentCategory;
     }
@@ -209,16 +215,8 @@ public class ApplicationController {
         this.currentFurniture = currentFurniture;
     }
 
-    public HashMap<Integer, HashMap<Integer, List<Image>>> getAllFurnituresImages(){
-        return allFurnituresImages;
-    }
-
-    public HashMap<Integer, List<Image>> getAllSubcategoryImages(){
-        return allSubcategoryImages;
-    }
-
-    public List<Image> getAllCategoryImages(){
-        return allCategoryImages;
+    public List<Category> getAllCategories(){
+        return allCategories;
     }
 
     /**
@@ -228,27 +226,12 @@ public class ApplicationController {
      * @param anchorPane anchorPane of the frame the image layed on
      * @throws Exception e
      */
-    public void openSingleView(Image imageOfFurniture, AnchorPane anchorPane) throws Exception {
-        int idFur = IdForFurnitureImages.get(imageOfFurniture);
-        for(Furniture f : allFurnitures){
-            if(f.getIdFurniture() == idFur){
-                setCurrentFurniture(f);
-            }
-        }
+    public void openSingleView(int idOfFurniture, AnchorPane anchorPane) throws Exception {
+        currentFurniture = getFurnitureById(idOfFurniture);
 
-        int idCat = getSubcategoryById(currentFurniture.getIdSubcategory()).getIdCategory();
-        for(Category c : allCategories){
-            if(c.getIdCategory() == idCat){
-                setCurrentCategory(c);
-            }
-        }
+        currentSubcategory = getSubcategoryById(currentFurniture.getIdSubcategory());
 
-        int idSub = currentFurniture.getIdSubcategory();
-        for(Subcategory s : allSubcategories){
-            if(s.getIdSubcategory() == idSub){
-                setCurrentSubcategory(s);
-            }
-        }
+        currentCategory = getCategoryById(currentSubcategory.getIdCategory());
 
         switchScene(anchorPane, "Singleitem");
     }
@@ -260,17 +243,12 @@ public class ApplicationController {
      * @param anchorPane anchorPane of the frame the image layed on
      * @throws Exception e
      */
-    public void openCategory(Image imageOfCategory, AnchorPane anchorPane) throws Exception {
-        int idCat = IdForCategoryImages.get(imageOfCategory);
+    public void openCategory(int idOfCategory, AnchorPane anchorPane) throws Exception {
+        currentCategory = getCategoryById(idOfCategory);
 
-        for(Category c : allCategories){
-            if(c.getIdCategory() == idCat){
-                setCurrentCategory(c);
-            }
-        }
+        currentSubcategory = null;
 
         currentFurniture = null;
-        currentSubcategory = null;
 
         switchScene(anchorPane, "Category");
     }
@@ -282,21 +260,10 @@ public class ApplicationController {
      * @param anchorPane anchorPane of the frame the image layed on
      * @throws IOException e
      */
-    public void openSubcategory(Image imageOfSubcategory, AnchorPane anchorPane) throws Exception {
-        int idSub = IdForSubcategoryImages.get(imageOfSubcategory);
+    public void openSubcategory(int idOfSubcategory, AnchorPane anchorPane) throws Exception {
+        currentSubcategory = getSubcategoryById(idOfSubcategory);
 
-        for(Subcategory s : allSubcategories){
-            if(s.getIdSubcategory() == idSub){
-                setCurrentSubcategory(s);
-            }
-        }
-
-        int idCat = currentSubcategory.getIdCategory();
-        for(Category c : allCategories){
-            if(c.getIdCategory() == idCat){
-                setCurrentCategory(c);
-            }
-        }
+        currentCategory = getCategoryById(currentSubcategory.getIdCategory());
 
         currentFurniture = null;
 
@@ -365,24 +332,6 @@ public class ApplicationController {
         return allSubcategories.stream().filter(s -> s.getIdSubcategory() == id).findFirst().orElse(null);
     }
 
-    /**
-     * Gets the image of a furniture and returns the furniture itself
-     * @param i image of the furniture
-     * @return furniture itself
-     */
-    public Furniture getFurnitureByImage(Image i){
-        return getFurnitureById(IdForFurnitureImages.get(i));
-    }
-
-    /**
-     * Gets the image of a category and returns the category itself
-     * @param i image of the category
-     * @return category itself
-     */
-    public Category getCategoryByImage(Image i){
-        return getCategoryById(IdForCategoryImages.get(i));
-    }
-
     public void addFurnitureToShoppingCart(int amount) {
         //add currentFurniture amount times in the shopping cart of the customer
     }
@@ -395,41 +344,6 @@ public class ApplicationController {
         this.currentUser = currentUser;
     }
 
-    public CategoryRepository getCategoryRepository() {
-        return categoryRepository;
-    }
-
-    public CustomerRepository getCustomerRepository() {
-        return customerRepository;
-    }
-
-    public FurnitureRepository getFurnitureRepository() {
-        return furnitureRepository;
-    }
-
-    public InvoiceRepository getInvoiceRepository() {
-        return invoiceRepository;
-    }
-
-    public InvoiceDetailsRepository getInvoiceDetailsRepository() {
-        return invoiceDetailsRepository;
-    }
-
-    public StaffRepository getStaffRepository() {
-        return staffRepository;
-    }
-
-    public SubcategoryRepository getSubcategoryRepository() {
-        return subcategoryRepository;
-    }
-
-    public UserRepository getUserRepository() {
-        return userRepository;
-    }
-
-    public UserRoleRepository getUserRoleRepository() {
-        return userRoleRepository;
-    }
 
     public boolean isUserLoggedIn(){
         return currentUser != null;
@@ -473,7 +387,8 @@ public class ApplicationController {
     }
 
     public int getUserRoleByUserId(int id) {
-        return (allUsers.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null)).getIdUserRole();
+        return (allUsers.stream().filter(s -> s.getIdUser() == id).findFirst().orElse(null))
+                .getIdUserRole();
     }
 
     public User getUserByUserId(int id){
@@ -488,7 +403,8 @@ public class ApplicationController {
     public void addFurnitureToDatabase(Furniture furniture) throws Exception {
         furnitureRepository.create(furniture);
         allFurnitures = furnitureRepository.getAll();
-        fillAllFurnitureImages();
+        fillAllFurnituresBySubcategory();
+        setAllFurnituresImage();
     }
 
     public Staff getStaffByUserId(int id) {
@@ -565,66 +481,155 @@ public class ApplicationController {
         allCustomers = customerRepository.getAll();
     }
 
+    private void fillAllFurnituresBySubcategory(){
+        allFurnituresBySubcategory = new HashMap<>();
 
-    private void fillAllFurnitureImages(){
-        allFurnituresImages = new HashMap<>();
+        for(Furniture furniture : allFurnitures){
+            Subcategory subcategoryOfFurniture = getSubcategoryById(furniture.getIdSubcategory());
+            if(allFurnituresBySubcategory.containsKey(subcategoryOfFurniture)){
+                //subcategory already exists with list
+                allFurnituresBySubcategory.get(subcategoryOfFurniture).add(furniture);
+            } else{
+                //subcategory does not exist with list
+                List<Furniture> list = new ArrayList<>();
+                list.add(furniture);
+                allFurnituresBySubcategory.put(subcategoryOfFurniture, list);
+            }
+        }
+    }
 
-        for(Furniture f : allFurnitures){
-            Image t;
-            if(allFurnituresImages.containsKey(getSubcategoryById(f.getIdSubcategory()).getIdCategory())) {
-                //case when the hashmap has already entries in the category (at least 1)
-                if (allFurnituresImages.get(getSubcategoryById(f.getIdSubcategory()).getIdCategory()).containsKey(f.getIdSubcategory())) {
-                    //case when the hashmap has already entries in the subcategory (at least 1)
-                    //adds the next entry to the existing list
-                    t = getFurnitureImageByFurniture(f);
-                    allFurnituresImages.get(getSubcategoryById(f.getIdSubcategory()).getIdCategory()).get(f.getIdSubcategory()).add(t);
-                } else {
-                    //case when the hashmap has no entry in the subcategory yet
-                    //adds a new HashMap with the first entry
-                    HashMap<Integer, List<Image>> h = new HashMap<>();
-                    List<Image> i = new ArrayList<>();
-                    t = getFurnitureImageByFurniture(f);
-                    i.add(t);
-                    h.put(f.getIdSubcategory(), i);
-                    allFurnituresImages.put(getSubcategoryById(f.getIdSubcategory()).getIdCategory(), h);
+    public HashMap<Subcategory, List<Furniture>> getAllFurnituresBySubcategory() {
+        return allFurnituresBySubcategory;
+    }
+
+    private void setAllFurnituresImage() {
+        String furnitureImagesDirectory = pathToWarehouseOut + "images\\furniture\\";
+
+        for(Furniture furniture : allFurnitures){
+            if(furniture.getImage() == null){
+                Image newImage;
+                //check if directory exist for furniture
+                String path = furnitureImagesDirectory + furniture.getIdFurniture();
+                File pathAsFile = new File(path);
+
+                String pathToImage = path + "\\" + furniture.getIdFurniture() + ".png";
+
+                if(!Files.exists(Paths.get(path))){
+
+                    pathAsFile.mkdir();
+
+                    Path source = Paths.get(pathToWarehouseOut + "images\\default_pic.png");
+                    Path dest = Paths.get(path + "\\" + furniture.getIdFurniture() + ".png");
+                    try {
+                        Files.copy(source, dest, StandardCopyOption.COPY_ATTRIBUTES);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            } else {
-                //case when the hashmap has no entry in the category yet
-                //adds a new hashmap with the first entry
-                HashMap<Integer, List<Image>> h = new HashMap<>();
-                List<Image> i = new ArrayList<>();
-                t = getFurnitureImageByFurniture(f);
-                i.add(t);
-                h.put(f.getIdSubcategory(), i);
-                allFurnituresImages.put(getSubcategoryById(f.getIdSubcategory()).getIdCategory(), h);
+                if(!Files.exists(Paths.get(pathToImage))){
+                    Path source = Paths.get(pathToWarehouseOut + "images\\default_pic.png");
+                    Path dest = Paths.get(path + "\\" + furniture.getIdFurniture() + ".png");
+                    try {
+                        Files.copy(source, dest, StandardCopyOption.COPY_ATTRIBUTES);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                furniture.setImage(new Image("file:/" + pathToImage));
             }
-            IdForFurnitureImages.put(t, f.getIdFurniture());
         }
     }
 
-    private void fillAllCategoryImages(){
-        for(Category c: allCategories){
-            Image t = getCategoryImageByCategory(c);
-            allCategoryImages.add(t);
-            IdForCategoryImages.put(t, c.getIdCategory());
+    private void setAllCategoriesImage() {
+        String categoryImagesDirectory = pathToWarehouseOut + "images\\category\\";
+
+        for(Category category : allCategories){
+            if(category.getImage() == null){
+                Image newImage;
+                //check if directory exist for furniture
+                String path = categoryImagesDirectory + category.getIdCategory();
+                File pathAsFile = new File(path);
+
+                String pathToImage = path + "\\" + category.getIdCategory() + ".png";
+
+                if(!Files.exists(Paths.get(path))){
+
+                    pathAsFile.mkdir();
+
+                    Path source = Paths.get(pathToWarehouseOut + "images\\default_pic.png");
+                    Path dest = Paths.get(path + "\\" + category.getIdCategory() + ".png");
+                    try {
+                        Files.copy(source, dest, StandardCopyOption.COPY_ATTRIBUTES);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(!Files.exists(Paths.get(pathToImage))){
+                    Path source = Paths.get(pathToWarehouseOut + "images\\default_pic.png");
+                    Path dest = Paths.get(path + "\\" + category.getIdCategory() + ".png");
+                    try {
+                        Files.copy(source, dest, StandardCopyOption.COPY_ATTRIBUTES);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                category.setImage(new Image("file:/" + pathToImage));
+            }
         }
     }
 
-    private void fillAllSubcategoryImages(){
-        for(Subcategory s : allSubcategories){
-            Image t;
-            if(allSubcategoryImages.containsKey(s.getIdCategory())){
-                //case when the hashmap has already entries in the category (at least 1)
-                t = getSubcategoryImageBySubcategory(s);
-                allSubcategoryImages.get(s.getIdCategory()).add(t);
-            } else {
-                //case when the hashmap has no entry yet in the category
-                List<Image> i = new ArrayList<>();
-                t = getSubcategoryImageBySubcategory(s);
-                i.add(t);
-                allSubcategoryImages.put(s.getIdCategory(), i);
+    private void setAllSubcategoriesImage() {
+        String subcategoryImagesDirectory = pathToWarehouseOut + "images\\subcategory\\";
+
+        for(Subcategory subcategory : allSubcategories){
+            if(subcategory.getImage() == null){
+                Image newImage;
+                //check if directory exist for furniture
+                String path = subcategoryImagesDirectory + subcategory.getIdSubcategory();
+                File pathAsFile = new File(path);
+
+                String pathToImage = path + "\\" + subcategory.getIdSubcategory() + ".png";
+
+                if(!Files.exists(Paths.get(path))){
+
+                    pathAsFile.mkdir();
+
+                    Path source = Paths.get(pathToWarehouseOut + "images\\default_pic.png");
+                    Path dest = Paths.get(path + "\\" + subcategory.getIdSubcategory() + ".png");
+                    try {
+                        Files.copy(source, dest, StandardCopyOption.COPY_ATTRIBUTES);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(!Files.exists(Paths.get(pathToImage))){
+                    Path source = Paths.get(pathToWarehouseOut + "images\\default_pic.png");
+                    Path dest = Paths.get(path + "\\" + subcategory.getIdSubcategory() + ".png");
+                    try {
+                        Files.copy(source, dest, StandardCopyOption.COPY_ATTRIBUTES);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                subcategory.setImage(new Image("file:/" + pathToImage));
             }
-            IdForSubcategoryImages.put(t, s.getIdSubcategory());
         }
+    }
+
+    public User getUserToLogIn(String username, String password) {
+        return  allUsers.stream().filter(s -> (s.getUsername().equals(username)) && (s.getPassword().equals(password)))
+                .findFirst().orElse(null);
+    }
+
+    public void addInvoiceDetailsToDatabase(InvoiceDetails invoiceDetails) throws Exception {
+        invoiceDetailsRepository.create(invoiceDetails);
+    }
+
+    public void addInvoiceToDatabase(Invoice invoice) throws Exception {
+        invoiceRepository.create(invoice);
+    }
+
+    public void updateStaff(Staff staffDataOfUser) throws Exception {
+        staffRepository.update(staffDataOfUser);
     }
 }

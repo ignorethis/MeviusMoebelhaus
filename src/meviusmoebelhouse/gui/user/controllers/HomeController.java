@@ -8,6 +8,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import meviusmoebelhouse.gui.ApplicationController;
+import meviusmoebelhouse.model.Category;
+import meviusmoebelhouse.model.Furniture;
+import meviusmoebelhouse.model.Subcategory;
 
 import java.net.URL;
 import java.util.*;
@@ -34,8 +37,8 @@ public class HomeController implements Initializable {
     ArrayList<ImageView> allSalesImageViews = new ArrayList<>(); //List with all homeSalesImageViews
     ArrayList<ImageView> allCategoryImageViews = new ArrayList<>(); //List with all homeCategoryImageViews
 
-    ArrayList<Image> allSalesImages = new ArrayList<>(); //List with all sales images
-    ArrayList<Image> allCategoryImages = new ArrayList<>(); //List with all category images
+    List<Furniture> allSalesFurnitures = new ArrayList<>(); //List with all sales images
+    List<Category> allCategories = new ArrayList<>(); //List with all category images
 
     public HomeController(ApplicationController applicationController) {
         this.applicationController = applicationController;
@@ -51,20 +54,20 @@ public class HomeController implements Initializable {
 
         updateUiBasedOnLoginState();
 
-        //load all images of furnitures with rebates in the allSalesImages list
-        HashMap<Integer, HashMap<Integer, List<Image>>> allFurnituresImages = applicationController.getAllFurnituresImages();
-        for(HashMap<Integer, List<Image>> hashMap : allFurnituresImages.values()){
-            for(List<Image> images : hashMap.values()){
-                for(Image image : images){
-                    if(applicationController.getFurnitureByImage(image).getRebate() != 0) {
-                        allSalesImages.add(image);
-                    }
+        //load all furnitures with rebates in the allSalesFurnitures list
+        HashMap<Subcategory, List<Furniture>> allFurnituresBySubcategory = applicationController.getAllFurnituresBySubcategory();
+        for(List<Furniture> furnitureList : allFurnituresBySubcategory.values()){
+            for(Furniture furniture : furnitureList){
+                if(furniture.getRebate() != 0){
+                    allSalesFurnitures.add(furniture);
                 }
             }
         }
 
-        //load all images of categories in allCategoryImages list
-        allCategoryImages.addAll(applicationController.getAllCategoryImages());
+        //load all categories in allCategories list
+        allCategories = applicationController.getAllCategories();
+
+        //show the images of the sales and categories in the image views
         showSalesImages();
         showCategoryImages();
     }
@@ -83,7 +86,7 @@ public class HomeController implements Initializable {
      * Adjusts the images in the image views showing the next image in the list
      */
     public void homeSalesSliderRightOCE() { //slides the sales images of the slider to the right
-        if(counterSales < allSalesImages.size() - allSalesImageViews.size()){
+        if(counterSales < allSalesFurnitures.size() - allSalesImageViews.size()){
             counterSales++ ;
             showSalesImages();
         }
@@ -103,7 +106,7 @@ public class HomeController implements Initializable {
      * Adjusts the images in the image views showing the next image in the list
      */
     public void homeCategoriesSliderRightOCE() { //slides the category images of the slider to the right
-        if(counterCategories < allCategoryImages.size() - allCategoryImageViews.size()){
+        if(counterCategories < allCategories.size() - allCategoryImageViews.size()){
             counterCategories++;
             showCategoryImages();
         }
@@ -116,11 +119,13 @@ public class HomeController implements Initializable {
      * @throws Exception exception
      */
     public void openSingleView(MouseEvent mouseEvent) throws Exception {
-        applicationController.openSingleView(allSalesImages.get(Integer.parseInt(mouseEvent.getPickResult().getIntersectedNode().getId())), mainAnchorPane);
+        int idOfFurniture = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
+        applicationController.openSingleView(idOfFurniture, mainAnchorPane);
     }
 
     public void openCategory(MouseEvent mouseEvent) throws Exception {
-        applicationController.openCategory(allCategoryImages.get(Integer.parseInt(mouseEvent.getPickResult().getIntersectedNode().getId())), mainAnchorPane);
+        int idOfCategory = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
+        applicationController.openCategory(idOfCategory, mainAnchorPane);
     }
 
     public void openLogin() throws Exception {
@@ -137,7 +142,6 @@ public class HomeController implements Initializable {
 
     public void logout() throws Exception {
         applicationController.logout(mainAnchorPane);
-        updateUiBasedOnLoginState();
     }
 
     /**
@@ -145,25 +149,21 @@ public class HomeController implements Initializable {
      * Disables the unused furniture sales image views
      */
     public void showSalesImages(){
-        for(int i = 0; i < allSalesImageViews.size() && i < allSalesImages.size(); i++){
-            allSalesImageViews.get(i).setImage(allSalesImages.get(counterSales + i));
-            allSalesImageViews.get(i).setId(String.valueOf(counterSales + i));
+        for(int i = 0; i < allSalesImageViews.size() && i < allSalesFurnitures.size(); i++){
+            allSalesImageViews.get(i).setImage(
+                    allSalesFurnitures.get(counterSales + i).getImage());
+            allSalesImageViews.get(i).setId(String.valueOf(
+                    allSalesFurnitures.get(counterSales + i).getIdFurniture()));
         }
-        for(int i = allSalesImageViews.size() - 1; i > allSalesImages.size() - 1; i--){
-            allSalesImageViews.get(i).setDisable(true);
+
+        //make unused imageViews invisable
+        for(int i = allSalesImageViews.size() - 1; i > allSalesFurnitures.size() - 1; i--){
+            allSalesImageViews.get(i).setVisible(false);
         }
 
         //Disable Buttons of Sales if it is negative or too big
-        if(counterSales >= allSalesImages.size() - 4){
-            homeSalesSliderRightButton.setDisable(true);
-        } else {
-            homeSalesSliderRightButton.setDisable(false);
-        }
-        if(counterSales > 0){
-            homeSalesSliderLeftButton.setDisable(false);
-        } else {
-            homeSalesSliderLeftButton.setDisable(true);
-        }
+        homeSalesSliderRightButton.setDisable(counterSales >= allSalesFurnitures.size() - 4);
+        homeSalesSliderLeftButton.setDisable(counterSales <= 0);
     }
 
     /**
@@ -171,34 +171,21 @@ public class HomeController implements Initializable {
      * Disables the unused category image views
      */
     public void showCategoryImages(){
-        for(int i = 0; i < allCategoryImageViews.size() && i < allCategoryImages.size(); i++){
-            allCategoryImageViews.get(i).setImage(allCategoryImages.get(counterCategories + i));
-            allCategoryImageViews.get(i).setId(String.valueOf(counterCategories + i));
+        for(int i = 0; i < allCategoryImageViews.size() && i < allCategories.size(); i++){
+            allCategoryImageViews.get(i).setImage(allCategories
+                    .get(counterCategories + i).getImage());
+            allCategoryImageViews.get(i).setId(String.valueOf(allCategories
+                    .get(counterCategories + i).getIdCategory()));
         }
-        for(int i = allCategoryImageViews.size() - 1; i > allCategoryImages.size() - 1; i--){
+
+        //make unused imageViews invisable
+        for(int i = allCategoryImageViews.size() - 1; i > allCategories.size() - 1; i--){
             allCategoryImageViews.get(i).setDisable(true);
         }
+
         //Disable Buttons of Categories if it is negative or too big
-        if(counterCategories >= allCategoryImages.size() - 4){
-            homeCategoriesSliderRightButton.setDisable(true);
-        } else {
-            homeCategoriesSliderRightButton.setDisable(false);
-        }
-        if(counterCategories > 0){
-            homeCategoriesSliderLeftButton.setDisable(false);
-        } else {
-            homeCategoriesSliderLeftButton.setDisable(true);
-        }
-    }
-
-    public void showInformationPane(MouseEvent mouseEvent) {
-        //TO BE IMPLEMENTED
-        //show new temporary pane when hovering over an furniture
-    }
-
-    public void suppressInformationPane(MouseEvent mouseEvent) {
-        //TO BE IMPLEMENTED
-        //show new temporary pane when hovering over an furniture
+        homeCategoriesSliderRightButton.setDisable(counterCategories >= allCategories.size() - 4);
+        homeCategoriesSliderLeftButton.setDisable(counterCategories <= 0);
     }
 
     private void updateUiBasedOnLoginState() {

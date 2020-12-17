@@ -1,8 +1,11 @@
 package meviusmoebelhouse.model;
 
+import javafx.scene.image.Image;
+
 public class Category {
     private int idCategory = 0;
     private String name = null;
+    private Image image = null;
 
     public int getIdCategory() {
         return idCategory;
@@ -18,6 +21,14 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Image getImage(){
+        return image;
+    }
+
+    public void setImage(Image image){
+        this.image = image;
     }
 
     @Override

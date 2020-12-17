@@ -1,5 +1,7 @@
 package meviusmoebelhouse.model;
 
+import javafx.scene.image.Image;
+
 import java.math.BigDecimal;
 
 public class Furniture {
@@ -13,6 +15,7 @@ public class Furniture {
     private double rebate = 0;
     private boolean isActive = true;
     private String description = null;
+    private Image image = null;
 
     public int getIdFurniture() {
         return idFurniture;
@@ -68,6 +71,14 @@ public class Furniture {
 
     public void setPrice(BigDecimal price){
         this.price = price;
+    }
+
+    public Image getImage(){
+        return image;
+    }
+
+    public void setImage(Image image){
+        this.image = image;
     }
 
     public double getRebate(){

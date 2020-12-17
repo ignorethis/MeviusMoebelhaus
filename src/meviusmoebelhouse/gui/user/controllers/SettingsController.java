@@ -62,11 +62,11 @@ public class SettingsController implements Initializable {
         customer.setBirthday(birthdayDatePicker.getValue());
         customer.setIBAN(IBANTextField.getText());
         customer.setEmailAddress(emailAddressTextField.getText());
-        applicationController.getCustomerRepository().update(customer);
+        applicationController.changeCustomerInDatabase(customer);
 
         if (!passwordLabel.isDisable()) {
             user.setPassword(passwordTextField.getText());
-            applicationController.getUserRepository().update(user);
+            applicationController.changeUserInDatabase(user);
         }
 
         applicationController.switchScene(mainAnchorPane, "Home");
